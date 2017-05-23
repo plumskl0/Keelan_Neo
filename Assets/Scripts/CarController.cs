@@ -5,11 +5,14 @@ using UnityEngine;
 public class CarController : MonoBehaviour
 {
 
+    private const int FRONT_RIGHT = 0;
+    private const int FRON_LEFT = 1;
+
     public Transform[] wheels;
     public float motorPower = 150.0f;
     public float maxTurn = 25.0f;
 
-    float instantePower = 0.0f;
+    float torque = 0.0f;
     float brake = 0.0f;
     float wheelTurn = 0.0f;
 
@@ -18,6 +21,9 @@ public class CarController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        // Hiermit kann man evtl. die beschleunigung etwas besser anpassen, damit das
+        // Gefühl etwas besser wird beim fahren. Einfach in Doku nachlesen für genauere Infos.
+        // m_Wheels[0].ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
         myRigidbody = this.gameObject.GetComponent<Rigidbody>();
         myRigidbody.centerOfMass = new Vector3(0, 0.0f, 0.0f);
     }
@@ -25,17 +31,17 @@ public class CarController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        instantePower = Input.GetAxis("Vertical") * motorPower;
+        torque = Input.GetAxis("Vertical") * motorPower;
         wheelTurn = Input.GetAxis("Horizontal") * maxTurn;
-        brake = Input.GetKey("space") ? myRigidbody.mass * 0.1f : 0.0f;
-
+        brake = Input.GetKey("space") ? myRigidbody.mass * 0.5f : 0.0f;
+        
         //turn collider
         getCollider(0).steerAngle = wheelTurn;
         getCollider(1).steerAngle = wheelTurn;
-
+        
         //turn wheels
         wheels[0].localEulerAngles = new Vector3(wheels[0].localEulerAngles.x,
-            getCollider(0).steerAngle - wheels[0].localEulerAngles.z + 90,
+            getCollider(0).steerAngle - wheels[1].localEulerAngles.z + 90,
             wheels[0].localEulerAngles.z);
         wheels[1].localEulerAngles = new Vector3(wheels[1].localEulerAngles.x,
             getCollider(1).steerAngle - wheels[1].localEulerAngles.z + 90,
@@ -63,8 +69,8 @@ public class CarController : MonoBehaviour
             getCollider(1).brakeTorque = 0.0f;
             getCollider(2).brakeTorque = 0.0f;
             getCollider(3).brakeTorque = 0.0f;
-            getCollider(2).motorTorque = instantePower;
-            getCollider(3).motorTorque = instantePower;
+            getCollider(2).motorTorque = torque;
+            getCollider(3).motorTorque = torque;
         }
     }
 
