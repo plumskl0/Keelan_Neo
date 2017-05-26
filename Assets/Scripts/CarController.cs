@@ -41,7 +41,7 @@ public class CarController : MonoBehaviour
         
         //turn wheels
         wheels[0].localEulerAngles = new Vector3(wheels[0].localEulerAngles.x,
-            getCollider(0).steerAngle - wheels[1].localEulerAngles.z + 90,
+            getCollider(0).steerAngle - wheels[0].localEulerAngles.z + 90,
             wheels[0].localEulerAngles.z);
         wheels[1].localEulerAngles = new Vector3(wheels[1].localEulerAngles.x,
             getCollider(1).steerAngle - wheels[1].localEulerAngles.z + 90,
