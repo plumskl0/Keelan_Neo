@@ -134,16 +134,17 @@ public class CarController : MonoBehaviour
 
                 Transform cage = transform.Find("Cage");
                 //die y-Achse der Wiimote muss auf die Z-Achse des Cages gemapt werden
-                float horicontal_tiltNew = accel_z;
+                //float horicontal_tiltNew = accel_z;
                 //Debug.Log("newTilt: " + horicontal_tiltNew);
                 //Debug.Log("oldTilt: " + horicontal_tilt);
-                float horicontal_diff = horicontal_tilt - horicontal_tiltNew;
-                horicontal_tilt = horicontal_tiltNew;
+                //float horicontal_diff = horicontal_tilt - horicontal_tiltNew;
+                //horicontal_tilt = horicontal_tiltNew;
                 //Debug.Log("diff: " + horicontal_diff);
                 //rotate_horicontal += horicontal_tilt;
                 //Debug.Log("rotate: " + rotate_horicontal);
-                cage.Rotate(0, 0, 5 * horicontal_diff);
+                //cage.Rotate(0, 0, 5 * horicontal_diff);
 
+                cage.Rotate(0, 0, -accel_z);
                 Debug.Log(this.GetAccelVector());
 
 
