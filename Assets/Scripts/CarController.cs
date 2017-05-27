@@ -103,8 +103,8 @@ public class CarController : MonoBehaviour
                 //Debug.Log("dRight");
                 moveVertical = -1;
             }
-			
-            instantePower = moveVertical * motorPower;
+
+            torque = moveVertical * motorPower;
             wheelTurn = moveHorizontal* maxTurn;
             brake = wiiRemote.Button.a ? myRigidbody.mass * 0.5f : 0.0f;
 
