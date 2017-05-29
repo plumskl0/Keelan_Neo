@@ -150,7 +150,9 @@ public class CarController : MonoBehaviour
                 //Debug.Log("rotate: " + rotate_horicontal);
                 //cage.Rotate(0, 0, 5 * horicontal_diff);
 
-                cage.Rotate(0, 0, -accel_z);
+                //cage.Rotate(0, 0, -accel_z);
+                float z = -accel_z * 90;
+                cage.localRotation = Quaternion.Euler(0f, 0f, z);
                 Debug.Log(this.GetAccelVector());
 
 

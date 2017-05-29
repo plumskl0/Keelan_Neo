@@ -22,7 +22,7 @@ public class PlateController : MonoBehaviour {
         y = Input.GetAxis("VerticalPlate") * angle;
         z = Input.GetAxis("HorizontalPlate") * angle;
 
-        plateTransform.localRotation = Quaternion.Euler(y, 0f, z);
+        //plateTransform.localRotation = Quaternion.Euler(y, 0f, z);
 
 	}
 }
