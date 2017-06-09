@@ -23,6 +23,9 @@ public class LiftBall : MonoBehaviour {
 
     private Rigidbody ball;
 
+    // Distanzabweichung am Ziel damit der Ball losgelassen wird
+    private const float minDistance = 0.2f;
+
     void Start()
     {
         targetPos = toPosition.position;
@@ -46,8 +49,6 @@ public class LiftBall : MonoBehaviour {
             }
         }
     }
-
-    private const float minDistance = 0.2f;
 
     private bool isBallAtDest()
     {

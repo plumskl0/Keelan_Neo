@@ -284,7 +284,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 49256551}
-  m_LocalRotation: {x: 0.6345957, y: 0.17071365, z: -0.4718957, w: 0.58775824}
+  m_LocalRotation: {x: 0.63459563, y: 0.17071363, z: -0.47189564, w: 0.5877582}
   m_LocalPosition: {x: 1.8179932, y: 1.246, z: 7.6520004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1519,7 +1519,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toPosition: {fileID: 1680799644}
-  timeToReachTarget: 0
+  timeToReachTarget: 2
   stayTime: 2
 --- !u!65 &869850976
 BoxCollider:
