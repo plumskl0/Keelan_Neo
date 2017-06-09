@@ -4,13 +4,38 @@ using UnityEngine;
 
 public class AttackerController : MonoBehaviour {
 
-    // Use this for initialization
-    void Start () {
+    public Transform ballDropZone;
 
+    public BallInZoneCheck attackZone;
+
+    private Rigidbody rb;
+    private Rigidbody ballRb;
+    
+    private bool ballCatched;
+
+    public void Start()
+    {
+        rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update () {
+    public void Update()
+    {
+        if (attackZone.isBallInZone)
+        {
+            Debug.Log("Ball is in Zone");
+        }
+        else
+        {
+            Debug.Log("Ball is not in Zone");
+        }
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Ball"))
+        {
+            ballRb = other.gameObject.GetComponent<Rigidbody>();
+
+        }
     }
 }
