@@ -7,11 +7,14 @@ public class BallInZoneCheck : MonoBehaviour
 
     public bool isBallInZone { get; set; }
 
+    public Rigidbody ballRb { get; private set; }
+
     private void OnTriggerEnter(Collider other)
     {
         if (IsBall(other))
         {
             isBallInZone = true;
+            ballRb = other.attachedRigidbody;
         }
     }
 
