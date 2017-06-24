@@ -18,7 +18,7 @@ public class CarController : MonoBehaviour
     float brake = 0.0f;
     float wheelTurn = 0.0f;
 
-    public int tellerSmoothinFactor;
+    public int tellerSmoothinFactor = 5;
     Rigidbody myRigidbody;
     private Wiimote wiiRemote;
     private float horicontal_tilt;
@@ -40,6 +40,10 @@ public class CarController : MonoBehaviour
     }
 
     // Update is called once per frame
+
+    //GG Zittern:
+    //Anstatt die Neigung des Tellers jeden Frame zu ändern bestimmt tellerSmoothinFactor die Häufigkeit
+    private int frameCount = 0; //Zähler für Frames -> Neigungsänderung wenn tellerSmoothinFactor erreicht
     void FixedUpdate()
     {
         //nutze die Wiimote, falls eine gefunden wurde
@@ -47,14 +51,6 @@ public class CarController : MonoBehaviour
         {
             float moveHorizontal = 0;
             float moveVertical = 0;
-            float moveUp = 0;
-
-            /*      -> Code für Tilt
-            float [] wiiSteuerkreuz = wiiRemote.Accel.GetCalibratedAccelData();
-            moveHorizontal = wiiSteuerkreuz[0];
-            moveVertical = wiiSteuerkreuz[2];
-            Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-            */
 
             int ret;
             do
@@ -105,10 +101,10 @@ public class CarController : MonoBehaviour
             
             //Cage nach links und rechts kippen
             float z = (float) System.Math.Round(-accel_z,tellerSmoothinFactor) * 90;
-            cage.localRotation = Quaternion.Euler(0f, 0f, z);
+            //cage.localRotation = Quaternion.Euler(0f, 0f, z);
 
             //Cage nach vorne und hinten kippen
-            float x = -accel_x * 90;
+            float x = (float)System.Math.Round(-accel_x * 90);
             cage.localRotation = Quaternion.Euler(x, 0f, z);
             Debug.Log(this.GetAccelVector());
         }
