@@ -18,6 +18,7 @@ public class CarController : MonoBehaviour
     float brake = 0.0f;
     float wheelTurn = 0.0f;
 
+    public int tellerSmoothinFactor;
     Rigidbody myRigidbody;
     private Wiimote wiiRemote;
     private float horicontal_tilt;
@@ -90,35 +91,26 @@ public class CarController : MonoBehaviour
             wheelTurn = moveHorizontal* maxTurn;
             brake = wiiRemote.Button.a ? myRigidbody.mass * 0.5f : 0.0f;
 
-            if (startup < 10)
-            {
-                startup++;
-                Debug.Log("startup");
-            }
 
-            else
-            {
+            float accel_x;
+            float accel_y;
+            float accel_z;
 
-                float accel_x;
-                float accel_y;
-                float accel_z;
+            float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
+            accel_x = accel[0];
+            accel_y = -accel[2];
+            accel_z = accel[1];
 
-                float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
-                accel_x = accel[0];
-                accel_y = -accel[2];
-                accel_z = accel[1];
+            Transform cage = transform.Find("Cage");
+            
+            //Cage nach links und rechts kippen
+            float z = (float) System.Math.Round(-accel_z,tellerSmoothinFactor) * 90;
+            cage.localRotation = Quaternion.Euler(0f, 0f, z);
 
-                Transform cage = transform.Find("Cage");
- 
-                //Cage nach links und rechts kippen
-                float z = -accel_z * 90;
-                cage.localRotation = Quaternion.Euler(0f, 0f, z);
-
-                //Cage nach vorne und hinten kippen
-                float x = -accel_x * 90;
-                cage.localRotation = Quaternion.Euler(x, 0f, z);
-                Debug.Log(this.GetAccelVector());
-            }
+            //Cage nach vorne und hinten kippen
+            float x = -accel_x * 90;
+            cage.localRotation = Quaternion.Euler(x, 0f, z);
+            Debug.Log(this.GetAccelVector());
         }
 
         //ansonsten nutzen die Tastatursteuerung

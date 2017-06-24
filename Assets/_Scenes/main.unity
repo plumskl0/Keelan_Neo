@@ -420,6 +420,7 @@ MonoBehaviour:
   - {fileID: 1434091657}
   motorPower: 150
   maxTurn: 25
+  tellerSmoothinFactor: 3
 --- !u!1 &993521438
 GameObject:
   m_ObjectHideFlags: 0
