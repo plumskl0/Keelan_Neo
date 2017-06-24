@@ -36,24 +36,6 @@ public class CarController : MonoBehaviour
         myRigidbody = this.gameObject.GetComponent<Rigidbody>();
         myRigidbody.centerOfMass = new Vector3(0, 0.0f, 0.0f);
         wiiRemote = wiiKalibrierung.wiiRemote;
-        //InitWiimotes();
-        /*if (wiiRemote != null)
-        {
-            float accel_x;
-            float accel_y;
-            float accel_z;
-
-            float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
-            accel_x = accel[0];
-            accel_y = -accel[2];
-            accel_z = -accel[1];
-            Debug.Log(accel[1]);
-            Debug.Log(accel_z);
-            horicontal_tilt = accel_z;
-            Debug.Log(horicontal_tilt);
-            Debug.Log(this.GetAccelVector());
-            //vertical_tilt = 
-        }*/
     }
 
     // Update is called once per frame
@@ -125,44 +107,17 @@ public class CarController : MonoBehaviour
                 accel_x = accel[0];
                 accel_y = -accel[2];
                 accel_z = accel[1];
-                /*
-                Debug.Log("x: = " + accel_x);
-                Debug.Log("y: = " + accel_y);
-                Debug.Log("z: = " + accel_z);
-                */
-
-                //Init Accel
-                /*if(rotate_init == false)
-                {
-                    horicontal_tilt = accel_z;
-                    rotate_init = true;
-                }*/
 
                 Transform cage = transform.Find("Cage");
-                //die y-Achse der Wiimote muss auf die Z-Achse des Cages gemapt werden
-                //float horicontal_tiltNew = accel_z;
-                //Debug.Log("newTilt: " + horicontal_tiltNew);
-                //Debug.Log("oldTilt: " + horicontal_tilt);
-                //float horicontal_diff = horicontal_tilt - horicontal_tiltNew;
-                //horicontal_tilt = horicontal_tiltNew;
-                //Debug.Log("diff: " + horicontal_diff);
-                //rotate_horicontal += horicontal_tilt;
-                //Debug.Log("rotate: " + rotate_horicontal);
-                //cage.Rotate(0, 0, 5 * horicontal_diff);
-
-                //cage.Rotate(0, 0, -accel_z);
+ 
+                //Cage nach links und rechts kippen
                 float z = -accel_z * 90;
                 cage.localRotation = Quaternion.Euler(0f, 0f, z);
-                Debug.Log(this.GetAccelVector());
 
-
-                /*// die x-Achse auf die x-Achse
-                vertical_tilt = 0.1f * accel_x;
-                //cage.Rotate(0.05f, 0, 0);
-                //cage.Rotate(horicontal_tilt, 0,0 );
+                //Cage nach vorne und hinten kippen
+                float x = -accel_x * 90;
+                cage.localRotation = Quaternion.Euler(x, 0f, z);
                 Debug.Log(this.GetAccelVector());
-                //cage.Rotate(this.GetAccelVector());
-                */
             }
         }
 
