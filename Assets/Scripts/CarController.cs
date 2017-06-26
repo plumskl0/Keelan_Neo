@@ -7,8 +7,8 @@ using WiimoteApi;
 public class CarController : MonoBehaviour
 {
 
-    private const int FRONT_RIGHT = 0;
-    private const int FRON_LEFT = 1;
+    private const int FRONT_RIGHT = 1;
+    private const int FRON_LEFT = 0;
 
     public Transform[] wheels;
     public float motorPower = 150.0f;
