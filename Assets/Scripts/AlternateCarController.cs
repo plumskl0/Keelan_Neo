@@ -29,7 +29,7 @@ public class AlternateCarController : MonoBehaviour {
 	}
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         getCollider(FRONT_LEFT).ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
 
@@ -37,8 +37,6 @@ public class AlternateCarController : MonoBehaviour {
         float torque = maxTorque * Input.GetAxis("Vertical");
 
         float handBrake = Input.GetKey(KeyCode.Space) ? brakeTorque : 0;
-
-        Debug.Log("Fahrzeug Geschwindigkeit: " + rb.velocity.magnitude);
 
         // Höchstgeschwindigkeit des Autos
         if (rb.velocity.magnitude >= maxSpeed)
