@@ -35,7 +35,9 @@ public class wiiKalibrierung : MonoBehaviour {
             //Debug.Log(wiiRemote.Accel.GetCalibratedAccelData().ToString());
             Vector3 accel = this.GetAccelVector();
             accelPlaceholder.text = this.GetAccelVector().ToString();
-            Debug.Log("x: " + accel.x);
+            //Debug.Log("x: " + accel.x);
+            Debug.Log(accel.x + ";" + accel.y + ";" + accel.z);
+
 
             //Debug.Log(this.GetAccelVector());
         }

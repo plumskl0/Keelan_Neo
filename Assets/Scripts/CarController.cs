@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -18,7 +19,8 @@ public class CarController : MonoBehaviour
     float brake = 0.0f;
     float wheelTurn = 0.0f;
 
-    public int tellerSmoothinFactor = 5;
+    public int tellerSmoothinFactor = 5;    //glättet Messwerte über die angegebene Anzahl von Frames
+    public int minAenderungswinkel = 5;     //nur wenn sich die Neigung, um mindestens diesen Winkel aendert wird die Tellerneigung veraendert
     Rigidbody myRigidbody;
     private Wiimote wiiRemote;
     private float horicontal_tilt;
@@ -44,6 +46,9 @@ public class CarController : MonoBehaviour
     //GG Zittern:
     //Anstatt die Neigung des Tellers jeden Frame zu ändern bestimmt tellerSmoothinFactor die Häufigkeit
     private int frameCount = 0; //Zähler für Frames -> Neigungsänderung wenn tellerSmoothinFactor erreicht
+    private float frameSummeZ = 0;
+    private float frameSummeX = 0;
+
     void FixedUpdate()
     {
         //nutze die Wiimote, falls eine gefunden wurde
@@ -98,15 +103,45 @@ public class CarController : MonoBehaviour
             accel_z = accel[1];
 
             Transform cage = transform.Find("Cage");
-            
-            //Cage nach links und rechts kippen
-            float z = (float) System.Math.Round(-accel_z,tellerSmoothinFactor) * 90;
-            //cage.localRotation = Quaternion.Euler(0f, 0f, z);
 
-            //Cage nach vorne und hinten kippen
-            float x = (float)System.Math.Round(-accel_x * 90);
-            cage.localRotation = Quaternion.Euler(x, 0f, z);
-            Debug.Log(this.GetAccelVector());
+            //Ueberspringe #Tiltaenderungen definiert durch tellerSmoothingFactor
+            //Berechne den Mittelwert der uebersprungenen Werte
+
+            frameSummeZ += -accel_z;
+            frameSummeX += -accel_x;
+            Debug.Log("frameSummeZ: " + frameSummeZ);
+            Debug.Log("frameSummeX: " + frameSummeX);
+            frameCount++;
+
+
+            //Ansonsten ändere Tilt
+            if (!(frameCount < tellerSmoothinFactor))
+            {
+                //Cage nach links und rechts kippen
+                float z = (frameSummeZ/tellerSmoothinFactor) * 90;
+                //cage.localRotation = Quaternion.Euler(0f, 0f, z);
+
+                //Cage nach vorne und hinten kippen
+                float x = (frameSummeX / tellerSmoothinFactor) * 90;
+                Debug.Log("Verändere Tellerwinkel");
+                //cage.localRotation = Quaternion.Euler(0f, 0f, z);
+
+                //Ignoriere Ausreiser indem nur Neigungen berücksichtigt werden, welche den Winkel um mindestens x Grad veraendert
+                float aktuelleNeigungX = cage.eulerAngles.x;
+                float aktuelleNeigungZ = cage.eulerAngles.z;
+
+                if (Math.Abs(aktuelleNeigungX - x) > minAenderungswinkel || Math.Abs(aktuelleNeigungZ - z) > minAenderungswinkel)
+                {
+                    cage.localRotation = Quaternion.Euler(x, 0f, z);
+                    Debug.Log(this.GetAccelVector());
+                }
+
+                //Setze Mittelwert und Frame Count auf 0 fuer naechste Runde auf 0
+                frameSummeX = 0;
+                frameSummeZ = 0;
+                frameCount = 0;
+            }
+ 
         }
 
         //ansonsten nutzen die Tastatursteuerung
