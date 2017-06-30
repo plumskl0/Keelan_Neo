@@ -29,7 +29,7 @@ public class AlternateCarController : MonoBehaviour {
 	}
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         getCollider(FRONT_LEFT).ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
 
@@ -37,8 +37,6 @@ public class AlternateCarController : MonoBehaviour {
         float torque = maxTorque * Input.GetAxis("Vertical");
 
         float handBrake = Input.GetKey(KeyCode.Space) ? brakeTorque : 0;
-
-        Debug.Log("Fahrzeug Geschwindigkeit: " + rb.velocity.magnitude);
 
         // Höchstgeschwindigkeit des Autos
         if (rb.velocity.magnitude >= maxSpeed)
@@ -50,11 +48,8 @@ public class AlternateCarController : MonoBehaviour {
         getCollider(FRONT_LEFT).steerAngle = angle;
         getCollider(FRONT_RIGHT).steerAngle = angle;
 
-        // Hintere Reifen bremsen
-        getCollider(FRONT_LEFT).brakeTorque = handBrake;
-        getCollider(FRONT_RIGHT).brakeTorque = handBrake;
-        getCollider(REAR_RIGHT).brakeTorque = handBrake;
-        getCollider(REAR_LEFT).brakeTorque = handBrake;
+        // Bremsen mit allen Rädern
+        fullBrake(handBrake);
 
         // Antrieb auf alle Räder?
         getCollider(FRONT_LEFT).motorTorque = torque;
@@ -68,6 +63,14 @@ public class AlternateCarController : MonoBehaviour {
         moveWheels(getCollider(REAR_RIGHT));
         moveWheels(getCollider(REAR_LEFT));
 
+    }
+
+    public void fullBrake(float handBrake)
+    {
+        getCollider(FRONT_LEFT).brakeTorque = handBrake;
+        getCollider(FRONT_RIGHT).brakeTorque = handBrake;
+        getCollider(REAR_RIGHT).brakeTorque = handBrake;
+        getCollider(REAR_LEFT).brakeTorque = handBrake;
     }
 
     private void moveWheels(WheelCollider wheel)
