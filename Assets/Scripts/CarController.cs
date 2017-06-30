@@ -19,15 +19,13 @@ public class CarController : MonoBehaviour
     float brake = 0.0f;
     float wheelTurn = 0.0f;
 
-    public int tellerSmoothinFactor = 5;    //glättet Messwerte über die angegebene Anzahl von Frames
-    public int minAenderungswinkel = 5;     //nur wenn sich die Neigung, um mindestens diesen Winkel aendert wird die Tellerneigung veraendert
+    //public int tellerSmoothinFactor = 5;    //glättet Messwerte über die angegebene Anzahl von Frames
+    //public int minAenderungswinkel = 5;     //nur wenn sich die Neigung, um mindestens diesen Winkel aendert wird die Tellerneigung veraendert
     Rigidbody myRigidbody;
-    private Wiimote wiiRemote;
+    public static Wiimote wiiRemote;
     private float horicontal_tilt;
     private float vertical_tilt;
     private float rotate_horicontal = 0;
-    private bool rotate_init = false;
-    private int startup = 0; //die ersten Accel Werte der Wiimote weichen stark von den folgenden ab -> überspringe rotation für die ersten 10 Frames
 
     // Use this for initialization
     void Start()
@@ -43,11 +41,11 @@ public class CarController : MonoBehaviour
 
     // Update is called once per frame
 
-    //GG Zittern:
-    //Anstatt die Neigung des Tellers jeden Frame zu ändern bestimmt tellerSmoothinFactor die Häufigkeit
-    private int frameCount = 0; //Zähler für Frames -> Neigungsänderung wenn tellerSmoothinFactor erreicht
-    private float frameSummeZ = 0;
-    private float frameSummeX = 0;
+    ////GG Zittern:
+    ////Anstatt die Neigung des Tellers jeden Frame zu ändern bestimmt tellerSmoothinFactor die Häufigkeit
+    //private int frameCount = 0; //Zähler für Frames -> Neigungsänderung wenn tellerSmoothinFactor erreicht
+    //private float frameSummeZ = 0;
+    //private float frameSummeX = 0;
 
     void FixedUpdate()
     {
@@ -93,54 +91,54 @@ public class CarController : MonoBehaviour
             brake = wiiRemote.Button.a ? myRigidbody.mass * 0.5f : 0.0f;
 
 
-            float accel_x;
-            float accel_y;
-            float accel_z;
+        //    float accel_x;
+        //    float accel_y;
+        //    float accel_z;
 
-            float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
-            accel_x = accel[0];
-            accel_y = -accel[2];
-            accel_z = accel[1];
+        //    float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
+        //    accel_x = accel[0];
+        //    accel_y = -accel[2];
+        //    accel_z = accel[1];
 
-            Transform cage = transform.Find("Cage");
+        //    Transform cage = transform.Find("Cage");
 
-            //Ueberspringe #Tiltaenderungen definiert durch tellerSmoothingFactor
-            //Berechne den Mittelwert der uebersprungenen Werte
+        //    //Ueberspringe #Tiltaenderungen definiert durch tellerSmoothingFactor
+        //    //Berechne den Mittelwert der uebersprungenen Werte
 
-            frameSummeZ += -accel_z;
-            frameSummeX += -accel_x;
-            Debug.Log("frameSummeZ: " + frameSummeZ);
-            Debug.Log("frameSummeX: " + frameSummeX);
-            frameCount++;
+        //    frameSummeZ += -accel_z;
+        //    frameSummeX += -accel_x;
+        //    Debug.Log("frameSummeZ: " + frameSummeZ);
+        //    Debug.Log("frameSummeX: " + frameSummeX);
+        //    frameCount++;
 
 
-            //Ansonsten ändere Tilt
-            if (!(frameCount < tellerSmoothinFactor))
-            {
-                //Cage nach links und rechts kippen
-                float z = (frameSummeZ/tellerSmoothinFactor) * 90;
-                //cage.localRotation = Quaternion.Euler(0f, 0f, z);
+        //    //Ansonsten ändere Tilt
+        //    if (!(frameCount < tellerSmoothinFactor))
+        //    {
+        //        //Cage nach links und rechts kippen
+        //        float z = (frameSummeZ/tellerSmoothinFactor) * 90;
+        //        //cage.localRotation = Quaternion.Euler(0f, 0f, z);
 
-                //Cage nach vorne und hinten kippen
-                float x = (frameSummeX / tellerSmoothinFactor) * 90;
-                Debug.Log("Verändere Tellerwinkel");
-                //cage.localRotation = Quaternion.Euler(0f, 0f, z);
+        //        //Cage nach vorne und hinten kippen
+        //        float x = (frameSummeX / tellerSmoothinFactor) * 90;
+        //        Debug.Log("Verändere Tellerwinkel");
+        //        //cage.localRotation = Quaternion.Euler(0f, 0f, z);
 
-                //Ignoriere Ausreiser indem nur Neigungen berücksichtigt werden, welche den Winkel um mindestens x Grad veraendert
-                float aktuelleNeigungX = cage.eulerAngles.x;
-                float aktuelleNeigungZ = cage.eulerAngles.z;
+        //        //Ignoriere Ausreiser indem nur Neigungen berücksichtigt werden, welche den Winkel um mindestens x Grad veraendert
+        //        float aktuelleNeigungX = cage.eulerAngles.x;
+        //        float aktuelleNeigungZ = cage.eulerAngles.z;
 
-                if (Math.Abs(aktuelleNeigungX - x) > minAenderungswinkel || Math.Abs(aktuelleNeigungZ - z) > minAenderungswinkel)
-                {
-                    cage.localRotation = Quaternion.Euler(x, 0f, z);
-                    Debug.Log(this.GetAccelVector());
-                }
+        //        if (Math.Abs(aktuelleNeigungX - x) > minAenderungswinkel || Math.Abs(aktuelleNeigungZ - z) > minAenderungswinkel)
+        //        {
+        //            cage.localRotation = Quaternion.Euler(x, 0f, z);
+        //            Debug.Log(this.GetAccelVector());
+        //        }
 
-                //Setze Mittelwert und Frame Count auf 0 fuer naechste Runde auf 0
-                frameSummeX = 0;
-                frameSummeZ = 0;
-                frameCount = 0;
-            }
+        //        //Setze Mittelwert und Frame Count auf 0 fuer naechste Runde auf 0
+        //        frameSummeX = 0;
+        //        frameSummeZ = 0;
+        //        frameCount = 0;
+        //    }
  
         }
 
