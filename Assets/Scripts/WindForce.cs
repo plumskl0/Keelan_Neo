@@ -12,8 +12,9 @@ public class WindForce : MonoBehaviour {
         if (other.CompareTag("Ball"))
         {
             Rigidbody ball = other.attachedRigidbody;
-            //ball.AddForce(Vector3.right * windForce, ForceMode.Acceleration);
-            
+
+            // Rechnet die globale Geschwindigkeit des Balls um und bewegt den Ball 
+            // immer in einer Richtung weg, egal in welcher Position der Ball sich befindet
             Vector3 locVel = transform.InverseTransformDirection(ball.velocity);
             locVel.z = windForce;
             ball.velocity = transform.TransformDirection(locVel);

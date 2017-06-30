@@ -2,6 +2,22 @@
 
 ## Unity
 
+### Vector3.Lerp vs. Vector3.MoveTowards
+
+`Lerp` ermöglicht es die zurückgelegte Distanz mit einem prozentualem Wert anzugeben.
+
+`MoveTowards` nutzt Schritte die man sehr gut mit einem Wert für die Geschwindigkeit anpassen kann.
+
+### Transform.Parent
+
+Beim Versuch den Ball vom Angreifer aufzuheben und dann an den Zielort zu bringen, kam mir die Idee den `transform.parent`zu nutzen. Problem war aber, dass der Ball seine Geschwindkeit beibehalten hat und von der Gravitation erfasst wurde.
+
+Das Ergebnis war, dass der Vogel zwar den Ball aufgehoben hat und mit sich schleppte, aber der Ball am Ursprungsort liegen blieb und nicht wirklich vom Angreifer "hoch gehoben" wurde.
+
+Zunächst hab ich dann probiert, dass Problem mit `useGravity = false` zu lösen aber der Ball wurde trotzdem nicht bewegt. 
+
+Die eigentliche Lösung für das Problem war es den Ball `isKinematic = true` zu setzen. Dadurch erhielt man den gewünschten Effekt.
+
 ### Windturbine, Gizmos und Beschleunigung
 
 - Wind ist mit einem `BoxCollider` realisiert
