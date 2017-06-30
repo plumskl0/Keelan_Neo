@@ -13,7 +13,6 @@ public class PickupLogic : MonoBehaviour {
     {        
         if (other.CompareTag("Coin"))
         {
-            Debug.Log("Bin drin");
             other.gameObject.SetActive(false);
             CoinCount++;
             setText();
