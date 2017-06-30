@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -18,13 +19,13 @@ public class CarController : MonoBehaviour
     float brake = 0.0f;
     float wheelTurn = 0.0f;
 
+    //public int tellerSmoothinFactor = 5;    //glättet Messwerte über die angegebene Anzahl von Frames
+    //public int minAenderungswinkel = 5;     //nur wenn sich die Neigung, um mindestens diesen Winkel aendert wird die Tellerneigung veraendert
     Rigidbody myRigidbody;
-    private Wiimote wiiRemote;
+    public static Wiimote wiiRemote;
     private float horicontal_tilt;
     private float vertical_tilt;
     private float rotate_horicontal = 0;
-    private bool rotate_init = false;
-    private int startup = 0; //die ersten Accel Werte der Wiimote weichen stark von den folgenden ab -> überspringe rotation für die ersten 10 Frames
 
     // Use this for initialization
     void Start()
@@ -36,27 +37,16 @@ public class CarController : MonoBehaviour
         myRigidbody = this.gameObject.GetComponent<Rigidbody>();
         myRigidbody.centerOfMass = new Vector3(0, 0.0f, 0.0f);
         wiiRemote = wiiKalibrierung.wiiRemote;
-        //InitWiimotes();
-        /*if (wiiRemote != null)
-        {
-            float accel_x;
-            float accel_y;
-            float accel_z;
-
-            float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
-            accel_x = accel[0];
-            accel_y = -accel[2];
-            accel_z = -accel[1];
-            Debug.Log(accel[1]);
-            Debug.Log(accel_z);
-            horicontal_tilt = accel_z;
-            Debug.Log(horicontal_tilt);
-            Debug.Log(this.GetAccelVector());
-            //vertical_tilt = 
-        }*/
     }
 
     // Update is called once per frame
+
+    ////GG Zittern:
+    ////Anstatt die Neigung des Tellers jeden Frame zu ändern bestimmt tellerSmoothinFactor die Häufigkeit
+    //private int frameCount = 0; //Zähler für Frames -> Neigungsänderung wenn tellerSmoothinFactor erreicht
+    //private float frameSummeZ = 0;
+    //private float frameSummeX = 0;
+
     void FixedUpdate()
     {
         //nutze die Wiimote, falls eine gefunden wurde
@@ -64,14 +54,6 @@ public class CarController : MonoBehaviour
         {
             float moveHorizontal = 0;
             float moveVertical = 0;
-            float moveUp = 0;
-
-            /*      -> Code für Tilt
-            float [] wiiSteuerkreuz = wiiRemote.Accel.GetCalibratedAccelData();
-            moveHorizontal = wiiSteuerkreuz[0];
-            moveVertical = wiiSteuerkreuz[2];
-            Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-            */
 
             int ret;
             do
@@ -108,60 +90,56 @@ public class CarController : MonoBehaviour
             wheelTurn = moveHorizontal* maxTurn;
             brake = wiiRemote.Button.a ? myRigidbody.mass * 0.5f : 0.0f;
 
-            if (startup < 10)
-            {
-                startup++;
-                Debug.Log("startup");
-            }
 
-            else
-            {
+        //    float accel_x;
+        //    float accel_y;
+        //    float accel_z;
 
-                float accel_x;
-                float accel_y;
-                float accel_z;
+        //    float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
+        //    accel_x = accel[0];
+        //    accel_y = -accel[2];
+        //    accel_z = accel[1];
 
-                float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
-                accel_x = accel[0];
-                accel_y = -accel[2];
-                accel_z = accel[1];
-                /*
-                Debug.Log("x: = " + accel_x);
-                Debug.Log("y: = " + accel_y);
-                Debug.Log("z: = " + accel_z);
-                */
+        //    Transform cage = transform.Find("Cage");
 
-                //Init Accel
-                /*if(rotate_init == false)
-                {
-                    horicontal_tilt = accel_z;
-                    rotate_init = true;
-                }*/
+        //    //Ueberspringe #Tiltaenderungen definiert durch tellerSmoothingFactor
+        //    //Berechne den Mittelwert der uebersprungenen Werte
 
-                Transform cage = transform.Find("Cage");
-                //die y-Achse der Wiimote muss auf die Z-Achse des Cages gemapt werden
-                //float horicontal_tiltNew = accel_z;
-                //Debug.Log("newTilt: " + horicontal_tiltNew);
-                //Debug.Log("oldTilt: " + horicontal_tilt);
-                //float horicontal_diff = horicontal_tilt - horicontal_tiltNew;
-                //horicontal_tilt = horicontal_tiltNew;
-                //Debug.Log("diff: " + horicontal_diff);
-                //rotate_horicontal += horicontal_tilt;
-                //Debug.Log("rotate: " + rotate_horicontal);
-                //cage.Rotate(0, 0, 5 * horicontal_diff);
-
-                cage.Rotate(0, 0, -accel_z);
-                Debug.Log(this.GetAccelVector());
+        //    frameSummeZ += -accel_z;
+        //    frameSummeX += -accel_x;
+        //    Debug.Log("frameSummeZ: " + frameSummeZ);
+        //    Debug.Log("frameSummeX: " + frameSummeX);
+        //    frameCount++;
 
 
-                /*// die x-Achse auf die x-Achse
-                vertical_tilt = 0.1f * accel_x;
-                //cage.Rotate(0.05f, 0, 0);
-                //cage.Rotate(horicontal_tilt, 0,0 );
-                Debug.Log(this.GetAccelVector());
-                //cage.Rotate(this.GetAccelVector());
-                */
-            }
+        //    //Ansonsten ändere Tilt
+        //    if (!(frameCount < tellerSmoothinFactor))
+        //    {
+        //        //Cage nach links und rechts kippen
+        //        float z = (frameSummeZ/tellerSmoothinFactor) * 90;
+        //        //cage.localRotation = Quaternion.Euler(0f, 0f, z);
+
+        //        //Cage nach vorne und hinten kippen
+        //        float x = (frameSummeX / tellerSmoothinFactor) * 90;
+        //        Debug.Log("Verändere Tellerwinkel");
+        //        //cage.localRotation = Quaternion.Euler(0f, 0f, z);
+
+        //        //Ignoriere Ausreiser indem nur Neigungen berücksichtigt werden, welche den Winkel um mindestens x Grad veraendert
+        //        float aktuelleNeigungX = cage.eulerAngles.x;
+        //        float aktuelleNeigungZ = cage.eulerAngles.z;
+
+        //        if (Math.Abs(aktuelleNeigungX - x) > minAenderungswinkel || Math.Abs(aktuelleNeigungZ - z) > minAenderungswinkel)
+        //        {
+        //            cage.localRotation = Quaternion.Euler(x, 0f, z);
+        //            Debug.Log(this.GetAccelVector());
+        //        }
+
+        //        //Setze Mittelwert und Frame Count auf 0 fuer naechste Runde auf 0
+        //        frameSummeX = 0;
+        //        frameSummeZ = 0;
+        //        frameCount = 0;
+        //    }
+ 
         }
 
         //ansonsten nutzen die Tastatursteuerung

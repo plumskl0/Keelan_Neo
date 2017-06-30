@@ -30,8 +30,16 @@ public class wiiKalibrierung : MonoBehaviour {
                 ret = wiiRemote.ReadWiimoteData();
 
             } while (ret > 0);
+            accelPlaceholder.text = wiiRemote.Accel.GetCalibratedAccelData().ToString();
+
+            //Debug.Log(wiiRemote.Accel.GetCalibratedAccelData().ToString());
+            Vector3 accel = this.GetAccelVector();
             accelPlaceholder.text = this.GetAccelVector().ToString();
-            Debug.Log(this.GetAccelVector());
+            //Debug.Log("x: " + accel.x);
+            Debug.Log(accel.x + ";" + accel.y + ";" + accel.z);
+
+
+            //Debug.Log(this.GetAccelVector());
         }
     }
     private Vector3 GetAccelVector()
@@ -42,8 +50,11 @@ public class wiiKalibrierung : MonoBehaviour {
 
         float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
         accel_x = accel[0];
-        accel_y = -accel[2];
-        accel_z = -accel[1];
+        accel_y = accel[2];
+        accel_z = accel[1];
+        //debug.log("x: " + accel_x);
+        //debug.log("y: " + accel_y);
+        //debug.log("z: " + accel_z);
         //return new Vector3(accel_x, accel_y, accel_z).normalized;
         return new Vector3(accel_x, accel_y, accel_z);
     }
