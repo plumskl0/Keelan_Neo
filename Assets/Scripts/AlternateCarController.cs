@@ -23,9 +23,12 @@ public class AlternateCarController : MonoBehaviour {
 
     private Rigidbody rb;
 
+    private bool playerControl;
+
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody>();
+        playerControl = true;
 	}
 
     // Update is called once per frame
@@ -33,10 +36,26 @@ public class AlternateCarController : MonoBehaviour {
     {
         getCollider(FRONT_LEFT).ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
 
-        float angle = maxAngle * Input.GetAxis("Horizontal");
-        float torque = maxTorque * Input.GetAxis("Vertical");
+        Debug.Log("Geschw: " + rb.velocity.magnitude);
 
-        float handBrake = Input.GetKey(KeyCode.Space) ? brakeTorque : 0;
+        float angle;
+        float torque;
+
+        float handBrake;
+
+        if (playerControl)
+        {
+            angle = maxAngle * Input.GetAxis("Horizontal");
+            torque = maxTorque * Input.GetAxis("Vertical");
+            handBrake = Input.GetKey(KeyCode.Space) ? brakeTorque : 0;
+        } 
+        else
+        {
+            angle = 0;
+            torque = 0;
+            handBrake = brakeTorque;
+        }
+
 
         // Höchstgeschwindigkeit des Autos
         if (rb.velocity.magnitude >= maxSpeed)
@@ -65,6 +84,11 @@ public class AlternateCarController : MonoBehaviour {
 
     }
 
+    public void setPlayerControl(bool b)
+    {
+        playerControl = b;
+    }
+    
     public void fullBrake(float handBrake)
     {
         getCollider(FRONT_LEFT).brakeTorque = handBrake;
