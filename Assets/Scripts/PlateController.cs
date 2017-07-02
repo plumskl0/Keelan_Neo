@@ -49,7 +49,9 @@ public class PlateController : MonoBehaviour {
             float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
             accel_x = accel[0];
             accel_y = -accel[2];
+
             accel_z = accel[1];
+            Debug.Log(accel_z);
 
             //Transform cage = transform.Find("Cage");
             //Transform plateTransform = this;
@@ -84,27 +86,27 @@ public class PlateController : MonoBehaviour {
 
                 if(aktuelleNeigungX < 90)
                 {
-                    aktuelleNeigungX = -aktuelleNeigungX;
+                    aktuelleNeigungX = aktuelleNeigungX;
                 }
                 if (aktuelleNeigungX > 270)
                 {
-                    aktuelleNeigungX = Math.Abs(aktuelleNeigungX -360);
+                    aktuelleNeigungX = aktuelleNeigungX -360;
                 }
 
 
                 if (aktuelleNeigungZ < 90)
                 {
-                    aktuelleNeigungZ = -aktuelleNeigungZ;
+                    aktuelleNeigungZ = aktuelleNeigungZ;
                 }
                 if (aktuelleNeigungZ > 270)
                 {
-                    aktuelleNeigungZ = Math.Abs(aktuelleNeigungZ - 360);
+                    aktuelleNeigungZ = aktuelleNeigungZ - 360;
                 }
 
 
 
                 //Debug.Log(aktuelleNeigungX);
-                Debug.Log(aktuelleNeigungZ);
+                //Debug.Log(aktuelleNeigungZ);
                 if (Math.Abs(aktuelleNeigungX - x) > minAenderungswinkel || Math.Abs(aktuelleNeigungZ - z) > minAenderungswinkel)
                 {
                     plateTransform.localRotation = Quaternion.Euler(x, 0f, z);
