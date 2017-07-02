@@ -18,6 +18,12 @@ public class PlateController : MonoBehaviour {
     private float y;
     private float z;
 
+    private bool mouseSteering = true;
+    public float mouseSteps = 0.1f;
+
+    private float mouseX;
+    private float mouseY;
+
     // Use this for initialization
     void Start () {
         plateTransform = GetComponent<Transform>();
@@ -93,10 +99,39 @@ public class PlateController : MonoBehaviour {
                 frameCount = 0;
             }
         }
+        else if (mouseSteering)
+        {
+            if (Input.GetAxis("Mouse X") < 0 && mouseX <= 1)
+            {
+                //Code for action on mouse moving left
+                mouseX += mouseSteps;
+            }
+            if (Input.GetAxis("Mouse X") > 0 && mouseX >= -1)
+            {
+                //Code for action on mouse moving right
+                mouseX -= mouseSteps;
+            }
 
-        //Ansonsten steuere Neigung ueber Tastatur
+            if (Input.GetAxis("Mouse Y") < 0 && mouseY >= -1)
+            {
+                //Code for action on mouse moving left
+                mouseY -= mouseSteps;
+            }
+            if (Input.GetAxis("Mouse Y") > 0 && mouseY <= 1)
+            {
+                //Code for action on mouse moving right
+                mouseY += mouseSteps;
+            }
+
+
+            y = mouseY * angle;
+            z = mouseX * angle;
+            Debug.Log("MouseX " + mouseX + " y " + y);
+            plateTransform.localRotation = Quaternion.Euler(y, 0f, z);
+        }
         else
         {
+            //Ansonsten steuere Neigung ueber Tastatur
             y = Input.GetAxis("VerticalPlate") * angle;
             z = Input.GetAxis("HorizontalPlate") * angle;
 
