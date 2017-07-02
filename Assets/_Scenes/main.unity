@@ -1239,10 +1239,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1548253809}
---- !u!4 &1556069457 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 400002, guid: ddca522d9f232b243bdf090758872cd7, type: 3}
-  m_PrefabInternal: {fileID: 1744662153}
 --- !u!1 &1620321573
 GameObject:
   m_ObjectHideFlags: 0
@@ -1304,7 +1300,7 @@ Canvas:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1620321573}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
@@ -1348,7 +1344,7 @@ GameObject:
   - component: {fileID: 1718220181}
   m_Layer: 0
   m_Name: Zielbereich
-  m_TagString: Untagged
+  m_TagString: zielbereich
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1524,6 +1520,10 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ddca522d9f232b243bdf090758872cd7, type: 3}
   m_IsPrefabParent: 0
+--- !u!4 &1744662154 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 1744662153}
 --- !u!1 &1809652461
 GameObject:
   m_ObjectHideFlags: 0
@@ -1550,7 +1550,7 @@ Transform:
   m_LocalPosition: {x: 0.134, y: 1.1297, z: -0.219}
   m_LocalScale: {x: 1, y: 0.4455015, z: 1}
   m_Children:
-  - {fileID: 1556069457}
+  - {fileID: 1744662154}
   m_Father: {fileID: 2024226740}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1566,6 +1566,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   angle: 25
+  tellerSmoothinFactor: 3
+  minAenderungswinkel: 3
 --- !u!1001 &1814166723
 Prefab:
   m_ObjectHideFlags: 0

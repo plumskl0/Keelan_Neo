@@ -7,6 +7,7 @@ TagManager:
   - Ball
   - Coin
   - Ramp
+  - zielbereich
   layers:
   - Default
   - TransparentFX

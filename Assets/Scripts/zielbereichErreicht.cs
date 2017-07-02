@@ -6,7 +6,7 @@ public class zielbereichErreicht : MonoBehaviour {
     public Canvas endbildschirm;
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "zielbereich")
+        if(other.CompareTag("zielbereich"))
         {
             Debug.Log("LadeBild");
             endbildschirm.enabled = true;
