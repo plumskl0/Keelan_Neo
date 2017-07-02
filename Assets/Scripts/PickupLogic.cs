@@ -14,6 +14,8 @@ public class PickupLogic : MonoBehaviour {
     public float time { get; private set; }
 
     public Image[] lifes;
+
+    public Canvas GameOverCanvas;
    
     private bool timerStarted;
     private int lifeCount;
@@ -74,6 +76,7 @@ public class PickupLogic : MonoBehaviour {
 
     public void removeLife()
     {
+        Debug.Log(lifeCount);
         lifeCount--;
         if (lifeCount > 0)
         {
@@ -81,8 +84,9 @@ public class PickupLogic : MonoBehaviour {
         }
         else
         {
-            // Game Over Screen
-            Debug.Log("Game Over");
+            if (lifeCount == 0)
+                lifes[lifeCount].enabled = false;
+            GameOverCanvas.enabled = true;
         }
     }
 

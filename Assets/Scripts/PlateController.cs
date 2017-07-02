@@ -126,7 +126,6 @@ public class PlateController : MonoBehaviour {
 
             y = mouseY * angle;
             z = mouseX * angle;
-            Debug.Log("MouseX " + mouseX + " y " + y);
             plateTransform.localRotation = Quaternion.Euler(y, 0f, z);
         }
         else
