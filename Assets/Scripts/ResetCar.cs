@@ -38,9 +38,10 @@ public class ResetCar : MonoBehaviour {
 
     private void FixedUpdate()
     {
+        Debug.Log( transform.rotation.y);
         if (resetCar)
         {
-            transform.rotation = Quaternion.Euler(0f, transform.rotation.y, 0f);
+            transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
 
             carControl.setPlayerControl(true);
 
