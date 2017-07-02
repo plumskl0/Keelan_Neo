@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using WiimoteApi;
 
 public class AlternateCarController : MonoBehaviour {
 
@@ -24,12 +25,14 @@ public class AlternateCarController : MonoBehaviour {
     private Rigidbody rb;
 
     private bool playerControl;
+    public static Wiimote wiiRemote;
 
     // Use this for initialization
-	void Start () {
+    void Start () {
         rb = GetComponent<Rigidbody>();
         playerControl = true;
-	}
+        wiiRemote = wiiKalibrierung.wiiRemote;
+    }
     
     // Update is called once per frame
     void FixedUpdate()
@@ -37,19 +40,67 @@ public class AlternateCarController : MonoBehaviour {
         getCollider(FRONT_LEFT).ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
 
         //Debug.Log("COM: " + rb.centerOfMass);
+            float angle;
+            float torque;
+            float handBrake;
+
+        //Debug.Log("COM: " + rb.centerOfMass);
 
         //rb.centerOfMass = new Vector3(0.1f, 0.4f, 0.1f);
 
-        float angle;
-        float torque;
-
-        float handBrake;
-
         if (playerControl)
         {
-            angle = maxAngle * Input.GetAxis("Horizontal");
-            torque = maxTorque * Input.GetAxis("Vertical");
-            handBrake = Input.GetKey(KeyCode.Space) ? brakeTorque : 0;
+                //nutze die Wiimote, falls eine gefunden wurde
+                if (wiiRemote != null)
+                {
+                    float moveHorizontal = 0;
+                    float moveVertical = 0;
+
+                    int ret;
+                    do
+                    {
+                        ret = wiiRemote.ReadWiimoteData();
+
+                    } while (ret > 0);
+
+
+                    if (wiiRemote.Button.d_down)
+                    {
+                        //Debug.Log("dDown");
+                        moveHorizontal = -1;
+                    }
+                    if (wiiRemote.Button.d_up)
+                    {
+                        //Debug.Log("d_up");
+                        moveHorizontal = 1;
+                    }
+
+                    if (wiiRemote.Button.d_left)
+                    {
+                        //Debug.Log("dLeft");
+                        moveVertical = 1;
+                    }
+
+                    if (wiiRemote.Button.d_right)
+                    {
+                        //Debug.Log("dRight");
+                        moveVertical = -1;
+                    }
+
+                    torque = moveVertical * maxTorque;
+                    angle = moveHorizontal * maxAngle;
+                    handBrake = wiiRemote.Button.a ? brakeTorque : 0;
+
+                }
+
+                //ansonsten nutzen die Tastatursteuerung
+                else
+                {
+                    angle = maxAngle * Input.GetAxis("Horizontal");
+                    torque = maxTorque * Input.GetAxis("Vertical");
+                    handBrake = Input.GetKey(KeyCode.Space) ? brakeTorque : 0;
+                }
+
         } 
         else
         {
