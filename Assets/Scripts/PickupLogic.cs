@@ -12,22 +12,23 @@ public class PickupLogic : MonoBehaviour {
     public Text TimerText;
 
     private float time;
+    private bool timerStarted;
 
     private void Start()
     {
         CoinCountText.text = " ";
+        TimerText.text = "00:00:000";
+        startTimer();
     }
 
     void Update()
     {
-        time += Time.deltaTime;
+        if (timerStarted)
+            time += Time.deltaTime;
 
-        var minutes = time / 60; //Divide the guiTime by sixty to get the minutes.
-        var seconds = time % 60;//Use the euclidean division for the seconds.
-        var fraction = (time * 100) % 100;
 
         //update the label value
-        TimerText.text = string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, fraction);
+        TimerText.text = getTimerText();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -44,4 +45,24 @@ public class PickupLogic : MonoBehaviour {
     {
         CoinCountText.text = "Münzen " + CoinCount;
     }
+
+    public void startTimer()
+    {
+        timerStarted = true;
+    }
+
+    public void stopTimer()
+    {
+        timerStarted = false;
+    }
+
+    public string getTimerText()
+    {
+        var minutes = time / 60; //Divide the guiTime by sixty to get the minutes.
+        var seconds = time % 60;//Use the euclidean division for the seconds.
+        var fraction = (time * 100) % 100;
+
+        return string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, fraction);
+    }
+
 }

@@ -210,7 +210,7 @@ public class CarController : MonoBehaviour
         wheel.GetWorldPose(out p, out q);
 
         // Assume that the only child of the wheelcollider is the wheel shape.
-        Transform shapeTransform = wheel.transform.GetChild(0);
+        Transform shapeTransform = wheel.transform;
         shapeTransform.position = p;
         shapeTransform.rotation = q;
     }

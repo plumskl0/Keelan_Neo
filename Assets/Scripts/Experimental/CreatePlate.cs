@@ -22,8 +22,10 @@ public class CreatePlate : MonoBehaviour {
     {
         for (int i = 0; i < plateParts; i++)
         {
-            Transform part = transform.Find("Alternate");
-            Transform newPart = Instantiate(part, new Vector3(part.position.x, part.position.y, part.position.z), Quaternion.Euler(part.rotation.x, part.rotation.y + offset * i, part.rotation.z));
+            Transform part = transform.Find("Part");
+            Transform newPart = Instantiate(part, 
+                new Vector3(part.position.x, part.position.y, part.position.z), 
+                Quaternion.Euler(part.rotation.x, part.rotation.y + offset * i, part.rotation.z));
             newPart.SetParent(transform);
         }
     }
