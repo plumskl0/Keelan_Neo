@@ -11,7 +11,7 @@ public class PickupLogic : MonoBehaviour {
 
     public Text TimerText;
 
-    private float time;
+    public float time { get; private set; }
     private bool timerStarted;
 
     private void Start()
