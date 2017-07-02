@@ -11,13 +11,19 @@ public class PickupLogic : MonoBehaviour {
 
     public Text TimerText;
 
+    public Image[] lifes;
+
     private float time;
     private bool timerStarted;
+    private int lifeCount;
 
     private void Start()
     {
         CoinCountText.text = " ";
         TimerText.text = "00:00:000";
+
+        lifeCount = lifes.Length;
+
         startTimer();
     }
 
@@ -63,6 +69,20 @@ public class PickupLogic : MonoBehaviour {
         var fraction = (time * 100) % 100;
 
         return string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, fraction);
+    }
+
+    public void removeLife()
+    {
+        lifeCount--;
+        if (lifeCount > 0)
+        {
+            lifes[lifeCount].enabled = false;
+        }
+        else
+        {
+            // Game Over Screen
+            Debug.Log("Game Over");
+        }
     }
 
 }

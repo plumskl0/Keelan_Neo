@@ -36,7 +36,7 @@ public class AlternateCarController : MonoBehaviour {
     {
         getCollider(FRONT_LEFT).ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
 
-        Debug.Log("COM: " + rb.centerOfMass);
+        //Debug.Log("COM: " + rb.centerOfMass);
 
         //rb.centerOfMass = new Vector3(0.1f, 0.4f, 0.1f);
 
