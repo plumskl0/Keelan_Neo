@@ -17,7 +17,7 @@ public class ResetBall : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKey(KeyCode.R))
+        if (ResetCar.debug && Input.GetKey(KeyCode.R))
         {
             // Ball unter beachtung des Radius auf dem Fahrzeug positionieren
             Vector3 pos = resetPosition.position;

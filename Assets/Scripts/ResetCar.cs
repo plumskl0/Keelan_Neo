@@ -6,11 +6,15 @@ using UnityEngine.UI;
 public class ResetCar : MonoBehaviour {
 
     public Text resetCarText;
+
+    public Rigidbody ball;
     public BallInZoneCheck ballOnPlateZone;
 
-    public bool debug = false;
+    public Transform ballResetPosition;
 
-    private bool resetCar;
+    public static bool debug = true;
+
+    private bool reset;
 
     private AlternateCarController carControl;
 
@@ -28,7 +32,7 @@ public class ResetCar : MonoBehaviour {
 
             carControl.setPlayerControl(false);
 
-            resetCar = isCarResetButtonPressed();
+            reset = isCarResetButtonPressed();
         }
         else
         {
@@ -38,16 +42,30 @@ public class ResetCar : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        Debug.Log( transform.rotation.y);
-        if (resetCar)
+        if (reset)
         {
+            // Resets Car
             transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
-
             carControl.setPlayerControl(true);
 
+            resetBall();
+
             clearResetText();
-            resetCar = false;
+            reset = false;
         }
+    }
+
+    private void resetBall()
+    {
+        float radius = ball.GetComponent<SphereCollider>().radius;
+
+        // Ball unter beachtung des Radius auf dem Fahrzeug positionieren
+        Vector3 pos = ballResetPosition.position;
+        pos.Set(pos.x, pos.y + radius, pos.z);
+        ball.transform.position = pos;
+
+        // Falls der Ball noch rollt die Geschwindigkeit entfernen
+        ball.velocity = Vector3.zero;
     }
 
     private bool isCarResetButtonPressed()
@@ -58,7 +76,7 @@ public class ResetCar : MonoBehaviour {
 
     private void setResetText()
     {
-        resetCarText.text = "Um das Auto wieder aufzurichten Shift+R drücken.";
+        resetCarText.text = "Reset mit Shift+R";
     }
 
     private void clearResetText()

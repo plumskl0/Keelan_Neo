@@ -9,6 +9,28 @@ public class PickupLogic : MonoBehaviour {
 
     public Text CoinCountText;
 
+    public Text TimerText;
+
+    private float time;
+    private bool timerStarted;
+
+    private void Start()
+    {
+        CoinCountText.text = " ";
+        TimerText.text = "00:00:000";
+        startTimer();
+    }
+
+    void Update()
+    {
+        if (timerStarted)
+            time += Time.deltaTime;
+
+
+        //update the label value
+        TimerText.text = getTimerText();
+    }
+
     private void OnTriggerEnter(Collider other)
     {        
         if (other.CompareTag("Coin"))
@@ -19,9 +41,28 @@ public class PickupLogic : MonoBehaviour {
         }
     }
 
-
     private void setText()
     {
-        CoinCountText.text = "Aufgesammelte Coins" + CoinCount;
+        CoinCountText.text = "Münzen " + CoinCount;
     }
+
+    public void startTimer()
+    {
+        timerStarted = true;
+    }
+
+    public void stopTimer()
+    {
+        timerStarted = false;
+    }
+
+    public string getTimerText()
+    {
+        var minutes = time / 60; //Divide the guiTime by sixty to get the minutes.
+        var seconds = time % 60;//Use the euclidean division for the seconds.
+        var fraction = (time * 100) % 100;
+
+        return string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, fraction);
+    }
+
 }
