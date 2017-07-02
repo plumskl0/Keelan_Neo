@@ -12,15 +12,17 @@ public class ResetCar : MonoBehaviour {
 
     public Transform ballResetPosition;
 
-    public static bool debug = true;
+    public static bool debug = !true;
 
     private bool reset;
 
     private AlternateCarController carControl;
+    private PickupLogic pul;
 
     private void Start()
     {
         carControl = GetComponent<AlternateCarController>();
+        pul = GetComponent<PickupLogic>();
         clearResetText();
     }
 
@@ -49,6 +51,9 @@ public class ResetCar : MonoBehaviour {
             carControl.setPlayerControl(true);
 
             resetBall();
+
+            // Leben entfernen
+            pul.removeLife();
 
             clearResetText();
             reset = false;
