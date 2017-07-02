@@ -21,7 +21,7 @@ public class PlateController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         plateTransform = GetComponent<Transform>();
-        wiiRemote = CarController.wiiRemote;
+        wiiRemote = wiiKalibrierung.wiiRemote;
 	}
 
 
@@ -59,8 +59,8 @@ public class PlateController : MonoBehaviour {
 
             frameSummeZ += -accel_z;
             frameSummeX += -accel_x;
-            Debug.Log("frameSummeZ: " + frameSummeZ);
-            Debug.Log("frameSummeX: " + frameSummeX);
+            //Debug.Log("frameSummeZ: " + frameSummeZ);
+            //Debug.Log("frameSummeX: " + frameSummeX);
             frameCount++;
 
 
@@ -73,17 +73,42 @@ public class PlateController : MonoBehaviour {
 
                 //Cage nach vorne und hinten kippen
                 float x = (frameSummeX / tellerSmoothinFactor) * 90;
-                Debug.Log("Verändere Tellerwinkel");
+                //Debug.Log("Verändere Tellerwinkel");
                 //cage.localRotation = Quaternion.Euler(0f, 0f, z);
 
                 //Ignoriere Ausreiser indem nur Neigungen berücksichtigt werden, welche den Winkel um mindestens x Grad veraendert
-                float aktuelleNeigungX = plateTransform.eulerAngles.x -360f;
-                float aktuelleNeigungZ = plateTransform.eulerAngles.z- 360f; 
+                //float aktuelleNeigungX = plateTransform.eulerAngles.x -360f;
+                //float aktuelleNeigungZ = plateTransform.eulerAngles.z- 360f;
+                float aktuelleNeigungX = plateTransform.eulerAngles.x;
+                float aktuelleNeigungZ = plateTransform.eulerAngles.z;
 
+                if(aktuelleNeigungX < 90)
+                {
+                    aktuelleNeigungX = -aktuelleNeigungX;
+                }
+                if (aktuelleNeigungX > 270)
+                {
+                    aktuelleNeigungX = Math.Abs(aktuelleNeigungX -360);
+                }
+
+
+                if (aktuelleNeigungZ < 90)
+                {
+                    aktuelleNeigungZ = -aktuelleNeigungZ;
+                }
+                if (aktuelleNeigungZ > 270)
+                {
+                    aktuelleNeigungZ = Math.Abs(aktuelleNeigungZ - 360);
+                }
+
+
+
+                //Debug.Log(aktuelleNeigungX);
+                Debug.Log(aktuelleNeigungZ);
                 if (Math.Abs(aktuelleNeigungX - x) > minAenderungswinkel || Math.Abs(aktuelleNeigungZ - z) > minAenderungswinkel)
                 {
                     plateTransform.localRotation = Quaternion.Euler(x, 0f, z);
-                    Debug.Log("habe versucht Neigung zu aendern");
+                    //Debug.Log("habe versucht Neigung zu aendern");
                     //Debug.Log(wiiKalibrierung.wiiRemote.GetAccelVector());
                 }
 

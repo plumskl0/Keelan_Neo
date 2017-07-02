@@ -101,59 +101,8 @@ public class CarController : MonoBehaviour
             }
 
             torque = moveVertical * maxTorque;
-            angle = moveHorizontal* maxAngle;
+            angle = moveHorizontal * maxAngle;
             handBrake = wiiRemote.Button.a ? brakeTorque : 0;
-            
-
-
-            //    float accel_x;
-            //    float accel_y;
-            //    float accel_z;
-
-            //    float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
-            //    accel_x = accel[0];
-            //    accel_y = -accel[2];
-            //    accel_z = accel[1];
-
-            //    Transform cage = transform.Find("Cage");
-
-            //    //Ueberspringe #Tiltaenderungen definiert durch tellerSmoothingFactor
-            //    //Berechne den Mittelwert der uebersprungenen Werte
-
-            //    frameSummeZ += -accel_z;
-            //    frameSummeX += -accel_x;
-            //    Debug.Log("frameSummeZ: " + frameSummeZ);
-            //    Debug.Log("frameSummeX: " + frameSummeX);
-            //    frameCount++;
-
-
-            //    //Ansonsten ändere Tilt
-            //    if (!(frameCount < tellerSmoothinFactor))
-            //    {
-            //        //Cage nach links und rechts kippen
-            //        float z = (frameSummeZ/tellerSmoothinFactor) * 90;
-            //        //cage.localRotation = Quaternion.Euler(0f, 0f, z);
-
-            //        //Cage nach vorne und hinten kippen
-            //        float x = (frameSummeX / tellerSmoothinFactor) * 90;
-            //        Debug.Log("Verändere Tellerwinkel");
-            //        //cage.localRotation = Quaternion.Euler(0f, 0f, z);
-
-            //        //Ignoriere Ausreiser indem nur Neigungen berücksichtigt werden, welche den Winkel um mindestens x Grad veraendert
-            //        float aktuelleNeigungX = cage.eulerAngles.x;
-            //        float aktuelleNeigungZ = cage.eulerAngles.z;
-
-            //        if (Math.Abs(aktuelleNeigungX - x) > minAenderungswinkel || Math.Abs(aktuelleNeigungZ - z) > minAenderungswinkel)
-            //        {
-            //            cage.localRotation = Quaternion.Euler(x, 0f, z);
-            //            Debug.Log(this.GetAccelVector());
-            //        }
-
-            //        //Setze Mittelwert und Frame Count auf 0 fuer naechste Runde auf 0
-            //        frameSummeX = 0;
-            //        frameSummeZ = 0;
-            //        frameCount = 0;
-            //    }
 
         }
 
@@ -164,92 +113,16 @@ public class CarController : MonoBehaviour
             torque = maxTorque * Input.GetAxis("Vertical");
             handBrake = Input.GetKey(KeyCode.Space) ? brakeTorque : 0;
         }
+    }
 
-
-        getCollider(FRONT_LEFT).ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
-
-        // Höchstgeschwindigkeit des Autos
-        if (rb.velocity.magnitude >= maxSpeed)
-        {
-            rb.velocity = rb.velocity.normalized * maxSpeed;
+        void OnApplicationQuit()
+    {
+            if (wiiRemote != null)
+            {
+                WiimoteManager.Cleanup(wiiRemote);
+                wiiRemote = null;
+            }
         }
-
-        // Vordere Reifen lenken
-        getCollider(FRONT_LEFT).steerAngle = angle;
-        getCollider(FRONT_RIGHT).steerAngle = angle;
-
-        // Bremsen mit allen Rädern
-        fullBrake(handBrake);
-
-        // Antrieb auf alle Räder?
-        getCollider(FRONT_LEFT).motorTorque = torque;
-        getCollider(FRONT_RIGHT).motorTorque = torque;
-        getCollider(REAR_RIGHT).motorTorque = torque;
-        getCollider(REAR_LEFT).motorTorque = torque;
-
-        // Räder bewegen
-        moveWheels(getCollider(FRONT_LEFT));
-        moveWheels(getCollider(FRONT_RIGHT));
-        moveWheels(getCollider(REAR_RIGHT));
-        moveWheels(getCollider(REAR_LEFT));
-
-    }
-
-    public void fullBrake(float handBrake)
-    {
-        getCollider(FRONT_LEFT).brakeTorque = handBrake;
-        getCollider(FRONT_RIGHT).brakeTorque = handBrake;
-        getCollider(REAR_RIGHT).brakeTorque = handBrake;
-        getCollider(REAR_LEFT).brakeTorque = handBrake;
-    }
-
-    private void moveWheels(WheelCollider wheel)
-    {
-        Quaternion q;
-        Vector3 p;
-        wheel.GetWorldPose(out p, out q);
-
-        // Assume that the only child of the wheelcollider is the wheel shape.
-        Transform shapeTransform = wheel.transform;
-        shapeTransform.position = p;
-        shapeTransform.rotation = q;
-    }
-
-    WheelCollider getCollider(int n)
-    {
-        return wheels[n].gameObject.GetComponent<WheelCollider>();
-    }
-
-    void OnApplicationQuit()
-    {
-        if (wiiRemote != null)
-        {
-            WiimoteManager.Cleanup(wiiRemote);
-            wiiRemote = null;
-        }
-    }
-
-        //wiiMoteHilfsmethoden
-    //    void InitWiimotes()
-    //{
-    //    WiimoteManager.FindWiimotes(); // Poll native bluetooth drivers to find Wiimotes
-
-    //    foreach (Wiimote remote in WiimoteManager.Wiimotes)
-    //    {
-    //        // Do stuff.
-    //        //Console.WriteLine("Gefunden");
-
-    //        //LEDs markieren, dass WiiRemote verbunden ist
-    //        wiiRemote = remote;
-    //        //remote.RumbleOn = true;
-    //        remote.SendStatusInfoRequest();
-    //        wiiRemote.SendPlayerLED(true, false, false, false);
-    //        //Thread.Sleep(1000);
-    //        //remote.RumbleOn = false;
-    //        remote.SendStatusInfoRequest();
-    //        remote.SendDataReportMode(InputDataType.REPORT_BUTTONS_ACCEL);
-    //    }
-    //}
 
     private Vector3 GetAccelVector()
     {
