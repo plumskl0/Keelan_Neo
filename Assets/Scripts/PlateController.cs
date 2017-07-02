@@ -57,7 +57,7 @@ public class PlateController : MonoBehaviour {
             accel_y = -accel[2];
 
             accel_z = accel[1];
-            Debug.Log(accel_z);
+            //Debug.Log(accel_z);
 
             //Transform cage = transform.Find("Cage");
             //Transform plateTransform = this;
@@ -87,8 +87,10 @@ public class PlateController : MonoBehaviour {
                 //Ignoriere Ausreiser indem nur Neigungen berücksichtigt werden, welche den Winkel um mindestens x Grad veraendert
                 //float aktuelleNeigungX = plateTransform.eulerAngles.x -360f;
                 //float aktuelleNeigungZ = plateTransform.eulerAngles.z- 360f;
-                float aktuelleNeigungX = plateTransform.eulerAngles.x;
-                float aktuelleNeigungZ = plateTransform.eulerAngles.z;
+                //float aktuelleNeigungX = plateTransform.
+                float aktuelleNeigungX = plateTransform.localEulerAngles.x;
+                float aktuelleNeigungZ = plateTransform.localEulerAngles.z;
+                Debug.Log(aktuelleNeigungZ);
 
                 if(aktuelleNeigungX < 90)
                 {
