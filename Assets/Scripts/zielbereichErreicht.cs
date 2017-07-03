@@ -12,12 +12,19 @@ public class zielbereichErreicht : MonoBehaviour {
     public Text coinCountText;
     public Text timeNeededText;
 
+    private AlternateCarController carControl;
+    private void Start()
+    {
+        carControl = GetComponent<AlternateCarController>();
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("zielbereich"))
         {
             Debug.Log("LadeBild");
+            carControl.setPlayerControl(false);
 
             PickupLogic pul = this.GetComponent<PickupLogic>();
             pul.stopTimer();
