@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 314195280}
-  m_IndirectSpecularColor: {r: 0.3500695, g: 0.4492445, b: 0.58802646, a: 1}
+  m_IndirectSpecularColor: {r: 0.3500884, g: 0.44928193, b: 0.5880745, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -5496,6 +5496,26 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 0d390c947ceb79940aa697ab6e3a3542, type: 3}
   m_PrefabInternal: {fileID: 1577533921}
+--- !u!1 &1604324089 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1618710738970252, guid: e316dddfef09a454a988be9bf442935e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1733532056}
+--- !u!114 &1604324090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1604324089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a6ae704be95a6d42b3eee3e28233a7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endbildschirm: {fileID: 551179289}
+  coinCount: 0
+  coinCountText: {fileID: 1161716811}
+  timeNeededText: {fileID: 124271674}
 --- !u!1 &1607443796
 GameObject:
   m_ObjectHideFlags: 0
