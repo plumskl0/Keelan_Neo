@@ -212,10 +212,10 @@ RectTransform:
   m_Father: {fileID: 2127025249}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.28100002, y: 0.5}
-  m_AnchorMax: {x: 0.9871727, y: 0.62250024}
-  m_AnchoredPosition: {x: -306.5, y: -30}
-  m_SizeDelta: {x: -615, y: 42}
+  m_AnchorMin: {x: 0.28100002, y: 0.474298}
+  m_AnchorMax: {x: 0.84989256, y: 0.62250024}
+  m_AnchoredPosition: {x: -241.5, y: -23.5}
+  m_SizeDelta: {x: -485, y: 29}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &348310603
 MonoBehaviour:
@@ -249,7 +249,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Legen sie die Wiimote horizontal auf eine ebene Fl\xE4che mit dem A Button
+  m_Text: "Legen sie die Wiimote horizontal auf eine ebene Fl\xE4che mit dem\n A Button
     nach oben. \nDr\xFCcken sie dann \"Kalibrierung Starten\""
 --- !u!222 &348310604
 CanvasRenderer:
@@ -800,7 +800,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.296, y: 0.7597797}
   m_AnchorMax: {x: 0.80700004, y: 0.87600005}
-  m_AnchoredPosition: {x: -208, y: -32.5}
+  m_AnchoredPosition: {x: -207.99998, y: -32.5}
   m_SizeDelta: {x: -418, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &895117428

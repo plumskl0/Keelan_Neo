@@ -25,28 +25,24 @@ Platform assembly: D:\gitVonWindows\Keelan_Neo\twst_Data\Managed\GETween.dll (th
 Loading D:\gitVonWindows\Keelan_Neo\twst_Data\Managed\GETween.dll into Unity Child Domain
 Platform assembly: D:\gitVonWindows\Keelan_Neo\twst_Data\Managed\GUIAnimatorFREE.dll (this message is harmless)
 Loading D:\gitVonWindows\Keelan_Neo\twst_Data\Managed\GUIAnimatorFREE.dll into Unity Child Domain
-- Completed reload, in  0.057 seconds
+- Completed reload, in  0.024 seconds
 Platform assembly: D:\gitVonWindows\Keelan_Neo\twst_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\gitVonWindows\Keelan_Neo\twst_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 5.076057 ms
+UnloadTime: 4.202670 ms
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 25c8 -> priority: 1 
-  Thread -> id: 1b54 -> priority: 1 
+  Thread -> id: 1028 -> priority: 1 
+  Thread -> id: 25f0 -> priority: 1 
 Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 6.500272 ms
+UnloadTime: 6.868485 ms
 
 Unloading 13 unused Assets to reduce memory usage. Loaded Objects now: 1658.
-Total: 1.012054 ms (FindLiveObjects: 0.119040 ms CreateObjectMapping: 0.056320 ms MarkObjects: 0.420267 ms  DeleteObjects: 0.415573 ms)
+Total: 1.407147 ms (FindLiveObjects: 0.168533 ms CreateObjectMapping: 0.090880 ms MarkObjects: 0.569600 ms  DeleteObjects: 0.576853 ms)
 
 3
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-2
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
