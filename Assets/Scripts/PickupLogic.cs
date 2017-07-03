@@ -78,14 +78,12 @@ public class PickupLogic : MonoBehaviour {
     {
         Debug.Log(lifeCount);
         lifeCount--;
-        if (lifeCount > 0)
+        if (lifeCount >= 0)
         {
             lifes[lifeCount].enabled = false;
         }
         else
         {
-            if (lifeCount == 0)
-                lifes[lifeCount].enabled = false;
             GameOverCanvas.enabled = true;
         }
     }
