@@ -23,7 +23,7 @@ public class zielbereichErreicht : MonoBehaviour {
     {
         if(other.CompareTag("zielbereich"))
         {
-            Debug.Log("LadeBild");
+            //Debug.Log("LadeBild");
             carControl.setPlayerControl(false);
 
             PickupLogic pul = this.GetComponent<PickupLogic>();

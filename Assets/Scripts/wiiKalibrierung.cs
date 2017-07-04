@@ -4,10 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using WiimoteApi;
 using System.Text;
+using System;
 
 public class wiiKalibrierung : MonoBehaviour {
 
-    public static Wiimote wiiRemote;
+    public Wiimote wiiRemote;
+    private Vector2 buttonMovement;
+    private Vector3 accelData;
 
     public Canvas menu;
     private int calibStep = 0;
@@ -15,49 +18,95 @@ public class wiiKalibrierung : MonoBehaviour {
     public Text calibText;
     public Text accelPlaceholder;
 
-	// Use this for initialization
-	void Start () {
+    private void Awake()
+    {
+        DontDestroyOnLoad(transform.gameObject);
+    }
+    // Use this for initialization
+    void Start () {
 		
 	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
+    public Vector3 GetAccelVector()
+    {
+        return accelData;
+    }
+
+    //liefert moveVertical und moveHorizontal
+    public Vector2 getButtons()
+    {
+        return buttonMovement;
+    }
+
+    // Update is called once per frame
+    void FixedUpdate () {
         if (wiiRemote != null)
         {
+            //Debug.Log("WiiRemote = " + wiiRemote);
             int ret;
             do
             {
                 ret = wiiRemote.ReadWiimoteData();
 
             } while (ret > 0);
-            accelPlaceholder.text = wiiRemote.Accel.GetCalibratedAccelData().ToString();
-
-            //Debug.Log(wiiRemote.Accel.GetCalibratedAccelData().ToString());
-            Vector3 accel = this.GetAccelVector();
-            accelPlaceholder.text = this.GetAccelVector().ToString();
-            //Debug.Log("x: " + accel.x);
-            Debug.Log(accel.x + ";" + accel.y + ";" + accel.z);
 
 
-            //Debug.Log(this.GetAccelVector());
+            //Bestimme Tastenwerte
+            float moveHorizontal = 0;
+            float moveVertical = 0;
+
+
+
+            if (wiiRemote.Button.d_down)
+            {
+                //Debug.Log("dDown");
+                moveHorizontal = -1;
+            }
+            if (wiiRemote.Button.d_up)
+            {
+                //Debug.Log("d_up");
+                moveHorizontal = 1;
+            }
+
+            if (wiiRemote.Button.d_left)
+            {
+                //Debug.Log("dLeft");
+                moveVertical = 1;
+            }
+
+            if (wiiRemote.Button.d_right)
+            {
+                //Debug.Log("dRight");
+                moveVertical = -1;
+            }
+            buttonMovement = new Vector2(moveHorizontal, moveVertical);
+
+            //bestimme Accel Daten
+            float accel_x;
+            float accel_y;
+            float accel_z;
+
+            float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
+            accel_x = accel[0];
+            accel_y = accel[2];
+            accel_z = accel[1];
+            accelData = new Vector3(accel_x, accel_y, accel_z);
+
+
+            if (menu != null)
+            {
+                accelPlaceholder.text = wiiRemote.Accel.GetCalibratedAccelData().ToString();
+
+                Debug.Log("Wiimote Daten: " + accelData.ToString());
+                accelPlaceholder.text = accelData.ToString();
+                //Debug.Log("x: " + accel.x);
+                //Debug.Log(accel.x + ";" + accel.y + ";" + accel.z);
+
+
+                //Debug.Log(this.GetAccelVector());
+            }
         }
     }
-    private Vector3 GetAccelVector()
-    {
-        float accel_x;
-        float accel_y;
-        float accel_z;
 
-        float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
-        accel_x = accel[0];
-        accel_y = accel[2];
-        accel_z = accel[1];
-        //debug.log("x: " + accel_x);
-        //debug.log("y: " + accel_y);
-        //debug.log("z: " + accel_z);
-        //return new Vector3(accel_x, accel_y, accel_z).normalized;
-        return new Vector3(accel_x, accel_y, accel_z);
-    }
 
     public void findWiimote()
     {
@@ -82,6 +131,8 @@ public class wiiKalibrierung : MonoBehaviour {
         if (count !=0)
         {
             findWiimoteText.text = ("Habe folgende Anzahl Wiimotes gefunden: " + count + ". \nFahren sie mit der Kalibrierung fort.");
+            //Debug.Log("START ---------- Wiimote gefunden");
+            //Debug.Log("Wiimote Daten: " + wiiRemote.Accel.GetCalibratedAccelData().ToString());
         }
     }
 
@@ -124,6 +175,16 @@ public class wiiKalibrierung : MonoBehaviour {
                 wiiRemote.Accel.CalibrateAccel(step);
             }
         }*/
+    }
+
+    public void QuitGame()
+    {
+        if (wiiRemote != null)
+        {
+            WiimoteManager.Cleanup(wiiRemote);
+            wiiRemote = null;
+        }
+        Application.Quit();
     }
 
     public void loadGame()

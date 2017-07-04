@@ -23,12 +23,17 @@ public class PlateController : MonoBehaviour {
 
     private float mouseX;
     private float mouseY;
+    private GameObject wiiRemoteRef;
+    private wiiKalibrierung wiiDaten;
 
     // Use this for initialization
     void Start () {
         plateTransform = GetComponent<Transform>();
-        wiiRemote = wiiKalibrierung.wiiRemote;
-	}
+        wiiDaten = GameObject.Find("wiiMote").GetComponent<wiiKalibrierung>();
+        wiiRemote = wiiDaten.wiiRemote;
+        //wiiDaten = GetComponent<wiiKalibrierung>();
+        //wiiRemote = wiiDaten.wiiRemote;
+    }
 
 
     //GG Zittern:
@@ -39,28 +44,18 @@ public class PlateController : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        if (wiiRemote != null)
+        if (wiiDaten.wiiRemote != null)
         {
-            int ret;
-            do
-            {
-                ret = wiiRemote.ReadWiimoteData();
-
-            } while (ret > 0);
-
             float accel_x;
             float accel_y;
             float accel_z;
 
-            float[] accel = wiiRemote.Accel.GetCalibratedAccelData();
+            Vector3 accel = wiiDaten.GetAccelVector();
             accel_x = accel[0];
-            accel_y = -accel[2];
+            accel_z = accel[2];
 
-            accel_z = accel[1];
-            //Debug.Log(accel_z);
-
-            //Transform cage = transform.Find("Cage");
-            //Transform plateTransform = this;
+            accel_y = accel[1];
+            
 
             //Ueberspringe #Tiltaenderungen definiert durch tellerSmoothingFactor
             //Berechne den Mittelwert der uebersprungenen Werte
@@ -77,6 +72,7 @@ public class PlateController : MonoBehaviour {
             {
                 //Cage nach links und rechts kippen
                 float z = (frameSummeZ / tellerSmoothinFactor) * 90;
+                Debug.Log(z);
                 //cage.localRotation = Quaternion.Euler(0f, 0f, z);
 
                 //Cage nach vorne und hinten kippen
@@ -90,7 +86,7 @@ public class PlateController : MonoBehaviour {
                 //float aktuelleNeigungX = plateTransform.
                 float aktuelleNeigungX = plateTransform.localEulerAngles.x;
                 float aktuelleNeigungZ = plateTransform.localEulerAngles.z;
-                Debug.Log(aktuelleNeigungZ);
+                //Debug.Log(aktuelleNeigungZ);
 
                 if(aktuelleNeigungX < 90)
                 {

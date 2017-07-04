@@ -39,6 +39,8 @@ public class CarController : MonoBehaviour
     private float vertical_tilt;
     private float rotate_horicontal = 0;
 
+    private wiiKalibrierung wiiDaten;
+
     // Use this for initialization
     void Start()
     {
@@ -47,7 +49,8 @@ public class CarController : MonoBehaviour
         // m_Wheels[0].ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
 
         rb = this.gameObject.GetComponent<Rigidbody>();
-        wiiRemote = wiiKalibrierung.wiiRemote;
+        wiiDaten = GetComponent<wiiKalibrierung>();
+        wiiRemote = wiiDaten.wiiRemote;
     }
 
     // Update is called once per frame

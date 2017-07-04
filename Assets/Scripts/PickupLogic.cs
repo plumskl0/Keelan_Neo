@@ -76,7 +76,7 @@ public class PickupLogic : MonoBehaviour {
 
     public void removeLife()
     {
-        Debug.Log(lifeCount);
+        //Debug.Log(lifeCount);
         lifeCount--;
         if (lifeCount >= 0)
         {

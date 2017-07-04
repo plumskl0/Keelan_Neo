@@ -25,7 +25,7 @@ public class pauseMenu : MonoBehaviour {
             carControl.setPlayerControl(false);
             pul.stopTimer();
             pauseMenuCanvas.enabled = true;
-            Debug.Log("Pause");
+            //Debug.Log("Pause");
         }
 	}
 
