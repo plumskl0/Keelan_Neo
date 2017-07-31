@@ -18,12 +18,14 @@ public class ResetCar : MonoBehaviour {
 
     private AlternateCarController carControl;
     private PickupLogic pul;
+    private SharedFields sharedData;
 
     private void Start()
     {
         carControl = GetComponent<AlternateCarController>();
         pul = GetComponent<PickupLogic>();
         clearResetText();
+        sharedData = GetComponent<SharedFields>();
     }
 
     void Update()
@@ -32,7 +34,8 @@ public class ResetCar : MonoBehaviour {
         {
             setResetText();
 
-            carControl.setPlayerControl(false);
+            sharedData.SetPlayerControl(false);
+            //carControl.setPlayerControl(false);
 
             reset = isCarResetButtonPressed();
         }
@@ -48,7 +51,9 @@ public class ResetCar : MonoBehaviour {
         {
             // Resets Car
             transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
-            carControl.setPlayerControl(true);
+
+            sharedData.SetPlayerControl(true);
+            //carControl.setPlayerControl(true);
 
             resetBall();
 

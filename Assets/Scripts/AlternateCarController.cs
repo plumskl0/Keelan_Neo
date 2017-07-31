@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using WiimoteApi;
@@ -24,17 +25,30 @@ public class AlternateCarController : MonoBehaviour {
 
     private Rigidbody rb;
 
-    private bool playerControl;
+    private Boolean playerControl;
     private GameObject wiiMoteRef;
     private wiiKalibrierung wiiDaten;
     public Wiimote wiiRemote;
+    private SharedFields sharedData;
 
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody>();
-        playerControl = true;
-        wiiDaten = GameObject.Find("wiiMote").GetComponent<wiiKalibrierung>();
-        wiiRemote = wiiDaten.wiiRemote;
+
+        sharedData = GetComponent<SharedFields>();
+        sharedData.SetPlayerControl(false);
+        //playerControl = true;
+
+        if (GameObject.Find("wiiMote") != null) //beim debuggen ist sonst wiiMote nullReferenz
+        {
+            wiiDaten = GameObject.Find("wiiMote").GetComponent<wiiKalibrierung>();
+            wiiRemote = wiiDaten.wiiRemote;
+        }
+        else
+        {
+            wiiDaten = null;
+            wiiRemote = null;
+        }
         //Debug.Log("ENDE ------- Übertrage WiimoteReferenz");
     }
     
@@ -52,7 +66,7 @@ public class AlternateCarController : MonoBehaviour {
 
         //rb.centerOfMass = new Vector3(0.1f, 0.4f, 0.1f);
 
-        if (playerControl)
+        if (sharedData.GetPlayerControl())
         {
                 //nutze die Wiimote, falls eine gefunden wurde
                 if (wiiRemote != null)
@@ -146,6 +160,12 @@ public class AlternateCarController : MonoBehaviour {
     {
         playerControl = b;
     }
+
+    public Boolean getPlayerControl()
+    {
+        return playerControl;
+    }
+
     
     public void fullBrake(float handBrake)
     {

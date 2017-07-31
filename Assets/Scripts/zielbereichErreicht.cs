@@ -13,6 +13,8 @@ public class zielbereichErreicht : MonoBehaviour {
     public Text timeNeededText;
 
     private AlternateCarController carControl;
+    private SharedFields sharedData;
+
     private void Start()
     {
         carControl = GetComponent<AlternateCarController>();
@@ -24,7 +26,9 @@ public class zielbereichErreicht : MonoBehaviour {
         if(other.CompareTag("zielbereich"))
         {
             //Debug.Log("LadeBild");
-            carControl.setPlayerControl(false);
+
+            sharedData.SetPlayerControl(false);
+            //carControl.setPlayerControl(false);
 
             PickupLogic pul = this.GetComponent<PickupLogic>();
             pul.stopTimer();
