@@ -107,11 +107,11 @@ public class wiiKalibrierung : MonoBehaviour {
         }
     }
 
-
+    public static int count = 0;
     public void findWiimote()
     {
         WiimoteManager.FindWiimotes(); // Poll native bluetooth drivers to find Wiimotes
-        int count = 0;
+
         foreach (Wiimote remote in WiimoteManager.Wiimotes)
         {
             // Do stuff.
@@ -128,12 +128,31 @@ public class wiiKalibrierung : MonoBehaviour {
             wiiRemote.SendDataReportMode(InputDataType.REPORT_BUTTONS_ACCEL);
             count++;
         }
-        if (count !=0)
+        if (count != 0)
         {
-            findWiimoteText.text = ("Habe folgende Anzahl Wiimotes gefunden: " + count + ". \nFahren sie mit der Kalibrierung fort.");
-            //Debug.Log("START ---------- Wiimote gefunden");
-            //Debug.Log("Wiimote Daten: " + wiiRemote.Accel.GetCalibratedAccelData().ToString());
+            /*if (GameObject.Find("CalibMenu").gameObject.activeSelf)
+            {
+                setFindWiimoteText();
+                //Debug.Log("START ---------- Wiimote gefunden");
+                //Debug.Log("Wiimote Daten: " + wiiRemote.Accel.GetCalibratedAccelData().ToString());
+            }*/
         }
+            /*return true;
+        }
+        else
+        {
+            return false;
+        }*/
+    }
+
+    public int getWiimoteCount()
+    {
+        return count;
+    }
+
+    public void setFindWiimoteText()
+    {
+        findWiimoteText.text = ("Habe folgende Anzahl Wiimotes gefunden: " + count + ". \nFahren sie mit der Kalibrierung fort.");
     }
 
     public void calibWiimote()

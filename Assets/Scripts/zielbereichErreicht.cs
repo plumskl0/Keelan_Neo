@@ -54,6 +54,6 @@ public class zielbereichErreicht : MonoBehaviour {
 
     public void RestartGame()
     {
-        Application.LoadLevel(0);
+        Application.LoadLevel(1);
     }
 }
