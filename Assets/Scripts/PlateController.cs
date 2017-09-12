@@ -9,6 +9,7 @@ public class PlateController : MonoBehaviour {
     public float angle = 25f;
     public int tellerSmoothinFactor = 3;    //glättet Messwerte über die angegebene Anzahl von Frames
     public int minAenderungswinkel = 3;     //nur wenn sich die Neigung, um mindestens diesen Winkel aendert wird die Tellerneigung veraendert
+
     Rigidbody myRigidbody;
     public static Wiimote wiiRemote;
 
@@ -19,20 +20,18 @@ public class PlateController : MonoBehaviour {
     private float z;
 
     private bool mouseSteering = true;
-    public float mouseSteps = 0.1f;
 
     private float mouseX;
     private float mouseY;
     private GameObject wiiRemoteRef;
     private wiiKalibrierung wiiDaten;
     private Boolean playerControl;
-    private SharedFields sharedData;
+    private SharedFields sharedData = SharedFields.Instance;
 
     // Use this for initialization
     void Start () {
         plateTransform = GetComponent<Transform>();
-
-        sharedData = GameObject.Find("Car Prototype v6").GetComponent<SharedFields>();
+        
         //playerControl = GetComponent<AlternateCarController>().getPlayerControl();
         if (GameObject.Find("wiiMote") != null) //beim debuggen ist sonst wiiMote null
         {
@@ -142,31 +141,15 @@ public class PlateController : MonoBehaviour {
             }
             else if (mouseSteering)
             {
-                if (Input.GetAxis("Mouse X") < 0 && mouseX <= 1)
-                {
-                    //Code for action on mouse moving left
-                    mouseX += mouseSteps;
-                }
-                if (Input.GetAxis("Mouse X") > 0 && mouseX >= -1)
-                {
-                    //Code for action on mouse moving right
-                    mouseX -= mouseSteps;
-                }
+                // Mausbewegung
+                mouseX += Input.GetAxis("Mouse X") * sharedData.sensitivity;
+                mouseY += Input.GetAxis("Mouse Y") * sharedData.sensitivity;
 
-                if (Input.GetAxis("Mouse Y") < 0 && mouseY >= -1)
-                {
-                    //Code for action on mouse moving left
-                    mouseY -= mouseSteps;
-                }
-                if (Input.GetAxis("Mouse Y") > 0 && mouseY <= 1)
-                {
-                    //Code for action on mouse moving right
-                    mouseY += mouseSteps;
-                }
+                // Winkel min und max einstellen mit Clamp
+                y = Mathf.Clamp(mouseY, -angle, angle);
+                z = Mathf.Clamp(mouseX, -angle, angle);
 
-
-                y = mouseY * angle;
-                z = mouseX * angle;
+                // Teller bewegen
                 plateTransform.localRotation = Quaternion.Euler(y, 0f, z);
             }
             else

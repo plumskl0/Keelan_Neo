@@ -10,13 +10,12 @@ public class pauseMenu : MonoBehaviour {
     private Boolean pauseButtonPressed = false;
     public Boolean weiterspielen =false;
     public Canvas pauseMenuCanvas;
-    private SharedFields sharedData;
+    private SharedFields sharedData = SharedFields.Instance;
 
     private void Start()
     {
         carControl = GetComponent<AlternateCarController>();
         pul = GetComponent<PickupLogic>();
-        sharedData = GetComponent<SharedFields>();
     }
 
     // Update is called once per frame
@@ -25,10 +24,9 @@ public class pauseMenu : MonoBehaviour {
 		if(pauseButtonPressed)
         {
             sharedData.SetPlayerControl(false);
-            //carControl.setPlayerControl(false);
+            sharedData.SetCursorVisible(true);
             pul.stopTimer();
             pauseMenuCanvas.enabled = true;
-            //Debug.Log("Pause");
         }
 	}
 
@@ -37,7 +35,7 @@ public class pauseMenu : MonoBehaviour {
         pul.startTimer();
 
         sharedData.SetPlayerControl(true);
-        //carControl.setPlayerControl(false);
+        sharedData.SetCursorVisible(false);
         pauseButtonPressed = false;
         pauseMenuCanvas.enabled = false;
     }

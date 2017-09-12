@@ -8,6 +8,7 @@ public class ResetBall : MonoBehaviour {
 
     private Rigidbody rb;
     private float radius;
+    private SharedFields sharedData = SharedFields.Instance;
 
 	// Use this for initialization
 	void Start () {
@@ -25,6 +26,9 @@ public class ResetBall : MonoBehaviour {
             transform.position = pos;
 
             // Falls der Ball noch rollt die Geschwindigkeit entfernen
+            rb.velocity = Vector3.zero;
+        } else if (!sharedData.GetPlayerControl())
+        {
             rb.velocity = Vector3.zero;
         }
 	}

@@ -2,10 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SharedFields : MonoBehaviour {
+public class SharedFields {
+
+    private static SharedFields instance;
+
+    public static SharedFields Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new SharedFields();
+            }
+            return instance;
+        }
+    }
+
+
+    private SharedFields() {}
 
     private bool playerControl = false;
 
+    // Mausempfindlichkeit
+    public float sensitivity = 1.25f;
 
     public bool GetPlayerControl()
     {
@@ -17,13 +36,8 @@ public class SharedFields : MonoBehaviour {
         playerControl = b;
     }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	public void SetCursorVisible(bool b)
+    {
+        Cursor.visible = b;
+    }
 }

@@ -13,7 +13,7 @@ public class zielbereichErreicht : MonoBehaviour {
     public Text timeNeededText;
 
     private AlternateCarController carControl;
-    private SharedFields sharedData;
+    private SharedFields sharedData = SharedFields.Instance;
 
     private void Start()
     {

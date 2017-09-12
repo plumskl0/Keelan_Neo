@@ -12,20 +12,19 @@ public class ResetCar : MonoBehaviour {
 
     public Transform ballResetPosition;
 
-    public static bool debug = !true;
+    public static bool debug = true;
 
     private bool reset;
 
     private AlternateCarController carControl;
     private PickupLogic pul;
-    private SharedFields sharedData;
+    private SharedFields sharedData = SharedFields.Instance;
 
     private void Start()
     {
         carControl = GetComponent<AlternateCarController>();
         pul = GetComponent<PickupLogic>();
         clearResetText();
-        sharedData = GetComponent<SharedFields>();
     }
 
     void Update()
@@ -35,7 +34,6 @@ public class ResetCar : MonoBehaviour {
             setResetText();
 
             sharedData.SetPlayerControl(false);
-            //carControl.setPlayerControl(false);
 
             reset = isCarResetButtonPressed();
         }
