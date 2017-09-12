@@ -36,7 +36,7 @@ public class AlternateCarController : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
 
         sharedData = GetComponent<SharedFields>();
-        sharedData.SetPlayerControl(false);
+        sharedData.SetPlayerControl(true);
         //playerControl = true;
 
         if (GameObject.Find("wiiMote") != null) //beim debuggen ist sonst wiiMote nullReferenz
