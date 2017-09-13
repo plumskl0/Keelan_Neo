@@ -19,6 +19,7 @@ public class PickupLogic : MonoBehaviour {
    
     private bool timerStarted;
     private int lifeCount;
+    private SharedFields sharedData = SharedFields.Instance;
 
     private void Start()
     {
@@ -34,7 +35,6 @@ public class PickupLogic : MonoBehaviour {
     {
         if (timerStarted)
             time += Time.deltaTime;
-
 
         //update the label value
         TimerText.text = getTimerText();
@@ -84,6 +84,7 @@ public class PickupLogic : MonoBehaviour {
         }
         else
         {
+            sharedData.SetCursorVisible(true);
             GameOverCanvas.enabled = true;
         }
     }

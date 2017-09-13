@@ -29,14 +29,14 @@ public class AlternateCarController : MonoBehaviour {
     private GameObject wiiMoteRef;
     private wiiKalibrierung wiiDaten;
     public Wiimote wiiRemote;
-    private SharedFields sharedData;
+    private SharedFields sharedData = SharedFields.Instance;
 
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody>();
-
-        sharedData = GetComponent<SharedFields>();
-        sharedData.SetPlayerControl(false);
+        
+        sharedData.SetCursorVisible(false);
+        sharedData.SetPlayerControl(true);
         //playerControl = true;
 
         if (GameObject.Find("wiiMote") != null) //beim debuggen ist sonst wiiMote nullReferenz
@@ -57,15 +57,10 @@ public class AlternateCarController : MonoBehaviour {
     {
         getCollider(FRONT_LEFT).ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
 
-        //Debug.Log("COM: " + rb.centerOfMass);
-            float angle;
-            float torque;
-            float handBrake;
-
-        //Debug.Log("COM: " + rb.centerOfMass);
-
-        //rb.centerOfMass = new Vector3(0.1f, 0.4f, 0.1f);
-
+        float angle;
+        float torque;
+        float handBrake;
+        
         if (sharedData.GetPlayerControl())
         {
                 //nutze die Wiimote, falls eine gefunden wurde
