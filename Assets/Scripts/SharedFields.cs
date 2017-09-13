@@ -17,14 +17,13 @@ public class SharedFields {
             return instance;
         }
     }
-
-
+    
     private SharedFields() {}
 
     private bool playerControl = false;
 
     // Mausempfindlichkeit
-    public float sensitivity = 1.25f;
+    public float sensitivity = 5f;
 
     public bool GetPlayerControl()
     {

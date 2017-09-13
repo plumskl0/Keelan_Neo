@@ -13,6 +13,9 @@ public class AttackerController : MonoBehaviour {
     [Tooltip("Bereich in dem der Angreifer den Ball versucht zu holen.")]
     public BallInZoneCheck attackZone;
 
+    [Tooltip("Bereich für das Versteck.")]
+    public BallInZoneCheck safetyZone;
+
     [Tooltip("Ort an dem der Ball vom Angreifer hingebracht werden soll.")]
     public Transform ballDropZone;
 
@@ -37,7 +40,7 @@ public class AttackerController : MonoBehaviour {
 
     public void Update()
     {
-        if (attackZone.isBallInZone && !ballCatched)
+        if ((attackZone.isBallInZone && !safetyZone.isBallInZone) && !ballCatched)
         {
             Debug.Log("Ball is in Zone");
             // Wenn der Ball sich in der Zone befindet,
@@ -53,6 +56,12 @@ public class AttackerController : MonoBehaviour {
 
             Vector3 ballPos = GetBallPositionWithRadius(ballRb.position);
 
+            Vector3 lookRotation = ballPos - atkTransform.position;
+            lookRotation.y -= 50;
+            Quaternion rotation = Quaternion.LookRotation(lookRotation);
+
+            atkTransform.rotation = Quaternion.Lerp(atkTransform.transform.rotation, rotation, step);
+
             atkTransform.position = Vector3.MoveTowards(atkTransform.position, ballPos, step);
 
             // Prüfen ob der Ball erreicht wurde
@@ -63,19 +72,20 @@ public class AttackerController : MonoBehaviour {
             Debug.Log("Caught the Ball and moving it");
             // Wenn der Ball gefangen wurde soll der am Zielort 
             // abgelegt werden
-            if (ballRb.transform.parent == null)
-            {
-                ballRb.transform.parent = atkTransform;
-                ballRb.isKinematic = true;
-            }
+            ballRb.isKinematic = true;
 
             float step = attackerSpeed * Time.deltaTime;
+
+            Vector3 ballCarryPos = atkTransform.position;
+            ballCarryPos.y -= ballRadius * 2;
+
             atkTransform.position = Vector3.MoveTowards(atkTransform.position, ballDropZone.position, step);
+            ballRb.position = ballCarryPos;
+
 
             if (isAtDest(atkTransform.position, ballDropZone.position))
             {
                 ballCatched = false;
-                atkTransform.DetachChildren();
                 ballRb.isKinematic = false;
             }
         }
@@ -86,6 +96,12 @@ public class AttackerController : MonoBehaviour {
             // dann soll der Angreifer zurück zu seinem Ursprungsort
             float step = attackerSpeed * Time.deltaTime;
             atkTransform.position = Vector3.MoveTowards(atkTransform.position, atkInitPos, step);
+
+            Vector3 lookRotation = atkInitPos - atkTransform.position;
+            lookRotation.y -= 50;
+            Quaternion rotation = Quaternion.LookRotation(lookRotation);
+
+            atkTransform.rotation = Quaternion.Lerp(atkTransform.transform.rotation, rotation, step);
         }
     }
 

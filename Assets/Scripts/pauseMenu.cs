@@ -8,7 +8,7 @@ public class pauseMenu : MonoBehaviour {
     private AlternateCarController carControl;
     private PickupLogic pul;
     private Boolean pauseButtonPressed = false;
-    public Boolean weiterspielen =false;
+    public Boolean weiterspielen = false;
     public Canvas pauseMenuCanvas;
     private SharedFields sharedData = SharedFields.Instance;
 
