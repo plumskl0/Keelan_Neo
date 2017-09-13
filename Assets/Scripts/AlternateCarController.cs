@@ -37,7 +37,6 @@ public class AlternateCarController : MonoBehaviour {
         
         sharedData.SetCursorVisible(false);
         sharedData.SetPlayerControl(true);
-        //playerControl = true;
 
         if (GameObject.Find("wiiMote") != null) //beim debuggen ist sonst wiiMote nullReferenz
         {
@@ -63,8 +62,10 @@ public class AlternateCarController : MonoBehaviour {
         
         if (sharedData.GetPlayerControl())
         {
+            if (sharedData.SelectedControl == SharedFields.WiiControl && wiiRemote != null)
+
                 //nutze die Wiimote, falls eine gefunden wurde
-                if (wiiRemote != null)
+                //if (wiiRemote != null)
                 {
                 //int ret;
                 //do
@@ -116,7 +117,7 @@ public class AlternateCarController : MonoBehaviour {
                 }
 
         } 
-        else
+        else   //stellt die Reifen neutral wenn keine playerControll gegeben wird
         {
             angle = 0;
             torque = 0;

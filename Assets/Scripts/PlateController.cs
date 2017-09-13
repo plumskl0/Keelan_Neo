@@ -59,7 +59,7 @@ public class PlateController : MonoBehaviour {
     {
         if (sharedData.GetPlayerControl())
         {
-            if (wiiRemote != null)
+            if (sharedData.SelectedControl == SharedFields.WiiControl && wiiRemote != null)
             {
                 float accel_x;
                 float accel_y;

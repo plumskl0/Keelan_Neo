@@ -18,9 +18,25 @@ public class SharedFields {
         }
     }
 
+    public string SelectedControl
+    {
+        get
+        {
+            return selectedControl;
+        }
+
+        set
+        {
+            selectedControl = value;
+        }
+    }
 
     private SharedFields() {}
 
+    public const string MTControl = "MausUndTastaturKontrolle";
+    public const string WiiControl = "WiimoteKontrolle";
+
+    private string selectedControl = MTControl;
     private bool playerControl = false;
 
     // Mausempfindlichkeit
