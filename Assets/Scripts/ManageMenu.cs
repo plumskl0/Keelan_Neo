@@ -9,7 +9,7 @@ public class ManageMenu : MonoBehaviour {
     public GameObject mouseBorder, wiimoteBorder;
     public Text controllerText;
     private wiiKalibrierung wiiDaten;
-    public Transform mainMenu, optionsMenu, calibMenu, missionMenu, wiimoteNotCalibratedPanel;
+    public Transform mainMenu, optionsMenu, calibMenu, missionMenu, keysMenu, wiimoteNotCalibratedPanel;
     private SharedFields sharedData = SharedFields.Instance;
 
     public void Start()
@@ -24,6 +24,8 @@ public class ManageMenu : MonoBehaviour {
 
     public void SetControlerImages() //prüft welche Steuerung gewählt ist und setzt die Images auf dem Panel dementsprechend
     {
+        mouseBorder = GameObject.Find("MouseBorder");
+        wiimoteBorder = GameObject.Find("WiimoteBorder");
         if (wiiDaten.getWiimoteCount() == 0)
         {
             mouseBorder.GetComponent<Image>().color = Color.yellow;
@@ -55,6 +57,11 @@ public class ManageMenu : MonoBehaviour {
         }
     }
 
+    public void SaveControllerSettings()
+    {
+
+    }
+
     public void SwitchToWiimoteControl()
     {
             sharedData.SelectedControl = SharedFields.WiiControl;
@@ -84,6 +91,13 @@ public class ManageMenu : MonoBehaviour {
     {
         SwitchToMTControl();
         LoadScene("Level1");
+    }
+
+    public void SwitchToKeysMenu()
+    {
+        DisableCurrentMenu();
+        keysMenu.gameObject.SetActive(true);
+        SetControlerImages();
     }
 
     public void LoadScene(string name)
