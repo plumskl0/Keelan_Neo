@@ -161,7 +161,19 @@ public class PlateController : MonoBehaviour {
                 plateTransform.localRotation = Quaternion.Euler(y, 0f, z);
             }
 
+            // Evtl. einbauen aber muss noch besprochen werden
+            //if (sharedData.CarReset)
+            //    resetPlateRotation();
         }
+    }
+
+    private void resetPlateRotation()
+    {
+        plateTransform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        mouseX = 0;
+        mouseY = 0;
+        y = 0;
+        z = 0;
     }
 
 }
