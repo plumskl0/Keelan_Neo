@@ -27,6 +27,9 @@ public class ResetBall : MonoBehaviour {
 
             // Falls der Ball noch rollt die Geschwindigkeit entfernen
             rb.velocity = Vector3.zero;
-        } 
+        } else if (!sharedData.GetPlayerControl())
+        {
+            rb.velocity = Vector3.zero;
+        }
 	}
 }

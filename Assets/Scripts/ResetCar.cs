@@ -8,6 +8,7 @@ public class ResetCar : MonoBehaviour {
     public Text resetCarText;
 
     public Rigidbody ball;
+    public BallInZoneCheck ballOnPlateZone;
 
     public Transform ballResetPosition;
 
@@ -16,7 +17,6 @@ public class ResetCar : MonoBehaviour {
     private bool reset;
 
     private AlternateCarController carControl;
-    private PlateController pc;
     private SharedFields sharedData = SharedFields.Instance;
 
     private void Start()
@@ -34,9 +34,6 @@ public class ResetCar : MonoBehaviour {
             sharedData.SetPlayerControl(false);
 
             reset = isCarResetButtonPressed();
-        } else if (debug)
-        {
-            reset = isCarResetButtonPressed();
         }
     }
 
@@ -45,13 +42,10 @@ public class ResetCar : MonoBehaviour {
         if (reset)
         {
             // Resets Car
-            Vector3 curPos = transform.position;
-            curPos.y = curPos.y * transform.localScale.y;
-
-            transform.position = curPos;
             transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
 
             sharedData.SetPlayerControl(true);
+
             resetBall();
 
             clearResetText();
