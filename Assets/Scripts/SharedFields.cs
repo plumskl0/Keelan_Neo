@@ -20,6 +20,16 @@ public class SharedFields {
     
     private SharedFields() {}
 
+    // Hat der Ball den Boden berührt -> ein leben verlieren
+    private bool lostLife = false;
+
+    public bool LostLife { get; set; }
+
+    // Hat der Ball den Boden berührt -> Fahrzeug reset
+    private bool carReset = false;
+    public bool CarReset { get; set; }
+
+    // Spielersteuerung ein und abschalten
     private bool playerControl = false;
 
     // Mausempfindlichkeit

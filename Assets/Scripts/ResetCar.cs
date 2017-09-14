@@ -17,29 +17,23 @@ public class ResetCar : MonoBehaviour {
     private bool reset;
 
     private AlternateCarController carControl;
-    private PickupLogic pul;
     private SharedFields sharedData = SharedFields.Instance;
 
     private void Start()
     {
         carControl = GetComponent<AlternateCarController>();
-        pul = GetComponent<PickupLogic>();
         clearResetText();
     }
 
     void Update()
     {
-        if (!ballOnPlateZone.isBallInZone && !debug)
+        if (sharedData.CarReset && !debug)
         {
             setResetText();
 
             sharedData.SetPlayerControl(false);
 
             reset = isCarResetButtonPressed();
-        }
-        else
-        {
-
         }
     }
 
@@ -51,15 +45,12 @@ public class ResetCar : MonoBehaviour {
             transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
 
             sharedData.SetPlayerControl(true);
-            //carControl.setPlayerControl(true);
 
             resetBall();
 
-            // Leben entfernen
-            pul.removeLife();
-
             clearResetText();
             reset = false;
+            sharedData.CarReset = false;
         }
     }
 

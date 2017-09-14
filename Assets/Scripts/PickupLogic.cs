@@ -38,6 +38,12 @@ public class PickupLogic : MonoBehaviour {
 
         //update the label value
         TimerText.text = getTimerText();
+
+        if (sharedData.LostLife)
+        {
+            removeLife();
+            sharedData.LostLife = false;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -78,11 +84,8 @@ public class PickupLogic : MonoBehaviour {
     {
         //Debug.Log(lifeCount);
         lifeCount--;
-        if (lifeCount >= 0)
-        {
-            lifes[lifeCount].enabled = false;
-        }
-        else
+        lifes[lifeCount].enabled = false;
+        if (lifeCount <= 0)
         {
             sharedData.SetCursorVisible(true);
             GameOverCanvas.enabled = true;
