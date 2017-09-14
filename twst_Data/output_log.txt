@@ -1,0 +1,73 @@
+Initialize engine version: 5.6.1f1 (2860b30f0b54)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: AMD Radeon HD 8750M (ID=0x6600)
+    Vendor:   ATI
+    VRAM:     2031 MB
+    Driver:   15.200.1055.0
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\Assembly-UnityScript.dll (this message is harmless)
+Loading C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\Assembly-UnityScript.dll into Unity Child Domain
+Platform assembly: C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
+Loading C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
+Platform assembly: C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\GETween.dll (this message is harmless)
+Loading C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\GETween.dll into Unity Child Domain
+Platform assembly: C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\GUIAnimatorFREE.dll (this message is harmless)
+Loading C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\GUIAnimatorFREE.dll into Unity Child Domain
+- Completed reload, in  0.959 seconds
+Platform assembly: C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\JuliaS\Documents\Keelan_Neo\twst_Data\Managed\System.dll (this message is harmless)
+desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
+<RI> Initializing input.
+XInput1_3.dll not found. Trying XInput9_1_0.dll instead...
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 2.957044 ms
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 35a8 -> priority: 1 
+  Thread -> id: 1704 -> priority: 1 
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 18.629831 ms
+Failed to create Convex Mesh from source mesh "Quad". Source mesh is likely have too many smooth surface regions. Please reduce the surface smoothness of the source mesh. Alternatively turn on Inflate Mesh and increase the Skin Width sufficiently for this mesh.
+ 
+(Filename:  Line: 54)
+
+
+Unloading 13 unused Assets to reduce memory usage. Loaded Objects now: 1443.
+Total: 2.976750 ms (FindLiveObjects: 0.146559 ms CreateObjectMapping: 0.186790 ms MarkObjects: 1.395800 ms  DeleteObjects: 1.245957 ms)
+
+ENDE ------- Übertrage WiimoteReferenz
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 60.786297 ms
+
+Unloading 295 unused Assets to reduce memory usage. Loaded Objects now: 460.
+Total: 17.137148 ms (FindLiveObjects: 0.168727 ms CreateObjectMapping: 0.194591 ms MarkObjects: 0.927796 ms  DeleteObjects: 15.844390 ms)
+
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 1.202851 ms
+Failed to create Convex Mesh from source mesh "Quad". Source mesh is likely have too many smooth surface regions. Please reduce the surface smoothness of the source mesh. Alternatively turn on Inflate Mesh and increase the Skin Width sufficiently for this mesh.
+ 
+(Filename:  Line: 54)
+
+
+Unloading 11 unused Assets to reduce memory usage. Loaded Objects now: 1444.
+Total: 2.858107 ms (FindLiveObjects: 0.233591 ms CreateObjectMapping: 0.239749 ms MarkObjects: 1.444243 ms  DeleteObjects: 0.938470 ms)
+
+ENDE ------- Übertrage WiimoteReferenz
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
