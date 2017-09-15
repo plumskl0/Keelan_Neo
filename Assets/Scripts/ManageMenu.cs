@@ -13,8 +13,6 @@ public class ManageMenu : MonoBehaviour {
     private wiiKalibrierung wiiDaten;
     public Transform mainMenu, optionsMenu, calibMenu, missionMenu, keysMenu, wiimoteNotCalibratedPanel, changeButtonPanel;
     private SharedFields sharedData = SharedFields.Instance;
-    public GameObject manageInstance;
-    public GameObject levelManager;
 
     public void Start()
     {
@@ -148,9 +146,6 @@ public class ManageMenu : MonoBehaviour {
     public void ChangeKeyTemporary(int directionCode)   //int definiert welche Steuertaste überschrieben werden soll
     {
         int lastKeyStrokeCount = KeyStrokeCount;
-        Boolean keyPressed = false;
-        Debug.Log("InMethode");
-        KeyCode tmpKey = KeyCode.A; //Standardinitialisierung 
         Debug.Log("setze Panel");
         changeButtonPanel.gameObject.SetActive(true);
         Debug.Log("Detecting Keystroke");
@@ -158,42 +153,19 @@ public class ManageMenu : MonoBehaviour {
         ChangeKeyWorker workerObject = new ChangeKeyWorker();
         Thread workerThread = new Thread(workerObject.DoWork);
         workerThread.Start((object)new KeySettingInfomation(directionCode, lastKeyStrokeCount));
-        //workerThread.Join();
+    }
 
-
-        /*while (lastKeyStrokeCount == KeyStrokeCount)
-        {
-            Debug.Log("Waiting for Keystroke.");
-        }*/
-        
-
-        /*
-        while (!keyPressed)
-        {
-            Debug.Log("Starte Schleife");
-            Event e = Event.current;
-            if (e.isKey)
-                Debug.Log("Detected key code: " + e.keyCode);
-
-            for (int i =0; i < 100;i++)
-            {
-                Debug.Log("Durchlaufe!");
-                if (Input.GetKey(KeyCode.B))
-                {
-                    Debug.Log("Taste erkannt");
-                    Debug.Log("key detected");
-                    tmpKey = KeyCode.A;
-                    keyPressed = true;
-                }
-            }
-        }*/
+    public void ChangeMouseSensitivity()
+    {
+        sharedData.sensitivity = GameObject.Find("MouseSensitivitySlider").GetComponent<Slider>().value;
+        Debug.Log("Sensitivity = " + sharedData.sensitivity);
     }
 
 
     public void SaveControllerSettings()
     {
         //übertrage tmpArray in die Speicherwerte
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
         {
             if (sharedData.TmpMouseControls[i]!= KeyCode.None)
             {
@@ -210,6 +182,9 @@ public class ManageMenu : MonoBehaviour {
                         break;
                     case 3:
                         sharedData.TUpKey = sharedData.TmpMouseControls[i];
+                        break;
+                    case 4:
+                        sharedData.TResetKey = sharedData.TmpMouseControls[i];
                         break;
                     default:
                         Debug.Log("Da lief was schief.");

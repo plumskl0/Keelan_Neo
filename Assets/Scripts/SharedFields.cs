@@ -99,6 +99,19 @@ public class SharedFields {
         }
     }
 
+    public KeyCode TResetKey
+    {
+        get
+        {
+            return tResetKey;
+        }
+
+        set
+        {
+            tResetKey = value;
+        }
+    }
+
     private SharedFields() {}
 
     //Tasteneinstellungen Speicher Tastatur
@@ -107,6 +120,7 @@ public class SharedFields {
     private KeyCode tDownKey = KeyCode.S;
     private KeyCode tLeftKey = KeyCode.A;
     private KeyCode tRightKey = KeyCode.D;
+    private KeyCode tResetKey = KeyCode.R;
 
     //Tasteneinstellungen Speicher Wiimote
     /*private ButtonData wUpKey = ButtonData.a;
