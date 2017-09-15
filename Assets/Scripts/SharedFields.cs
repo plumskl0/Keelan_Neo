@@ -34,7 +34,7 @@ public class SharedFields {
         }
     }
 
-    public KeyCode UpKey
+    public KeyCode TUpKey
     {
         get
         {
@@ -47,7 +47,7 @@ public class SharedFields {
         }
     }
 
-    public KeyCode DownKey
+    public KeyCode TDownKey
     {
         get
         {
@@ -60,7 +60,7 @@ public class SharedFields {
         }
     }
 
-    public KeyCode LeftKey
+    public KeyCode TLeftKey
     {
         get
         {
@@ -73,7 +73,7 @@ public class SharedFields {
         }
     }
 
-    public KeyCode RightKey
+    public KeyCode TRightKey
     {
         get
         {
@@ -86,20 +86,33 @@ public class SharedFields {
         }
     }
 
+    public KeyCode[] TmpMouseControls
+    {
+        get
+        {
+            return tmpMouseControls;
+        }
+
+        set
+        {
+            tmpMouseControls = value;
+        }
+    }
 
     private SharedFields() {}
 
     //Tasteneinstellungen Speicher Tastatur
+    private KeyCode[] tmpMouseControls = new KeyCode[4]; // 0 -> up, 1 -> down, 2-> left, 3 -> right
     private KeyCode tUpKey = KeyCode.W;
     private KeyCode tDownKey = KeyCode.S;
     private KeyCode tLeftKey = KeyCode.A;
     private KeyCode tRightKey = KeyCode.D;
 
     //Tasteneinstellungen Speicher Wiimote
-    private ButtonData wUpKey = ButtonData.a;
+    /*private ButtonData wUpKey = ButtonData.a;
     private ButtonData wDownKey = KeyCode.S;
     private ButtonData wLeftKey = KeyCode.A;
-    private ButtonData wRightKey = KeyCode.D;
+    private ButtonData wRightKey = KeyCode.D;*/
 
     //Controllerauswahl
     public const string MTControl = "MausUndTastaturKontrolle";

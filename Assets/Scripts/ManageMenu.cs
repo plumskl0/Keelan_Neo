@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 using WiimoteApi;
@@ -9,8 +11,10 @@ public class ManageMenu : MonoBehaviour {
     public GameObject mouseBorder, wiimoteBorder;
     public Text controllerText;
     private wiiKalibrierung wiiDaten;
-    public Transform mainMenu, optionsMenu, calibMenu, missionMenu, keysMenu, wiimoteNotCalibratedPanel;
+    public Transform mainMenu, optionsMenu, calibMenu, missionMenu, keysMenu, wiimoteNotCalibratedPanel, changeButtonPanel;
     private SharedFields sharedData = SharedFields.Instance;
+    public GameObject manageInstance;
+    public GameObject levelManager;
 
     public void Start()
     {
@@ -18,7 +22,8 @@ public class ManageMenu : MonoBehaviour {
         wiiDaten = GameObject.Find("wiiMote").GetComponent<wiiKalibrierung>();
         Debug.Log("nach if");
         wiiDaten.findWiimote();
-        SetControlerImages(); 
+        SetControlerImages();
+        //manageInstance = GameObject.Find("LevelManger").GetComponent<ManageMenu>();
 
     }
 
@@ -57,9 +62,161 @@ public class ManageMenu : MonoBehaviour {
         }
     }
 
+
+    
+
+    /*public void ChangeKeyTemporary(int directionCode)   //int definiert welche Steuertaste überschrieben werden soll
+    {
+        Boolean keyPressed = false;
+        Debug.Log("InMethode");
+        KeyCode tmpKey = KeyCode.A; //Standardinitialisierung 
+        Debug.Log("setze Panel");
+        changeButtonPanel.gameObject.SetActive(true);
+        while (!keyPressed)
+        {
+            Debug.Log("Starte Schleife");
+            foreach (KeyCode vKey in System.Enum.GetValues(typeof(KeyCode)))
+            {
+                Debug.Log("Durchlaufe!");
+                if (Input.GetKey(vKey))
+                {
+                    Debug.Log("Taste erkannt");
+                    Debug.Log("key detected");
+                    tmpKey = vKey;
+                    keyPressed = true;
+                }
+            }
+        }
+        tmpMouseControls[directionCode] = tmpKey;
+    }*/
+
+    static KeyCode tmpKey;
+    static int keyStrokeCount = 0;
+
+    public static int KeyStrokeCount
+    {
+        get
+        {
+            return keyStrokeCount;
+        }
+
+        set
+        {
+            keyStrokeCount = value;
+        }
+    }
+
+    public static KeyCode TmpKey
+    {
+        get
+        {
+            return tmpKey;
+        }
+
+        set
+        {
+            tmpKey = value;
+        }
+    }
+
+    void OnGUI()
+    {
+        Event e = Event.current;
+        if (e.isKey)
+        {
+            //Debug.Log("Detected key code: " + e.keyCode);
+            //Debug.Log("keystrokecount: " + KeyStrokeCount);
+            TmpKey = e.keyCode;
+            KeyStrokeCount++;
+            if (changeButtonPanel.gameObject.activeSelf == true)
+            {
+                changeButtonPanel.gameObject.SetActive(false);
+            }
+        }
+
+    }
+
+  /*  public static void ChangeKeyTestEnde()   //int definiert welche Steuertaste überschrieben werden soll
+    {
+        
+        Debug.Log("Beende Tastensetzen");
+       levelManager.GetComponent<ManageMenu>.changeButtonPanel.gameObject.SetActive(false);
+        manageInstance.tmpMouseControls[0] = manageInstance.tmpKey;
+        Debug.Log("Egebnis = " + manageInstance.tmpMouseControls[0]);
+    }*/
+
+    public void ChangeKeyTemporary(int directionCode)   //int definiert welche Steuertaste überschrieben werden soll
+    {
+        int lastKeyStrokeCount = KeyStrokeCount;
+        Boolean keyPressed = false;
+        Debug.Log("InMethode");
+        KeyCode tmpKey = KeyCode.A; //Standardinitialisierung 
+        Debug.Log("setze Panel");
+        changeButtonPanel.gameObject.SetActive(true);
+        Debug.Log("Detecting Keystroke");
+
+        ChangeKeyWorker workerObject = new ChangeKeyWorker();
+        Thread workerThread = new Thread(workerObject.DoWork);
+        workerThread.Start((object)new KeySettingInfomation(directionCode, lastKeyStrokeCount));
+        //workerThread.Join();
+
+
+        /*while (lastKeyStrokeCount == KeyStrokeCount)
+        {
+            Debug.Log("Waiting for Keystroke.");
+        }*/
+        
+
+        /*
+        while (!keyPressed)
+        {
+            Debug.Log("Starte Schleife");
+            Event e = Event.current;
+            if (e.isKey)
+                Debug.Log("Detected key code: " + e.keyCode);
+
+            for (int i =0; i < 100;i++)
+            {
+                Debug.Log("Durchlaufe!");
+                if (Input.GetKey(KeyCode.B))
+                {
+                    Debug.Log("Taste erkannt");
+                    Debug.Log("key detected");
+                    tmpKey = KeyCode.A;
+                    keyPressed = true;
+                }
+            }
+        }*/
+    }
+
+
     public void SaveControllerSettings()
     {
-
+        //übertrage tmpArray in die Speicherwerte
+        for (int i = 0; i < 4; i++)
+        {
+            if (sharedData.TmpMouseControls[i]!= KeyCode.None)
+            {
+                switch (i)
+                {
+                    case 0:
+                        sharedData.TUpKey = sharedData.TmpMouseControls[i];
+                        break;
+                    case 1:
+                        sharedData.TDownKey = sharedData.TmpMouseControls[i];
+                        break;
+                    case 2:
+                        sharedData.TUpKey = sharedData.TmpMouseControls[i];
+                        break;
+                    case 3:
+                        sharedData.TUpKey = sharedData.TmpMouseControls[i];
+                        break;
+                    default:
+                        Debug.Log("Da lief was schief.");
+                        break;
+                }
+            }
+        }
     }
 
     public void SwitchToWiimoteControl()
