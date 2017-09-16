@@ -186,9 +186,9 @@ RectTransform:
   - {fileID: 988517261}
   - {fileID: 1361609771}
   - {fileID: 490065478}
-  - {fileID: 461100672}
   - {fileID: 1482668387}
   - {fileID: 221505208}
+  - {fileID: 461100672}
   m_Father: {fileID: 1958306887}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -547,17 +547,17 @@ Prefab:
         type: 2}
       propertyPath: lifes.Array.data[3]
       value: 
-      objectReference: {fileID: 461100673}
+      objectReference: {fileID: 1482668388}
     - target: {fileID: 114283193159528488, guid: 1979cc5034c8bf6419de923b2798b26d,
         type: 2}
       propertyPath: lifes.Array.data[4]
       value: 
-      objectReference: {fileID: 1482668388}
+      objectReference: {fileID: 221505209}
     - target: {fileID: 114283193159528488, guid: 1979cc5034c8bf6419de923b2798b26d,
         type: 2}
       propertyPath: lifes.Array.data[5]
       value: 
-      objectReference: {fileID: 221505209}
+      objectReference: {fileID: 461100673}
     - target: {fileID: 114579199917717724, guid: 1979cc5034c8bf6419de923b2798b26d,
         type: 2}
       propertyPath: resetCarText
@@ -601,6 +601,18 @@ Transform:
   m_PrefabParentObject: {fileID: 4471290569926958, guid: 1979cc5034c8bf6419de923b2798b26d,
     type: 2}
   m_PrefabInternal: {fileID: 205680002}
+--- !u!114 &205680005 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114206102873337008, guid: 1979cc5034c8bf6419de923b2798b26d,
+    type: 2}
+  m_PrefabInternal: {fileID: 205680002}
+  m_Script: {fileID: 11500000, guid: 0a6ae704be95a6d42b3eee3e28233a7f, type: 3}
+--- !u!114 &205680006 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114036216028175824, guid: 1979cc5034c8bf6419de923b2798b26d,
+    type: 2}
+  m_PrefabInternal: {fileID: 205680002}
+  m_Script: {fileID: 11500000, guid: d7e88dfb5d927fd4aa657aff3425f5ae, type: 3}
 --- !u!1 &221505207
 GameObject:
   m_ObjectHideFlags: 0
@@ -612,7 +624,7 @@ GameObject:
   - component: {fileID: 221505210}
   - component: {fileID: 221505209}
   m_Layer: 5
-  m_Name: Life6
+  m_Name: Life5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -629,12 +641,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 89089007}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -0.9}
-  m_SizeDelta: {x: 20, y: 20}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &221505209
 MonoBehaviour:
@@ -1419,7 +1431,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 205680005}
         m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
@@ -1522,7 +1534,7 @@ GameObject:
   - component: {fileID: 461100674}
   - component: {fileID: 461100673}
   m_Layer: 5
-  m_Name: Life4
+  m_Name: Life6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1539,12 +1551,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 89089007}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 65, y: -0.9}
-  m_SizeDelta: {x: 20, y: 20}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &461100673
 MonoBehaviour:
@@ -1612,7 +1624,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 65, y: 26.2}
-  m_SizeDelta: {x: 20, y: 20}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &490065479
 MonoBehaviour:
@@ -2437,7 +2449,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 205680005}
         m_MethodName: RestartGame
         m_Mode: 1
         m_Arguments:
@@ -3006,7 +3018,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -65, y: 26.2}
-  m_SizeDelta: {x: 20, y: 20}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &988517262
 MonoBehaviour:
@@ -3868,7 +3880,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 26.2}
-  m_SizeDelta: {x: 20, y: 20}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1361609772
 MonoBehaviour:
@@ -4309,7 +4321,7 @@ GameObject:
   - component: {fileID: 1482668389}
   - component: {fileID: 1482668388}
   m_Layer: 5
-  m_Name: Life5
+  m_Name: Life4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4326,12 +4338,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 89089007}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -65, y: -0.9}
-  m_SizeDelta: {x: 20, y: 20}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1482668388
 MonoBehaviour:
@@ -4484,6 +4496,7 @@ GameObject:
   - component: {fileID: 1566585822}
   - component: {fileID: 1566585821}
   - component: {fileID: 1566585820}
+  - component: {fileID: 1566585823}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -4545,6 +4558,17 @@ Transform:
   m_Father: {fileID: 1358717126}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1566585823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1566585819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55fec530eaa830846ba068e0acb2fb19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1577533921
 Prefab:
   m_ObjectHideFlags: 0
@@ -6150,7 +6174,7 @@ Prefab:
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 205680005}
     - target: {fileID: 114446963285493674, guid: 0e807cfedcade944e9ebf33441024230,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -6160,7 +6184,7 @@ Prefab:
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 205680005}
     - target: {fileID: 114222741432860270, guid: 0e807cfedcade944e9ebf33441024230,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -6170,7 +6194,7 @@ Prefab:
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 205680006}
     - target: {fileID: 114004078487869402, guid: 0e807cfedcade944e9ebf33441024230,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName

@@ -11,7 +11,7 @@ public class ResetCar : MonoBehaviour {
 
     public Transform ballResetPosition;
 
-    public static bool debug = true;
+    public static bool debug = !true;
 
     private bool reset;
 

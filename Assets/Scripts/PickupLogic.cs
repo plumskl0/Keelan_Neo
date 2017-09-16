@@ -24,7 +24,7 @@ public class PickupLogic : MonoBehaviour {
         CoinCountText.text = " ";
         TimerText.text = "00:00:000";
 
-        lifeCount = lifes.Length;
+        setLifeCount();
 
         startTimer();
     }
@@ -102,15 +102,26 @@ public class PickupLogic : MonoBehaviour {
     {
         //Debug.Log(lifeCount);
         lifeCount--;
-        if (lifeCount > lifes.Length)
+        if (lifeCount >= 1)
         {
-            lifes[lifeCount].enabled = false;
+            disableLifeIcon(lifeCount);
         }
         if (lifeCount <= 0)
         {
+            disableLifeIcon(lifeCount);
             sharedData.SetCursorVisible(true);
             GameOverCanvas.enabled = true;
+            setLifeCount();
         }
     }
 
+    private void disableLifeIcon(int n)
+    {
+        lifes[lifeCount].enabled = false;
+    }
+
+    private void setLifeCount()
+    {
+        lifeCount = lifes.Length;
+    }
 }

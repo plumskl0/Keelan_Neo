@@ -55,5 +55,6 @@ public class zielbereichErreicht : MonoBehaviour {
     public void RestartGame()
     {
         Application.LoadLevel(1);
+        sharedData.CarReset = false;
     }
 }
