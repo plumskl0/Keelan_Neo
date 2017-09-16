@@ -30,7 +30,7 @@ public class PickupLogic : MonoBehaviour {
 
         startTimer();
     }
-
+    
     void Update()
     {
         if (timerStarted)
@@ -44,16 +44,35 @@ public class PickupLogic : MonoBehaviour {
             removeLife();
             sharedData.LostLife = false;
         }
+
+        if (sharedData.PayedCoin)
+        {
+            if (CoinCount > 0)
+            {
+                coinPayed();
+            } else
+            {
+                Debug.Log("No more coins left");
+            }
+            sharedData.PayedCoin = false;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {        
+        // Erhöht die Münzenanzahl um 1
         if (other.CompareTag("Coin"))
         {
             other.gameObject.SetActive(false);
             CoinCount++;
             setText();
         }
+    }
+
+    private void coinPayed()
+    {
+        CoinCount--;
+        setText();
     }
 
     private void setText()
