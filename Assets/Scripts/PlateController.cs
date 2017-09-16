@@ -145,9 +145,12 @@ public class PlateController : MonoBehaviour {
                 mouseX += Input.GetAxis("Mouse X") * sharedData.sensitivity;
                 mouseY += Input.GetAxis("Mouse Y") * sharedData.sensitivity;
 
+                mouseY = Mathf.Clamp(mouseY, -angle, angle);
+                mouseX = Mathf.Clamp(mouseX, -angle, angle);
+
                 // Winkel min und max einstellen mit Clamp
-                y = Mathf.Clamp(mouseY, -angle, angle);
-                z = Mathf.Clamp(mouseX, -angle, angle);
+                y = mouseY;
+                z = mouseX;
 
                 // Teller bewegen
                 plateTransform.localRotation = Quaternion.Euler(y, 0f, z);
