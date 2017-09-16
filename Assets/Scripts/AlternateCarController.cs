@@ -63,41 +63,7 @@ public class AlternateCarController : MonoBehaviour {
         if (sharedData.GetPlayerControl())
         {
             if (sharedData.SelectedControl == SharedFields.WiiControl && wiiRemote != null)
-
-                //nutze die Wiimote, falls eine gefunden wurde
-                //if (wiiRemote != null)
                 {
-                //int ret;
-                //do
-                //{
-                //    ret = wiiRemote.ReadWiimoteData();
-
-                //} while (ret > 0);
-
-
-                //if (wiiRemote.Button.d_down)
-                //{
-                //    //Debug.Log("dDown");
-                //    moveHorizontal = -1;
-                //}
-                //if (wiiRemote.Button.d_up)
-                //{
-                //    //Debug.Log("d_up");
-                //    moveHorizontal = 1;
-                //}
-
-                //if (wiiRemote.Button.d_left)
-                //{
-                //    //Debug.Log("dLeft");
-                //    moveVertical = 1;
-                //}
-
-                //if (wiiRemote.Button.d_right)
-                //{
-                //    //Debug.Log("dRight");
-                //    moveVertical = -1;
-                //}
-
                 Vector2 buttonMovement = wiiDaten.getButtons();
                 float moveHorizontal = buttonMovement.x;
                 float moveVertical = buttonMovement.y;

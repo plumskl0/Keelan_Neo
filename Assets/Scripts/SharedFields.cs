@@ -139,7 +139,7 @@ public class SharedFields {
     //Tasteneinstellungen Speicher Wiimote
     /*private ButtonData wUpKey = ButtonData.a;
     private ButtonData wDownKey = KeyCode.S;
-    private ButtonData wLeftKey = KeyCode.A;
+    private ButtonData wLeftKey = ButtonData.;
     private ButtonData wRightKey = KeyCode.D;*/
 
     //Controllerauswahl

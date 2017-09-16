@@ -13,6 +13,7 @@ public class ManageMenu : MonoBehaviour {
     private wiiKalibrierung wiiDaten;
     public Transform mainMenu, optionsMenu, calibMenu, missionMenu, keysMenu, wiimoteNotCalibratedPanel, changeButtonPanel;
     private SharedFields sharedData = SharedFields.Instance;
+    public Text upText, downText, leftText, rightText,resetText, brakeText;
 
     public void Start()
     {
@@ -201,6 +202,17 @@ public class ManageMenu : MonoBehaviour {
                 }
             }
         }
+        ShowKeysInSettings();
+    }
+
+    public void ShowKeysInSettings()
+    {
+        upText.text = sharedData.TUpKey.ToString();
+        downText.text = sharedData.TDownKey.ToString();
+        leftText.text = sharedData.TLeftKey.ToString();
+        rightText.text = sharedData.TRightKey.ToString();
+        resetText.text = sharedData.TResetKey.ToString();
+        brakeText.text = sharedData.TBrakeKey.ToString();
     }
 
     public void SwitchToWiimoteControl()

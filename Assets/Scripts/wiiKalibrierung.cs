@@ -204,19 +204,6 @@ public class wiiKalibrierung : MonoBehaviour {
             CalibStep++;
             calibText.text = calibInfo.ToString();
         }
-        /*for (int x = 0; x < 3; x++)
-        {
-
-            AccelCalibrationStep step = (AccelCalibrationStep)x;
-
-            //folgendes erzeugt drei Buttons (-> einen pro Calibration Step)
-            //  -> liefern true wenn der Nutzer darauf drückt
-            //  -> daraufhin startet die ausgewählte Kalibrierung
-            if (GUILayout.Button(step.ToString(), GUILayout.Width(100)))
-            {
-                wiiRemote.Accel.CalibrateAccel(step);
-            }
-        }*/
     }
 
     public void QuitGame()
