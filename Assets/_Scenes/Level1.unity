@@ -573,6 +573,21 @@ Prefab:
       propertyPath: pauseMenuCanvas
       value: 
       objectReference: {fileID: 1735187127}
+    - target: {fileID: 114206102873337008, guid: 1979cc5034c8bf6419de923b2798b26d,
+        type: 2}
+      propertyPath: endbildschirm
+      value: 
+      objectReference: {fileID: 551179289}
+    - target: {fileID: 114206102873337008, guid: 1979cc5034c8bf6419de923b2798b26d,
+        type: 2}
+      propertyPath: coinCountText
+      value: 
+      objectReference: {fileID: 1161716811}
+    - target: {fileID: 114206102873337008, guid: 1979cc5034c8bf6419de923b2798b26d,
+        type: 2}
+      propertyPath: timeNeededText
+      value: 
+      objectReference: {fileID: 124271674}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1979cc5034c8bf6419de923b2798b26d, type: 2}
   m_IsPrefabParent: 0
@@ -6036,6 +6051,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114004078487869402, guid: 0e807cfedcade944e9ebf33441024230,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 224542391904275888, guid: 0e807cfedcade944e9ebf33441024230,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -6155,6 +6175,16 @@ Prefab:
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Continue
+      objectReference: {fileID: 0}
+    - target: {fileID: 114004078487869402, guid: 0e807cfedcade944e9ebf33441024230,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114004078487869402, guid: 0e807cfedcade944e9ebf33441024230,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0e807cfedcade944e9ebf33441024230, type: 2}
