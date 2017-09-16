@@ -1471,8 +1471,8 @@ RectTransform:
   m_Father: {fileID: 942050382}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.1511111, y: 0}
+  m_AnchorMax: {x: 0.1511111, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2787,7 +2787,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &529506195
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3132,7 +3132,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.209, y: 0.42714217}
   m_AnchorMax: {x: 0.374, y: 0.5761422}
-  m_AnchoredPosition: {x: -1.949997, y: 2.4659996}
+  m_AnchoredPosition: {x: -1.9500122, y: 2.4659996}
   m_SizeDelta: {x: -7, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &572471062
@@ -3206,7 +3206,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.33, y: 0.826858}
   m_AnchorMax: {x: 0.620652, y: 0.937858}
-  m_AnchoredPosition: {x: 344.0003, y: -105}
+  m_AnchoredPosition: {x: 344.00034, y: -105}
   m_SizeDelta: {x: 23, y: -8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &574762489
@@ -3990,7 +3990,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &742718328
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5358,7 +5358,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.705522, y: 0.20344524}
   m_AnchorMax: {x: 0.9716961, y: 0.29389402}
-  m_AnchoredPosition: {x: -0.5, y: -5.49971}
+  m_AnchoredPosition: {x: -0.5, y: -5.4997025}
   m_SizeDelta: {x: -2, y: 9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1133597333
@@ -6355,7 +6355,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.1511111, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7435,7 +7435,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1768907506
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7590,8 +7590,6 @@ MonoBehaviour:
   keysMenu: {fileID: 529506195}
   wiimoteNotCalibratedPanel: {fileID: 154086899}
   changeButtonPanel: {fileID: 1366420966}
-  manageInstance: {fileID: 0}
-  levelManager: {fileID: 1794839873}
 --- !u!4 &1794839875
 Transform:
   m_ObjectHideFlags: 0

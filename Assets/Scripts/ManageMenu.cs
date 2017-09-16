@@ -165,7 +165,7 @@ public class ManageMenu : MonoBehaviour {
     public void SaveControllerSettings()
     {
         //übertrage tmpArray in die Speicherwerte
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 6; i++)
         {
             if (sharedData.TmpMouseControls[i]!= KeyCode.None)
             {
@@ -173,18 +173,27 @@ public class ManageMenu : MonoBehaviour {
                 {
                     case 0:
                         sharedData.TUpKey = sharedData.TmpMouseControls[i];
+                        Debug.Log("up ist: " + sharedData.TUpKey);
                         break;
                     case 1:
                         sharedData.TDownKey = sharedData.TmpMouseControls[i];
+                        Debug.Log("down ist: " + sharedData.TDownKey);
                         break;
                     case 2:
-                        sharedData.TUpKey = sharedData.TmpMouseControls[i];
+                        sharedData.TLeftKey = sharedData.TmpMouseControls[i];
+                        Debug.Log("left ist: " + sharedData.TLeftKey);
                         break;
                     case 3:
-                        sharedData.TUpKey = sharedData.TmpMouseControls[i];
+                        sharedData.TRightKey = sharedData.TmpMouseControls[i];
+                        Debug.Log("right ist: " + sharedData.TRightKey);
                         break;
                     case 4:
                         sharedData.TResetKey = sharedData.TmpMouseControls[i];
+                        Debug.Log("reset ist: " + sharedData.TResetKey);
+                        break;
+                    case 5:
+                        sharedData.TBrakeKey = sharedData.TmpMouseControls[i];
+                        Debug.Log("brake ist: " + sharedData.TBrakeKey);
                         break;
                     default:
                         Debug.Log("Da lief was schief.");
@@ -242,6 +251,7 @@ public class ManageMenu : MonoBehaviour {
         //hier muss eine Pause rein bis geladen wird
         else
         {
+            Debug.Log(" " + sharedData.TUpKey + sharedData.TDownKey + sharedData.TLeftKey + sharedData.TRightKey);
             Application.LoadLevel(name);
         }
     }

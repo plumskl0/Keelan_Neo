@@ -112,15 +112,29 @@ public class SharedFields {
         }
     }
 
+    public KeyCode TBrakeKey
+    {
+        get
+        {
+            return tBrakeKey;
+        }
+
+        set
+        {
+            tBrakeKey = value;
+        }
+    }
+
     private SharedFields() {}
 
     //Tasteneinstellungen Speicher Tastatur
-    private KeyCode[] tmpMouseControls = new KeyCode[4]; // 0 -> up, 1 -> down, 2-> left, 3 -> right
+    private KeyCode[] tmpMouseControls = new KeyCode[6]; // 0 -> up, 1 -> down, 2-> left, 3 -> right, 4 -> reset, 5 -> brake
     private KeyCode tUpKey = KeyCode.W;
     private KeyCode tDownKey = KeyCode.S;
     private KeyCode tLeftKey = KeyCode.A;
     private KeyCode tRightKey = KeyCode.D;
     private KeyCode tResetKey = KeyCode.R;
+    private KeyCode tBrakeKey = KeyCode.Space;
 
     //Tasteneinstellungen Speicher Wiimote
     /*private ButtonData wUpKey = ButtonData.a;

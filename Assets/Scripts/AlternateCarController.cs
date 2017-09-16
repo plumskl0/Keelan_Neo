@@ -111,10 +111,16 @@ public class AlternateCarController : MonoBehaviour {
                 //ansonsten nutzen die Tastatursteuerung
                 else
                 {
-                    angle = maxAngle * Input.GetAxis("Horizontal");
-                    torque = maxTorque * Input.GetAxis("Vertical");
-                    handBrake = Input.GetKey(KeyCode.Space) ? brakeTorque : 0;
-                }
+                //angle = maxAngle * Input.GetAxis("Horizontal");
+                //torque = maxTorque * Input.GetAxis("Vertical");
+                //handBrake = Input.GetKey(KeyCode.Space) ? brakeTorque : 0;
+                Vector2 keyboardMovement = GetKeyboardButtons();
+                angle = maxAngle * keyboardMovement.x;
+                //Debug.Log("horizontal = " +keyboardMovement.x);
+                torque = maxTorque * keyboardMovement.y;
+                //Debug.Log("vertical = " + keyboardMovement.y);
+                handBrake = Input.GetKey(sharedData.TBrakeKey) ? brakeTorque : 0;
+            }
 
         } 
         else   //stellt die Reifen neutral wenn keine playerControll gegeben wird
@@ -150,6 +156,51 @@ public class AlternateCarController : MonoBehaviour {
         moveWheels(getCollider(REAR_RIGHT));
         moveWheels(getCollider(REAR_LEFT));
 
+    }
+
+    private Vector4 GetKeyboardButtons()
+    {
+        //Bestimme Tastenwerte
+        float moveHorizontal = 0;
+        float moveVertical = 0;
+        float brake = 0;
+        float reset = 0;
+        if (Input.GetKey(sharedData.TDownKey))
+        {
+            //Debug.Log("dDown");
+            moveVertical = -1;
+        }
+        if (Input.GetKey(sharedData.TUpKey))
+        {
+            //Debug.Log("d_up");
+            moveVertical = 1;
+        }
+
+        if (Input.GetKey(sharedData.TLeftKey))
+        {
+            //Debug.Log("dLeft");
+            moveHorizontal = -1;
+        }
+
+        if (Input.GetKey(sharedData.TRightKey))
+        {
+            //Debug.Log("dRight");
+            moveHorizontal = 1;
+        }
+
+        if (Input.GetKey(sharedData.TBrakeKey))
+        {
+            //Debug.Log("dRight");
+            brake = 1;
+        }
+
+
+        if (Input.GetKeyDown(sharedData.TResetKey))
+        {
+            //Debug.Log("dRight");
+            reset = 1;
+        }
+        return new Vector4(moveHorizontal, moveVertical, brake, reset);
     }
 
     public void setPlayerControl(bool b)
