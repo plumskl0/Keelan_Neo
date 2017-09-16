@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class PickupLogic : MonoBehaviour {
 
-    public int CoinCount { get; private set; }
-
     public Text CoinCountText;
 
     public Text TimerText;
@@ -47,10 +45,11 @@ public class PickupLogic : MonoBehaviour {
 
         if (sharedData.PayedCoin)
         {
-            if (CoinCount > 0)
+            if (sharedData.CoinCount > 0)
             {
                 coinPayed();
-            } else
+            }
+            else
             {
                 Debug.Log("No more coins left");
             }
@@ -64,20 +63,20 @@ public class PickupLogic : MonoBehaviour {
         if (other.CompareTag("Coin"))
         {
             other.gameObject.SetActive(false);
-            CoinCount++;
+            sharedData.CoinCount++;
             setText();
         }
     }
 
     private void coinPayed()
     {
-        CoinCount--;
+        sharedData.CoinCount--;
         setText();
     }
 
     private void setText()
     {
-        CoinCountText.text = "Münzen " + CoinCount;
+        CoinCountText.text = "Münzen " + sharedData.CoinCount;
     }
 
     public void startTimer()
@@ -103,7 +102,10 @@ public class PickupLogic : MonoBehaviour {
     {
         //Debug.Log(lifeCount);
         lifeCount--;
-        lifes[lifeCount].enabled = false;
+        if (lifeCount > lifes.Length)
+        {
+            lifes[lifeCount].enabled = false;
+        }
         if (lifeCount <= 0)
         {
             sharedData.SetCursorVisible(true);
