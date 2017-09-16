@@ -14,18 +14,21 @@ public class zielbereichErreicht : MonoBehaviour {
 
     private AlternateCarController carControl;
     private SharedFields sharedData = SharedFields.Instance;
+    private DatabaseManager db;
 
     private void Start()
     {
         carControl = GetComponent<AlternateCarController>();
+        db = GameObject.Find("Endbild").GetComponent<DatabaseManager>();
     }
 
-
+    int anzahlGewonnen = 0;
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("zielbereich"))
         {
             //Debug.Log("LadeBild");
+            anzahlGewonnen++;
 
             sharedData.SetPlayerControl(false);
             //carControl.setPlayerControl(false);
@@ -38,7 +41,13 @@ public class zielbereichErreicht : MonoBehaviour {
             coinCountText.text = coinCount.ToString();
             //timeNeededText.text = timeNeeded.ToString();
             timeNeededText.text = pul.TimerText.text;
+            if (anzahlGewonnen == 1)
+            {
+                db.InsertNewScore(timeNeeded);
+            }
             endbildschirm.enabled = true;
+            Debug.Log("Habe so oft gewonnen: " +anzahlGewonnen);
+
         }
     }
 
