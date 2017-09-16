@@ -13,10 +13,11 @@ public class wiiKalibrierung : MonoBehaviour {
     private Vector3 accelData;
 
     public Canvas menu;
-    private int calibStep = 0;
+    public int calibStep = 0;
     public Text findWiimoteText;
     public Text calibText;
     public Text accelPlaceholder;
+    private SharedFields sharedData = SharedFields.Instance;
 
     private void Awake()
     {
@@ -107,11 +108,25 @@ public class wiiKalibrierung : MonoBehaviour {
         }
     }
 
+    public static int count = 0;
+
+    public int CalibStep
+    {
+        get
+        {
+            return calibStep;
+        }
+
+        set
+        {
+            calibStep = value;
+        }
+    }
 
     public void findWiimote()
     {
         WiimoteManager.FindWiimotes(); // Poll native bluetooth drivers to find Wiimotes
-        int count = 0;
+
         foreach (Wiimote remote in WiimoteManager.Wiimotes)
         {
             // Do stuff.
@@ -128,26 +143,52 @@ public class wiiKalibrierung : MonoBehaviour {
             wiiRemote.SendDataReportMode(InputDataType.REPORT_BUTTONS_ACCEL);
             count++;
         }
-        if (count !=0)
+        if (count != 0)
+        {
+            /*if (GameObject.Find("CalibMenu").gameObject.activeSelf)
+            {
+                setFindWiimoteText();
+                //Debug.Log("START ---------- Wiimote gefunden");
+                //Debug.Log("Wiimote Daten: " + wiiRemote.Accel.GetCalibratedAccelData().ToString());
+            }*/
+        }
+            /*return true;
+        }
+        else
+        {
+            return false;
+        }*/
+    }
+
+    public int getWiimoteCount()
+    {
+        return count;
+    }
+
+    public void setFindWiimoteText()
+    {
+        if (count > 0)
         {
             findWiimoteText.text = ("Habe folgende Anzahl Wiimotes gefunden: " + count + ". \nFahren sie mit der Kalibrierung fort.");
-            //Debug.Log("START ---------- Wiimote gefunden");
-            //Debug.Log("Wiimote Daten: " + wiiRemote.Accel.GetCalibratedAccelData().ToString());
+        }
+        else
+        {
+            findWiimoteText.text = ("Habe folgende Anzahl Wiimotes gefunden: " + count + ". \nDrücken sie den Find Wiimote Button, um erneut zu suchen.");
         }
     }
 
     public void calibWiimote()
     {
         StringBuilder calibInfo = new StringBuilder();
-        if (calibStep <= 3)
+        if (CalibStep <= 3)
         {
-            AccelCalibrationStep step = (AccelCalibrationStep)calibStep;
+            AccelCalibrationStep step = (AccelCalibrationStep)CalibStep;
             wiiRemote.Accel.CalibrateAccel(step);
 
             //Je nachdem, welcher Step gerade ausgeführt wurde wird ein
             //  entsprechender Infotext angezeigt
             calibInfo.Append(step.ToString() + " ausgeführt. ");
-            switch (calibStep)
+            switch (CalibStep)
             {
                 case 0:
                     calibInfo.Append("Stellen sie den IR Sensor der Wiimote nun auf den Tischen\n, sodass der Extenstion Port nach oben zeigt.");
@@ -157,24 +198,12 @@ public class wiiKalibrierung : MonoBehaviour {
                     break;
                 case 2:
                     calibInfo.Append("Wir sind fertig! Das Spiel kann nun gestartet werden.");
+                    sharedData.SelectedControl = SharedFields.WiiControl;
                     break;
             }
-            calibStep++;
+            CalibStep++;
             calibText.text = calibInfo.ToString();
         }
-        /*for (int x = 0; x < 3; x++)
-        {
-
-            AccelCalibrationStep step = (AccelCalibrationStep)x;
-
-            //folgendes erzeugt drei Buttons (-> einen pro Calibration Step)
-            //  -> liefern true wenn der Nutzer darauf drückt
-            //  -> daraufhin startet die ausgewählte Kalibrierung
-            if (GUILayout.Button(step.ToString(), GUILayout.Width(100)))
-            {
-                wiiRemote.Accel.CalibrateAccel(step);
-            }
-        }*/
     }
 
     public void QuitGame()

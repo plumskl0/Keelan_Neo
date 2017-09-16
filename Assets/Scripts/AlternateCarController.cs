@@ -37,7 +37,6 @@ public class AlternateCarController : MonoBehaviour {
         
         sharedData.SetCursorVisible(false);
         sharedData.SetPlayerControl(true);
-        //playerControl = true;
 
         if (GameObject.Find("wiiMote") != null) //beim debuggen ist sonst wiiMote nullReferenz
         {
@@ -63,40 +62,8 @@ public class AlternateCarController : MonoBehaviour {
         
         if (sharedData.GetPlayerControl())
         {
-                //nutze die Wiimote, falls eine gefunden wurde
-                if (wiiRemote != null)
+            if (sharedData.SelectedControl == SharedFields.WiiControl && wiiRemote != null)
                 {
-                //int ret;
-                //do
-                //{
-                //    ret = wiiRemote.ReadWiimoteData();
-
-                //} while (ret > 0);
-
-
-                //if (wiiRemote.Button.d_down)
-                //{
-                //    //Debug.Log("dDown");
-                //    moveHorizontal = -1;
-                //}
-                //if (wiiRemote.Button.d_up)
-                //{
-                //    //Debug.Log("d_up");
-                //    moveHorizontal = 1;
-                //}
-
-                //if (wiiRemote.Button.d_left)
-                //{
-                //    //Debug.Log("dLeft");
-                //    moveVertical = 1;
-                //}
-
-                //if (wiiRemote.Button.d_right)
-                //{
-                //    //Debug.Log("dRight");
-                //    moveVertical = -1;
-                //}
-
                 Vector2 buttonMovement = wiiDaten.getButtons();
                 float moveHorizontal = buttonMovement.x;
                 float moveVertical = buttonMovement.y;
@@ -110,13 +77,19 @@ public class AlternateCarController : MonoBehaviour {
                 //ansonsten nutzen die Tastatursteuerung
                 else
                 {
-                    angle = maxAngle * Input.GetAxis("Horizontal");
-                    torque = maxTorque * Input.GetAxis("Vertical");
-                    handBrake = Input.GetKey(KeyCode.Space) ? brakeTorque : 0;
-                }
+                //angle = maxAngle * Input.GetAxis("Horizontal");
+                //torque = maxTorque * Input.GetAxis("Vertical");
+                //handBrake = Input.GetKey(KeyCode.Space) ? brakeTorque : 0;
+                Vector2 keyboardMovement = GetKeyboardButtons();
+                angle = maxAngle * keyboardMovement.x;
+                //Debug.Log("horizontal = " +keyboardMovement.x);
+                torque = maxTorque * keyboardMovement.y;
+                //Debug.Log("vertical = " + keyboardMovement.y);
+                handBrake = Input.GetKey(sharedData.TBrakeKey) ? brakeTorque : 0;
+            }
 
         } 
-        else
+        else   //stellt die Reifen neutral wenn keine playerControll gegeben wird
         {
             angle = 0;
             torque = 0;
@@ -149,6 +122,51 @@ public class AlternateCarController : MonoBehaviour {
         moveWheels(getCollider(REAR_RIGHT));
         moveWheels(getCollider(REAR_LEFT));
 
+    }
+
+    private Vector4 GetKeyboardButtons()
+    {
+        //Bestimme Tastenwerte
+        float moveHorizontal = 0;
+        float moveVertical = 0;
+        float brake = 0;
+        float reset = 0;
+        if (Input.GetKey(sharedData.TDownKey))
+        {
+            //Debug.Log("dDown");
+            moveVertical = -1;
+        }
+        if (Input.GetKey(sharedData.TUpKey))
+        {
+            //Debug.Log("d_up");
+            moveVertical = 1;
+        }
+
+        if (Input.GetKey(sharedData.TLeftKey))
+        {
+            //Debug.Log("dLeft");
+            moveHorizontal = -1;
+        }
+
+        if (Input.GetKey(sharedData.TRightKey))
+        {
+            //Debug.Log("dRight");
+            moveHorizontal = 1;
+        }
+
+        if (Input.GetKey(sharedData.TBrakeKey))
+        {
+            //Debug.Log("dRight");
+            brake = 1;
+        }
+
+
+        if (Input.GetKeyDown(sharedData.TResetKey))
+        {
+            //Debug.Log("dRight");
+            reset = 1;
+        }
+        return new Vector4(moveHorizontal, moveVertical, brake, reset);
     }
 
     public void setPlayerControl(bool b)
