@@ -21,10 +21,15 @@ public class SharedFields {
         }
     }
     
-    private SharedFields() {}
+    private SharedFields()
+    {
+        LostLife = false;
+        CarReset = false;
+        PayedCoin = false;
+        CoinCount = 0;
+    }
 
     // Hat der Ball den Boden berührt -> ein leben verlieren
-    private bool lostLife = false;
     public bool LostLife { get; set; }
     public string SelectedControl
     {
@@ -131,16 +136,13 @@ public class SharedFields {
     }
 
     // Hat der Ball den Boden berührt -> Fahrzeug reset
-    private bool carReset = false;
     public bool CarReset { get; set; }
 
     // Wurde für ein Special mit einer Münze bezahlt
-    private bool payedCoin = false;
     public bool PayedCoin { get; set; }
 
-    // Zum übertragen der Münzenmenge in das nächste Level
-    private int coinTransferCount = 0;
-    public int CoinTransferCount { get; set; }
+    // Anzahl der gesammelten Münzen
+    public int CoinCount { get; set; }
 
     // Spielersteuerung ein und abschalten
     //Tasteneinstellungen Speicher Tastatur
