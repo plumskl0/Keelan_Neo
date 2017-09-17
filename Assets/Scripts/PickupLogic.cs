@@ -21,7 +21,8 @@ public class PickupLogic : MonoBehaviour {
 
     private void Start()
     {
-        CoinCountText.text = " ";
+        //CoinCountText.text = " ";
+        setCoinText();
         TimerText.text = "00:00:000";
 
         setLifeCount();
@@ -64,17 +65,17 @@ public class PickupLogic : MonoBehaviour {
         {
             other.gameObject.SetActive(false);
             sharedData.CoinCount++;
-            setText();
+            setCoinText();
         }
     }
 
     private void coinPayed()
     {
-        sharedData.CoinCount--;
-        setText();
+        sharedData.CoinCount -= sharedData.getPayedCoins();
+        setCoinText();
     }
 
-    private void setText()
+    private void setCoinText()
     {
         CoinCountText.text = "Münzen " + sharedData.CoinCount;
     }

@@ -929,6 +929,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   angle: 25
+  tellerSmoothinFactor: 3
+  minAenderungswinkel: 3
 --- !u!114 &114256058152125406
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -940,13 +942,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e8c1f401858b546b870329ced41df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxAngle: 30
+  maxTorque: 300
+  brakeTorque: 30000
+  maxSpeed: 30
   wheels:
   - {fileID: 4474362315605438}
   - {fileID: 4282061907165894}
   - {fileID: 4393010952239078}
   - {fileID: 4584835233433734}
-  motorPower: 150
-  maxTurn: 25
 --- !u!146 &146194364640337906
 WheelCollider:
   m_ObjectHideFlags: 1
