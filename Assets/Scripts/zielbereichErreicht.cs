@@ -35,7 +35,7 @@ public class zielbereichErreicht : MonoBehaviour {
 
             PickupLogic pul = this.GetComponent<PickupLogic>();
             pul.stopTimer();
-            coinCount = this.GetComponent<PickupLogic>().CoinCount;
+            coinCount = sharedData.CoinCount;
             timeNeeded = pul.time;
 
             coinCountText.text = coinCount.ToString();
@@ -64,5 +64,6 @@ public class zielbereichErreicht : MonoBehaviour {
     public void RestartGame()
     {
         Application.LoadLevel(1);
+        sharedData.CarReset = false;
     }
 }
