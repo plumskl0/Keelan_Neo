@@ -159,12 +159,12 @@ public class AlternateCarController : MonoBehaviour {
             }
             else
             {
-                Debug.Log("dDown");
+                //Debug.Log("dDown");
                 moveVertical = -1;
             }
             lastVerticalAxisButtonPressend = down;
             axisButtonPressedThisFrame = true;
-            Debug.Log("moveVertical ist jetzt: " + moveVertical);
+            //Debug.Log("moveVertical ist jetzt: " + moveVertical);
         }
         if (Input.GetKey(sharedData.TUpKey))
         {
@@ -180,12 +180,12 @@ public class AlternateCarController : MonoBehaviour {
             }
             else
             {
-                Debug.Log("dUp");
+                //Debug.Log("dUp");
                 moveVertical = 1;
             }
             lastVerticalAxisButtonPressend = up;
             axisButtonPressedThisFrame = true;
-            Debug.Log("moveVertical ist jetzt: " + moveVertical);
+            //Debug.Log("moveVertical ist jetzt: " + moveVertical);
         }
 
         if (Input.GetKey(sharedData.TLeftKey))
@@ -202,12 +202,12 @@ public class AlternateCarController : MonoBehaviour {
             }
             else
             {
-                Debug.Log("dleft");
+                //Debug.Log("dleft");
                 moveHorizontal = -1;
             }
             lastHorizontalAxisButtonPressend = left;
             axisButtonPressedThisFrame = true;
-            Debug.Log("moveHorizontal ist jetzt: " + moveHorizontal);
+            //Debug.Log("moveHorizontal ist jetzt: " + moveHorizontal);
         }
 
         if (Input.GetKey(sharedData.TRightKey))
@@ -224,17 +224,17 @@ public class AlternateCarController : MonoBehaviour {
             }
             else
             {
-                Debug.Log("dleft");
+                //Debug.Log("dleft");
                 moveHorizontal = 1;
             }
             lastHorizontalAxisButtonPressend = right;
             axisButtonPressedThisFrame = true;
-            Debug.Log("moveHorizontal ist jetzt: " + moveHorizontal);
+            //Debug.Log("moveHorizontal ist jetzt: " + moveHorizontal);
         }
 
         if(!axisButtonPressedThisFrame)
         {
-            Debug.Log("Setze Achsen zurück");
+            //Debug.Log("Setze Achsen zurück");
             lastVerticalAxisButtonPressend = no;
             moveHorizontal = 0;
             moveVertical = 0;

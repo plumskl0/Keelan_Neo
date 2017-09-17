@@ -65,5 +65,6 @@ public class zielbereichErreicht : MonoBehaviour {
     {
         Application.LoadLevel(1);
         sharedData.CarReset = false;
+        sharedData.CoinCount = 0;
     }
 }
