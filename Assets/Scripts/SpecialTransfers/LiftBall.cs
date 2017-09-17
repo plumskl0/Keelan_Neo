@@ -40,7 +40,13 @@ public class LiftBall : MonoBehaviour {
     {
         if (ball != null)
         {
-            if (coinBooth != null && !coinBooth.BoothUsedOnce)
+            if (coinBooth != null && coinBooth.ManualBooth)
+            {
+                if (coinBooth.isBoothAffordable())
+                    coinBooth.payManualBooth();
+            }
+
+            if (coinBooth != null && !coinBooth.BoothUsedOnce && coinBooth.WasPayed)
             {
                 moveBallToDestWithBooth();
             }
@@ -62,6 +68,10 @@ public class LiftBall : MonoBehaviour {
     {
         if (targetPos != null && transferingBall)
         {
+
+            if (!ball.isKinematic)
+                ball.isKinematic = true;
+
             if (!isBallAtDest())
             {
                 t += Time.deltaTime / timeToReachTarget;
@@ -102,8 +112,8 @@ public class LiftBall : MonoBehaviour {
                 startTime = 0;
 
                 ball.velocity = Vector3.zero;
-                ball.isKinematic = true;
             }
         }
     }
+
 }

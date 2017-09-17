@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PickupLogic : MonoBehaviour {
 
@@ -32,9 +33,26 @@ public class PickupLogic : MonoBehaviour {
         TimerText.text = getTimerText();
         //*********hier muss eine Initialisierung der Leben rein
         setLifeCount();
+        //checkIfLevel1();
+
+        //CoinCountText.text = " ";
+        setCoinText();
+        
         startTimer();
     }
     
+    private void checkIfLevel1()
+    {
+        Scene scene = SceneManager.GetActiveScene();
+        if (scene.name == "Level1")
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                removeLife();
+            }
+        }
+    }
+
     void Update()
     {
         if (timerStarted)
@@ -70,17 +88,23 @@ public class PickupLogic : MonoBehaviour {
         {
             other.gameObject.SetActive(false);
             sharedData.CoinCount++;
-            setText();
+            setCoinText();
+
+            // Leben auffüllen
+            for (int i = 0; i < lifes.Length; i++)
+            {
+                addLife();
+            }
         }
     }
 
     private void coinPayed()
     {
-        sharedData.CoinCount--;
-        setText();
+        sharedData.CoinCount -= sharedData.getPayedCoins();
+        setCoinText();
     }
 
-    private void setText()
+    private void setCoinText()
     {
         CoinCountText.text = "Münzen " + sharedData.CoinCount;
     }
@@ -110,20 +134,34 @@ public class PickupLogic : MonoBehaviour {
         lifeCount--;
         if (lifeCount >= 1)
         {
-            disableLifeIcon(lifeCount);
+            disableLifeIcon();
         }
         if (lifeCount <= 0)
         {
-            disableLifeIcon(lifeCount);
+            disableLifeIcon();
             sharedData.SetCursorVisible(true);
             GameOverCanvas.enabled = true;
             setLifeCount();
         }
     }
 
-    private void disableLifeIcon(int n)
+    public void addLife()
+    {
+        if (lifeCount < lifes.Length)
+        {
+            enableLifeIcon();
+            lifeCount++;
+        }
+    }
+
+    private void disableLifeIcon()
     {
         lifes[lifeCount].enabled = false;
+    }
+
+    private void enableLifeIcon()
+    {
+        lifes[lifeCount].enabled = true;
     }
 
     private void setLifeCount()

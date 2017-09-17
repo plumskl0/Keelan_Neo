@@ -1974,6 +1974,7 @@ MonoBehaviour:
   - {fileID: 4306891484528122}
   - {fileID: 4720555382268718}
   - {fileID: 4533011085183172}
+  stepsToAxisMax: 0.01
 --- !u!114 &114283193159528488
 MonoBehaviour:
   m_ObjectHideFlags: 1

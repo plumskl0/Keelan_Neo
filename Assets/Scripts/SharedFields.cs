@@ -145,8 +145,13 @@ public class SharedFields {
     // Wurde für ein Special mit einer Münze bezahlt
     public bool PayedCoin { get; set; }
 
+    // Kosten eines Specials
+    private int cost = 1;
+
+
     // Anzahl der gesammelten Münzen
     public int CoinCount { get; set; }
+
 
     public float TimeNeededToLastLevel
     {
@@ -199,5 +204,20 @@ public class SharedFields {
 	public void SetCursorVisible(bool b)
     {
         Cursor.visible = b;
+    }
+
+    public void payCoins()
+    {
+        cost = 1;
+    }
+
+    public void payedCoins(int amount)
+    {
+        cost = amount;
+    }
+
+    public int getPayedCoins()
+    {
+        return cost;
     }
 }
