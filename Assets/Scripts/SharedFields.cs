@@ -26,7 +26,7 @@ public class SharedFields {
         LostLife = false;
         CarReset = false;
         PayedCoin = false;
-        CoinCount = 3;
+        CoinCount = 0;
     }
 
     // Hat der Ball den Boden berührt -> ein leben verlieren
