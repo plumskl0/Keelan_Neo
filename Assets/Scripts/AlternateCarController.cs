@@ -124,34 +124,120 @@ public class AlternateCarController : MonoBehaviour {
 
     }
 
+    public const String no = "None";
+    public const String up = "UpWasPressedLastFrame";
+    public const String down = "DownWasPressedLastFrame";
+    public const String left = "LeftWasPressedLastFrame";
+    public const String right = "RightWasPressedLastFrame";
+
+    private String lastVerticalAxisButtonPressend = no;
+    private String lastHorizontalAxisButtonPressend = no;
+    float moveHorizontal = 0;
+    float moveVertical = 0;
+    public float stepsToAxisMax= 0.01f;
+
     private Vector4 GetKeyboardButtons()
     {
         //Bestimme Tastenwerte
-        float moveHorizontal = 0;
-        float moveVertical = 0;
+        //float moveHorizontal = 0;
+        //float moveVertical = 0;
         float brake = 0;
         float reset = 0;
+        bool axisButtonPressedThisFrame = false;
+
         if (Input.GetKey(sharedData.TDownKey))
         {
-            //Debug.Log("dDown");
-            moveVertical = -1;
+            if (lastVerticalAxisButtonPressend != down)
+            {
+                moveVertical = 0;
+            }
+
+            else if (moveVertical > -1)
+            {
+               // Debug.Log("move")
+                moveVertical -= stepsToAxisMax;
+            }
+            else
+            {
+                Debug.Log("dDown");
+                moveVertical = -1;
+            }
+            lastVerticalAxisButtonPressend = down;
+            axisButtonPressedThisFrame = true;
+            Debug.Log("moveVertical ist jetzt: " + moveVertical);
         }
         if (Input.GetKey(sharedData.TUpKey))
         {
-            //Debug.Log("d_up");
-            moveVertical = 1;
+            if (lastVerticalAxisButtonPressend != up)
+            {
+                moveVertical = 0;
+            }
+
+            else if (moveVertical < 1)
+            {
+                // Debug.Log("move")
+                moveVertical += stepsToAxisMax;
+            }
+            else
+            {
+                Debug.Log("dUp");
+                moveVertical = 1;
+            }
+            lastVerticalAxisButtonPressend = up;
+            axisButtonPressedThisFrame = true;
+            Debug.Log("moveVertical ist jetzt: " + moveVertical);
         }
 
         if (Input.GetKey(sharedData.TLeftKey))
         {
-            //Debug.Log("dLeft");
-            moveHorizontal = -1;
+            if (lastHorizontalAxisButtonPressend != left)
+            {
+                moveHorizontal = 0;
+            }
+
+            else if (moveHorizontal > -1)
+            {
+                // Debug.Log("move")
+                moveHorizontal -= stepsToAxisMax;
+            }
+            else
+            {
+                Debug.Log("dleft");
+                moveHorizontal = -1;
+            }
+            lastHorizontalAxisButtonPressend = left;
+            axisButtonPressedThisFrame = true;
+            Debug.Log("moveHorizontal ist jetzt: " + moveHorizontal);
         }
 
         if (Input.GetKey(sharedData.TRightKey))
         {
-            //Debug.Log("dRight");
-            moveHorizontal = 1;
+            if (lastHorizontalAxisButtonPressend != right)
+            {
+                moveHorizontal = 0;
+            }
+
+            else if (moveHorizontal < 1)
+            {
+                // Debug.Log("move")
+                moveHorizontal += stepsToAxisMax;
+            }
+            else
+            {
+                Debug.Log("dleft");
+                moveHorizontal = 1;
+            }
+            lastHorizontalAxisButtonPressend = right;
+            axisButtonPressedThisFrame = true;
+            Debug.Log("moveHorizontal ist jetzt: " + moveHorizontal);
+        }
+
+        if(!axisButtonPressedThisFrame)
+        {
+            Debug.Log("Setze Achsen zurück");
+            lastVerticalAxisButtonPressend = no;
+            moveHorizontal = 0;
+            moveVertical = 0;
         }
 
         if (Input.GetKey(sharedData.TBrakeKey))
@@ -166,6 +252,7 @@ public class AlternateCarController : MonoBehaviour {
             //Debug.Log("dRight");
             reset = 1;
         }
+
         return new Vector4(moveHorizontal, moveVertical, brake, reset);
     }
 
