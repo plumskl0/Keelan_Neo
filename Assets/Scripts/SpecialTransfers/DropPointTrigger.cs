@@ -11,7 +11,7 @@ public class DropPointTrigger : MonoBehaviour {
     {
         if (car != null)
         {
-            if (car.velocity == Vector3.zero)
+            if (car.velocity.sqrMagnitude <= 1)
                 endpoint.SetActive(false);
         }
     }

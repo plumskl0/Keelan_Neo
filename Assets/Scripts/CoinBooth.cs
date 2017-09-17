@@ -29,7 +29,7 @@ public class CoinBooth : MonoBehaviour {
             {
                 if (!ManualBooth)
                 {
-                    if ((sharedData.CoinCount - cost) >= 0)
+                    if (isBoothAffordable())
                     {
                         usedBooth();
                     }
@@ -58,4 +58,13 @@ public class CoinBooth : MonoBehaviour {
         usedBooth();
     }
 
+    public void payManualBooth()
+    {
+        WasPayed = true;
+    }
+
+    public bool isBoothAffordable()
+    {
+        return (sharedData.CoinCount - cost) >= 0;
+    }
 }
