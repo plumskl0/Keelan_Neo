@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -83,10 +84,13 @@ public class zielbereichErreicht : MonoBehaviour {
         Application.Quit();
     }
 
-    public void RestartGame()
+    public void RestartGame(String levelInDasGesprungenWird)
     {
-        Application.LoadLevel(1);
+        Application.LoadLevel(levelInDasGesprungenWird);
         sharedData.CarReset = false;
-        sharedData.CoinCount = 0;
+        if (levelInDasGesprungenWird == "Level1")
+        {
+            sharedData.CoinCount = 0;
+        }
     }
 }
