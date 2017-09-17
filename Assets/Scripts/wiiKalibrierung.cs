@@ -38,6 +38,19 @@ public class wiiKalibrierung : MonoBehaviour {
         return buttonMovement;
     }
 
+    public const String no = "None";
+    public const String up = "UpWasPressedLastFrame";
+    public const String down = "DownWasPressedLastFrame";
+    public const String left = "LeftWasPressedLastFrame";
+    public const String right = "RightWasPressedLastFrame";
+
+
+    private String lastVerticalAxisButtonPressend = no;
+    private String lastHorizontalAxisButtonPressend = no;
+    float moveHorizontal = 0;
+    float moveVertical = 0;
+    public float stepsToAxisMax = 0.01f;
+
     // Update is called once per frame
     void FixedUpdate () {
         if (wiiRemote != null)
@@ -52,33 +65,107 @@ public class wiiKalibrierung : MonoBehaviour {
 
 
             //Bestimme Tastenwerte
-            float moveHorizontal = 0;
-            float moveVertical = 0;
+            //float moveHorizontal = 0;
+            //float moveVertical = 0;
+            bool axisButtonPressedThisFrame = false;
 
 
 
             if (wiiRemote.Button.d_down)
             {
-                //Debug.Log("dDown");
-                moveHorizontal = -1;
+                if (lastVerticalAxisButtonPressend != down)
+                {
+                    moveVertical = 0;
+                }
+
+                else if (moveVertical > -1)
+                {
+                    // Debug.Log("move")
+                    moveVertical -= stepsToAxisMax;
+                }
+                else
+                {
+                    Debug.Log("dDown");
+                    moveVertical = -1;
+                }
+                lastVerticalAxisButtonPressend = down;
+                axisButtonPressedThisFrame = true;
+                Debug.Log("moveVertical ist jetzt: " + moveVertical);
+
             }
             if (wiiRemote.Button.d_up)
             {
-                //Debug.Log("d_up");
-                moveHorizontal = 1;
+                if (lastVerticalAxisButtonPressend != up)
+                {
+                    moveVertical = 0;
+                }
+
+                else if (moveVertical < 1)
+                {
+                    // Debug.Log("move")
+                    moveVertical += stepsToAxisMax;
+                }
+                else
+                {
+                    Debug.Log("dUp");
+                    moveVertical = 1;
+                }
+                lastVerticalAxisButtonPressend = up;
+                axisButtonPressedThisFrame = true;
+                Debug.Log("moveVertical ist jetzt: " + moveVertical);
             }
 
             if (wiiRemote.Button.d_left)
             {
-                //Debug.Log("dLeft");
-                moveVertical = 1;
+                if (lastHorizontalAxisButtonPressend != left)
+                {
+                    moveHorizontal = 0;
+                }
+
+                else if (moveHorizontal > -1)
+                {
+                    // Debug.Log("move")
+                    moveHorizontal -= stepsToAxisMax;
+                }
+                else
+                {
+                    Debug.Log("dleft");
+                    moveHorizontal = -1;
+                }
+                lastHorizontalAxisButtonPressend = left;
+                axisButtonPressedThisFrame = true;
+                Debug.Log("moveHorizontal ist jetzt: " + moveHorizontal);
             }
 
             if (wiiRemote.Button.d_right)
             {
-                //Debug.Log("dRight");
-                moveVertical = -1;
+                if (lastHorizontalAxisButtonPressend != right)
+                {
+                    moveHorizontal = 0;
+                }
+
+                else if (moveHorizontal < 1)
+                {
+                    // Debug.Log("move")
+                    moveHorizontal += stepsToAxisMax;
+                }
+                else
+                {
+                    Debug.Log("dleft");
+                    moveHorizontal = 1;
+                }
+                lastHorizontalAxisButtonPressend = right;
+                axisButtonPressedThisFrame = true;
+                Debug.Log("moveHorizontal ist jetzt: " + moveHorizontal);
             }
+            if (!axisButtonPressedThisFrame)
+            {
+                Debug.Log("Setze Achsen zurück");
+                lastVerticalAxisButtonPressend = no;
+                moveHorizontal = 0;
+                moveVertical = 0;
+            }
+
             buttonMovement = new Vector2(moveHorizontal, moveVertical);
 
             //bestimme Accel Daten
