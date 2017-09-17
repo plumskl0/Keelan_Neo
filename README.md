@@ -9,7 +9,7 @@ Habt ihr das Repository bereits gecloned reicht es aus die bin.exe im Ornder bui
 
 **Wiimote Anschluss an den Computer:**
 Hier haben wir einiges versucht! Je nachdem welche Windows Version sie nutzen empfehlen wir folgendes Vorgehen:
-- Windows 10 vor CreatorUpdate, Windows 7 und niedriger
+- Windows 10 vor CreatorUpdate (Juni 2017), Windows 7 und niedriger
    - https://youtu.be/5K_4RPiYLhg
 - Windows 10 (neueres)
    - https://youtu.be/d-DKK9RUsIE
