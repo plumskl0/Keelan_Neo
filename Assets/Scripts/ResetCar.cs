@@ -76,12 +76,12 @@ public class ResetCar : MonoBehaviour {
     private bool isCarResetButtonPressed()
     {
         return (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-            && Input.GetKey(KeyCode.R);
+            && Input.GetKey(sharedData.TResetKey);
     }
 
     private void setResetText()
     {
-        resetCarText.text = "Reset mit Shift+R";
+        resetCarText.text = "Reset mit Shift+" +sharedData.TResetKey.ToString();
     }
 
     private void clearResetText()
