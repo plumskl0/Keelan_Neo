@@ -64,6 +64,7 @@ public class zielbereichErreicht : MonoBehaviour {
         if (other.CompareTag("zielLevel2"))
         {
             sharedData.TimeNeededToLastLevel = pul.time;
+            Debug.Log("Setze time auf: " + pul.time);
             Debug.Log("Lade Level3");
             Application.LoadLevel("Level3");
 
