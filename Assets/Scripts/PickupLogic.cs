@@ -21,11 +21,17 @@ public class PickupLogic : MonoBehaviour {
 
     private void Start()
     {
-        CoinCountText.text = " ";
-        TimerText.text = "00:00:000";
+        //CoinCountText.text = " ";
+        //TimerText.text = "00:00:000";
 
+        //setLifeCount();
+
+        //startTimer();
+        CoinCountText.text = sharedData.CoinCount.ToString();
+        time = sharedData.TimeNeededToLastLevel;
+        TimerText.text = getTimerText();
+        //*********hier muss eine Initialisierung der Leben rein
         setLifeCount();
-
         startTimer();
     }
     

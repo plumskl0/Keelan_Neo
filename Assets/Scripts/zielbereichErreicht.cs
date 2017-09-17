@@ -15,16 +15,20 @@ public class zielbereichErreicht : MonoBehaviour {
     private AlternateCarController carControl;
     private SharedFields sharedData = SharedFields.Instance;
     private DatabaseManager db;
+    private PickupLogic pul;
 
     private void Start()
     {
         carControl = GetComponent<AlternateCarController>();
         db = GameObject.Find("Endbild").GetComponent<DatabaseManager>();
+        pul = GetComponent<PickupLogic>();
+        
     }
 
     int anzahlGewonnen = 0;
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.tag.ToString());
         if(other.CompareTag("zielbereich"))
         {
             //Debug.Log("LadeBild");
@@ -47,8 +51,25 @@ public class zielbereichErreicht : MonoBehaviour {
             }
             endbildschirm.enabled = true;
             Debug.Log("Habe so oft gewonnen: " +anzahlGewonnen);
+        }
+
+        if (other.CompareTag("zielLevel1"))
+        {
+            Debug.Log("Lade Level2");
+            sharedData.TimeNeededToLastLevel = pul.time;
+            Debug.Log("Setze time auf: " + pul.time);
+            Application.LoadLevel("Level2");
+        }
+
+        if (other.CompareTag("zielLevel2"))
+        {
+            sharedData.TimeNeededToLastLevel = pul.time;
+            Debug.Log("Lade Level3");
+            Application.LoadLevel("Level3");
 
         }
+
+
     }
 
     public void QuitGame()

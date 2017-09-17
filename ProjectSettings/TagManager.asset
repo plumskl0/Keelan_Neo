@@ -9,6 +9,8 @@ TagManager:
   - Ramp
   - zielbereich
   - Menu
+  - zielLevel2
+  - zielLevel1
   layers:
   - Default
   - TransparentFX

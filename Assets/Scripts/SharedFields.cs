@@ -29,6 +29,10 @@ public class SharedFields {
         CoinCount = 0;
     }
 
+
+    private float timeNeededToLastLevel = 0;
+
+
     // Hat der Ball den Boden berührt -> ein leben verlieren
     public bool LostLife { get; set; }
     public string SelectedControl
@@ -143,6 +147,19 @@ public class SharedFields {
 
     // Anzahl der gesammelten Münzen
     public int CoinCount { get; set; }
+
+    public float TimeNeededToLastLevel
+    {
+        get
+        {
+            return timeNeededToLastLevel;
+        }
+
+        set
+        {
+            timeNeededToLastLevel = value;
+        }
+    }
 
     // Spielersteuerung ein und abschalten
     //Tasteneinstellungen Speicher Tastatur
