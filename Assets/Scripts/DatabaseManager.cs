@@ -42,7 +42,8 @@ public class DatabaseManager : MonoBehaviour {
                     while (reader.Read() && readCount < scoresNeeded)
                     {
                         float score = reader.GetFloat(2);
-                        first10Scores.AppendLine(score.ToString());
+                        //first10Scores.AppendLine(score.ToString());
+                        first10Scores.AppendLine(getTimerText(score));
                         readCount++;
                     }
                     dbConnection.Close();
@@ -51,6 +52,14 @@ public class DatabaseManager : MonoBehaviour {
                 }
             }
         }
+    }
+    public string getTimerText(float time)
+    {
+        var minutes = time / 60; //Divide the guiTime by sixty to get the minutes.
+        var seconds = time % 60;//Use the euclidean division for the seconds.
+        var fraction = (time * 100) % 100;
+
+        return string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, fraction);
     }
 
     public void InsertNewScore(float timeNeeded)
