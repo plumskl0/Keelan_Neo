@@ -11,6 +11,7 @@ TagManager:
   - Menu
   - zielLevel2
   - zielLevel1
+  - Teller
   layers:
   - Default
   - TransparentFX

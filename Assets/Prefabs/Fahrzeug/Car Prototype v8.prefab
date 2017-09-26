@@ -467,9 +467,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4729366982512886}
   - component: {fileID: 114403738353952096}
+  - component: {fileID: 65664382636796532}
   m_Layer: 0
   m_Name: Teller
-  m_TagString: Untagged
+  m_TagString: Teller
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -726,7 +727,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1698933623510586}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: 0.48539898, z: -0, w: 0.87429285}
   m_LocalPosition: {x: 93.767, y: 0.324, z: 30.603}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -735,7 +736,7 @@ Transform:
   - {fileID: 4949013056838636}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 58.077003, z: 0}
 --- !u!4 &4399129739446430
 Transform:
   m_ObjectHideFlags: 1
@@ -1151,7 +1152,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: ae6be866a6a304d43a206cc279f7c2ee, type: 2}
+  - {fileID: 2100000, guid: 548788691f54ca241be998a0fc78a45b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1183,7 +1184,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: ae6be866a6a304d43a206cc279f7c2ee, type: 2}
+  - {fileID: 2100000, guid: 548788691f54ca241be998a0fc78a45b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1279,7 +1280,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: ae6be866a6a304d43a206cc279f7c2ee, type: 2}
+  - {fileID: 2100000, guid: 548788691f54ca241be998a0fc78a45b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1311,7 +1312,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: ae6be866a6a304d43a206cc279f7c2ee, type: 2}
+  - {fileID: 2100000, guid: 548788691f54ca241be998a0fc78a45b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1375,7 +1376,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: ae6be866a6a304d43a206cc279f7c2ee, type: 2}
+  - {fileID: 2100000, guid: 548788691f54ca241be998a0fc78a45b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1439,7 +1440,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: ae6be866a6a304d43a206cc279f7c2ee, type: 2}
+  - {fileID: 2100000, guid: 548788691f54ca241be998a0fc78a45b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1567,7 +1568,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: ae6be866a6a304d43a206cc279f7c2ee, type: 2}
+  - {fileID: 2100000, guid: e75ce33b6b483b049a8968d726cdf490, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1631,7 +1632,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: ae6be866a6a304d43a206cc279f7c2ee, type: 2}
+  - {fileID: 2100000, guid: 548788691f54ca241be998a0fc78a45b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1663,7 +1664,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: ae6be866a6a304d43a206cc279f7c2ee, type: 2}
+  - {fileID: 2100000, guid: 548788691f54ca241be998a0fc78a45b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1888,6 +1889,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.80885315, y: 0.5163239, z: 1.8886948}
   m_Center: {x: 0.115356445, y: 0.3516327, z: 0.06658554}
+--- !u!65 &65664382636796532
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1788964755002200}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.5065514, y: 0.28104043, z: 1.5345055}
+  m_Center: {x: -0.028851388, y: 0.35947978, z: 0.028000144}
 --- !u!65 &65707710729021130
 BoxCollider:
   m_ObjectHideFlags: 1

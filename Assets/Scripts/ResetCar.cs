@@ -52,7 +52,9 @@ public class ResetCar : MonoBehaviour {
             transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
 
             sharedData.SetPlayerControl(true);
-            resetBall();
+
+            if (sharedData.BallReset)
+                resetBall();
 
             clearResetText();
             reset = false;
@@ -71,6 +73,7 @@ public class ResetCar : MonoBehaviour {
 
         // Falls der Ball noch rollt die Geschwindigkeit entfernen
         ball.velocity = Vector3.zero;
+        sharedData.BallReset = false;
     }
 
     private bool isCarResetButtonPressed()

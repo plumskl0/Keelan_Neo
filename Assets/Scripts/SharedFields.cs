@@ -25,6 +25,7 @@ public class SharedFields {
     {
         LostLife = false;
         CarReset = false;
+        BallReset = false;
         PayedCoin = false;
         CoinCount = 0;
     }
@@ -33,8 +34,9 @@ public class SharedFields {
     private float timeNeededToLastLevel = 0;
 
 
-    // Hat der Ball den Boden berührt -> ein leben verlieren
+    // Hat der Ball den Boden berührt -> ein Leben verlieren
     public bool LostLife { get; set; }
+
     public string SelectedControl
     {
         get
@@ -141,6 +143,9 @@ public class SharedFields {
 
     // Hat der Ball den Boden berührt -> Fahrzeug reset
     public bool CarReset { get; set; }
+
+    // Hat der Teller den Boden berührt -> ein Leben verlieren aber ball nicht reseten
+    public bool BallReset { get; set; }
 
     // Wurde für ein Special mit einer Münze bezahlt
     public bool PayedCoin { get; set; }

@@ -51,6 +51,7 @@ public class zielbereichErreicht : MonoBehaviour {
                 db.InsertNewScore(timeNeeded);
             }
             endbildschirm.enabled = true;
+            sharedData.SetCursorVisible(true);
             Debug.Log("Habe so oft gewonnen: " +anzahlGewonnen);
         }
 
@@ -92,5 +93,6 @@ public class zielbereichErreicht : MonoBehaviour {
         {
             sharedData.CoinCount = 0;
         }
+        sharedData.SetCursorVisible(false);
     }
 }
