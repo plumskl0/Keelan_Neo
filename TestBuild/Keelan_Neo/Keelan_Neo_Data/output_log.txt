@@ -1,0 +1,469 @@
+Initialize engine version: 5.6.1f1 (2860b30f0b54)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: AMD Mobility Radeon HD 5800 Series (ID=0x68a1)
+    Vendor:   ATI
+    VRAM:     1014 MB
+    Driver:   15.301.1901.0
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\Assembly-UnityScript.dll (this message is harmless)
+Loading C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\Assembly-UnityScript.dll into Unity Child Domain
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
+Loading C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\UnityEngine.CloudBuild.dll (this message is harmless)
+Loading C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\UnityEngine.CloudBuild.dll into Unity Child Domain
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\GETween.dll (this message is harmless)
+Loading C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\GETween.dll into Unity Child Domain
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\GUIAnimatorFREE.dll (this message is harmless)
+Loading C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\GUIAnimatorFREE.dll into Unity Child Domain
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\Mono.Data.Sqlite.dll (this message is harmless)
+Loading C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\Mono.Data.Sqlite.dll into Unity Child Domain
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\System.Data.dll (this message is harmless)
+Loading C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\System.Data.dll into Unity Child Domain
+- Completed reload, in  0.056 seconds
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Entwicklung\Unity\Games\Keelan_Neo\TestBuild\plumsklo-keelan_neo-default-windows-desktop-32-bit-3\Keelan_Neo_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 1.414096 ms
+nach if
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 145c -> priority: 1 
+  Thread -> id: 20ec -> priority: 1 
+ WSAD
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 8.923866 ms
+
+Unloading 28 unused Assets to reduce memory usage. Loaded Objects now: 1430.
+Total: 1.640797 ms (FindLiveObjects: 0.181360 ms CreateObjectMapping: 0.089824 ms MarkObjects: 0.812271 ms  DeleteObjects: 0.555629 ms)
+
+Ball
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Ball
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielLevel1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Lade Level2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Setze time auf: 200.4641
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 5.125566 ms
+
+Unloading 103 unused Assets to reduce memory usage. Loaded Objects now: 2125.
+Total: 4.044676 ms (FindLiveObjects: 0.288722 ms CreateObjectMapping: 0.120193 ms MarkObjects: 1.104843 ms  DeleteObjects: 2.529205 ms)
+
+Ball
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielLevel2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Setze time auf: 333.3188
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Lade Level3
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 6 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 3.757237 ms
+
+Unloading 102 unused Assets to reduce memory usage. Loaded Objects now: 1266.
+Total: 6.874153 ms (FindLiveObjects: 0.171094 ms CreateObjectMapping: 0.100090 ms MarkObjects: 0.847773 ms  DeleteObjects: 5.753483 ms)
+
+Ball
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Ball
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Ball
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Ball
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Ball
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Ball
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at zielbereichErreicht.OnTriggerEnter (UnityEngine.Collider other) [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 3
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 4
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 5
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 6
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 7
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 8
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 9
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 10
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 11
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 12
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 13
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 14
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 15
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 16
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 17
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 18
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 19
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 20
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 21
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 22
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 23
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 24
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 25
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 26
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 27
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 28
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 29
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 30
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 31
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 32
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 33
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 34
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 35
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 36
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 37
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 38
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 39
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 40
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+zielbereich
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Habe so oft gewonnen: 41
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 6 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 2.100613 ms
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 1266.
+Total: 1.352502 ms (FindLiveObjects: 0.157407 ms CreateObjectMapping: 0.065871 ms MarkObjects: 0.715603 ms  DeleteObjects: 0.412765 ms)
+
+Ball
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
