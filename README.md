@@ -5,7 +5,9 @@ Spiel für Spieleprogrammierung SS17.
 Geschicklichkeitsspiel bei dem man mit einem "Fahrzeug" einen Ball durch verschiedene Level steuern muss, ohne den Ball zu verlieren. 
 
 **Installation:**
-Habt ihr das Repository bereits gecloned reicht es aus die bin.exe im Ornder build zu starten. Falls ihr spielen wollte ohne den Code zu laden müsst ihr den /bin Ordner downloaden. Da github keine direkte Funktion zur Verfügung stellt, um einzelne Ordner zu downloaden müsst ihr auf der Seite https://minhaskamal.github.io/DownGit/#/home den Ordnerlink (https://github.com/plumskl0/Keelan_Neo/tree/master/bin) eingeben und den Download Button drücken.
+Mithilfe des Repositorys kann man die aktuelle Version des Spiels selbst erzeugen. Dazu benötigt man Unity 5.6.1f1.
+
+Alternativ kann man den letzten Build unter diesem Link hier herunterladen:     https://seafile.rlp.net/f/592277e8bb954a8c805b/
 
 **Wiimote Anschluss an den Computer:**
 Hier haben wir einiges versucht! Je nachdem welche Windows Version sie nutzen empfehlen wir folgendes Vorgehen:
@@ -13,21 +15,3 @@ Hier haben wir einiges versucht! Je nachdem welche Windows Version sie nutzen em
    - https://youtu.be/5K_4RPiYLhg
 - Windows 10 (neueres)
    - https://youtu.be/d-DKK9RUsIE
-
-## Geplant
-### Muss
-- PC Spiel
-- Physikalisches Geschicklichkeitsspiel
-- 2.5D
-- Verschiedene Schwierigkeitsstufen
-- Tastatur Steuerung
-- HUD
-
-### Kann
-- WII Mote Steuerung
-- Lokaler Multiplayer
-
-### Noch zu Diskutieren
-- Save Games
-- Geldeinheiten
-- Remote Multiplayer
