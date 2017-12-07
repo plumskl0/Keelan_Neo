@@ -158,7 +158,32 @@ public class ApiAiModule : MonoBehaviour
             Debug.LogException(ex);
         }
     }
-    
+
+    public void SendVoiceText()
+    {
+        //var text = inputTextField.text;
+        var text = answerTextField.text;
+
+        Debug.Log(text);
+
+        AIResponse response = apiAiUnity.TextRequest(text);
+
+        if (response != null)
+        {
+            Debug.Log("Resolved query: " + response.Result.ResolvedQuery);
+            var outText = JsonConvert.SerializeObject(response, jsonSettings);
+
+            Debug.Log("Result: " + outText);
+
+            answerTextField.text = outText;
+        }
+        else
+        {
+            Debug.LogError("Response is null");
+        }
+
+    }
+
     public void SendText()
     {
         var text = inputTextField.text;
