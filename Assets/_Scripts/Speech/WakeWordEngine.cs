@@ -25,7 +25,7 @@ public class WakeWordEngine : MonoBehaviour {
     {
         Debug.Log("Keyword erkannt: " + args.text);
         asr.Print(args.text);
-        asr.SwitchToSpeechToText(args.text);
+        asr.SwitchToSpeechToText(args.text, asr.debugText);
     }
 
     public void AddWakeWords(String[] wordsToAdd)

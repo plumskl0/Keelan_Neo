@@ -512,9 +512,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1b3818f5cd3d4abeb3628dbcaa21e16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  answerTextField: {fileID: 1074724871}
-  inputTextField: {fileID: 314446922}
-  listeningSound: {fileID: 8300000, guid: a5c3aed75486c4d22aff51a1dcfedaf3, type: 3}
+  answerTextField: {fileID: 0}
+  inputTextField: {fileID: 0}
+  listeningSound: {fileID: 0}
 --- !u!1 &478547014
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,7 +527,7 @@ GameObject:
   - component: {fileID: 478547017}
   - component: {fileID: 478547016}
   m_Layer: 5
-  m_Name: SwitchTODictation
+  m_Name: SwitchTODictationButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -751,6 +751,7 @@ GameObject:
   m_Component:
   - component: {fileID: 625873577}
   - component: {fileID: 625873575}
+  - component: {fileID: 625873576}
   m_Layer: 0
   m_Name: SpeechAssistant
   m_TagString: Untagged
@@ -773,6 +774,19 @@ MonoBehaviour:
   sttText: {fileID: 1074724871}
   WakeWordStateText: {fileID: 375073519}
   DictationStateText: {fileID: 1379859090}
+--- !u!114 &625873576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 625873574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a4bc9ae82024d4882a129e1f39927f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  answerTextField: {fileID: 1074724871}
+  inputTextField: {fileID: 314446922}
 --- !u!4 &625873577
 Transform:
   m_ObjectHideFlags: 0
@@ -843,19 +857,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 442643552}
+      - m_Target: {fileID: 625873576}
         m_MethodName: SendVoiceText
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_MethodName: StartListening
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2051,7 +2054,7 @@ GameObject:
   - component: {fileID: 2015861229}
   - component: {fileID: 2015861228}
   m_Layer: 5
-  m_Name: SwitchTOKeyword
+  m_Name: SwitchTOKeywordButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

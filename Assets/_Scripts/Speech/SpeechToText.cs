@@ -42,7 +42,8 @@ public class SpeechToText : MonoBehaviour {
     private void DictationRecognizer_DictationResult(string text, ConfidenceLevel confidence)
     {
         asr.Print(text);
-        asr.SwitchToWakeWordDetection(text);
+        asr.LastCommand = text;
+        asr.SwitchToWakeWordDetection(text, asr.debugText);
         //_userCommand = text;
         //resultText.text = _userCommand;
         //Debug.Log(_userCommand);

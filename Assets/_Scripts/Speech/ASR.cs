@@ -7,11 +7,14 @@ using UnityEngine.Windows.Speech;
 
 public class ASR : MonoBehaviour {
     //Debug Ausgabefelder 
+    public Text debugText;
     public Text wakeWordText;
     public Text sttText;
     public Text WakeWordStateText;
     public Text DictationStateText;
 
+    private string lastCommand;
+    private EventMessageObject userCommandMessage;
 
 
     private GameObject SpeechAssistant;
@@ -20,6 +23,19 @@ public class ASR : MonoBehaviour {
     SpeechSystemStatus WakeWordState;
     SpeechSystemStatus DictationState;
     private Boolean WantToChangeToWakeWordDetection = false;
+
+    public string LastCommand
+    {
+        get
+        {
+            return lastCommand;
+        }
+
+        set
+        {
+            lastCommand = value;
+        }
+    }
 
     //private List<String> WakeWords = new List<String>();
 
@@ -31,6 +47,10 @@ public class ASR : MonoBehaviour {
         SpeechAssistant.AddComponent<WakeWordEngine>();
         WWE = GetComponent<WakeWordEngine>();
         Debug.Log("Stt hinzugefügt");
+
+
+        //Registriere Events:
+        //EventManager.StartListening()
     }
 
     // Use this for initialization
@@ -58,7 +78,9 @@ public class ASR : MonoBehaviour {
     public void SwitchToWakeWordDetection()
     {
         STT.StopDetection();
-        WWE.StartDetection();
+        //object userCommandMessageObject = userCommandMessage;
+        EventManager.TriggerEvent("SpeechCommandRegocnized", userCommandMessage);
+        WantToChangeToWakeWordDetection = true;
     }
 
     public void SwitchToSpeechToText()
@@ -78,12 +100,12 @@ public class ASR : MonoBehaviour {
     }
 
 
-    public void SwitchToWakeWordDetection(String textHeard)
+    public void SwitchToWakeWordDetection(String textHeard, Text textFieldToDisplay)
     {
         Debug.Log("VORHER Status Wakeword: " + PhraseRecognitionSystem.Status);
         Debug.Log("VORHER Status Dication: " + STT.dictationRecognizer.Status);
-        sttText.text = textHeard;
-        wakeWordText.text = "";
+        textFieldToDisplay.text = textHeard;
+        //wakeWordText.text = "";
         STT.StopDetection();
         WantToChangeToWakeWordDetection = true;
         /*DateTime timeout = waitXSeconds(5);
@@ -113,10 +135,10 @@ public class ASR : MonoBehaviour {
         Debug.Log("Status Dication: " + STT.dictationRecognizer.Status);
     }
 
-    public void SwitchToSpeechToText(String textHeard)
+    public void SwitchToSpeechToText(String textHeard, Text textFieldToDisplay)
     {
-        wakeWordText.text = textHeard;
-        sttText.text = "";
+        textFieldToDisplay.text = textHeard;
+        //sttText.text = "";
         Debug.Log("VORHER Status Wakeword: " + WakeWordState);
         Debug.Log("VORHER Status Dication: " + DictationState);
         WWE.StopDetection();
@@ -146,6 +168,7 @@ public class ASR : MonoBehaviour {
         Debug.Log("Status Dication: " + DictationState);
     }
 
+
     private DateTime waitXSeconds(double secondsToWait)
     {
         DateTime startTime = DateTime.Now;
@@ -158,8 +181,8 @@ public class ASR : MonoBehaviour {
         WakeWordState = PhraseRecognitionSystem.Status;
         DictationState = STT.dictationRecognizer.Status;
 
-        WakeWordStateText.text = WakeWordState.ToString();
-        DictationStateText.text = DictationState.ToString();
+        //WakeWordStateText.text = WakeWordState.ToString();
+        //DictationStateText.text = DictationState.ToString();
 
 
         if(WantToChangeToWakeWordDetection)
