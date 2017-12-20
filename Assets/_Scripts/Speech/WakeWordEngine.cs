@@ -24,8 +24,9 @@ public class WakeWordEngine : MonoBehaviour {
     private void KeywordRecognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
         Debug.Log("Keyword erkannt: " + args.text);
-        asr.Print(args.text);
-        asr.SwitchToSpeechToText(args.text, asr.debugText);
+        EventManager.TriggerEvent(EventManager.keywordDetectedEvent, new EventMessageObject(EventManager.keywordDetectedEvent, args.text));
+        Debug.Log("Trigger WakewordDetected Event");
+        //asr.SwitchToSpeechToText(args.text, asr.debugText);   wird jetzt durch Events getriggert
     }
 
     public void AddWakeWords(String[] wordsToAdd)

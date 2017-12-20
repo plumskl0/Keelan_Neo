@@ -14,11 +14,25 @@ public class NLU : MonoBehaviour {
 
     }
 
-    public AIResponse UnderstandRequest (object query)
+    public void UnderstandRequest (object query)
     {
         EventMessageObject queryMessage = (EventMessageObject) query;
-        return dialogflowConnection.SendVoiceText(queryMessage.MessageBody);
+        string asrRequest = (string) queryMessage.MessageBody;
+        AIResponse dialogflowAnswer = dialogflowConnection.SendVoiceText(asrRequest);
+        EventManager.TriggerEvent(EventManager.nluAnswerDetectedEvent, new EventMessageObject(EventManager.nluAnswerDetectedEvent, dialogflowAnswer));
+        Debug.Log("Trigger NLUAnswerDetected Event");
     }
+
+   /* private AsrRequest marshalEventMessage(EventMessageObject eventMessage)
+    {
+
+    }
+
+    public struct AsrRequest
+    {
+        public string queryMessageObject;
+        string asr
+    }*/
 
     // Use this for initialization
     void Start () {

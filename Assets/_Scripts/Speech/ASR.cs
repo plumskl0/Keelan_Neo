@@ -4,17 +4,17 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
+using UnityEngine.Events;
 
 public class ASR : MonoBehaviour {
     //Debug Ausgabefelder 
-    public Text debugText;
+    /*public Text debugText;
     public Text wakeWordText;
     public Text sttText;
     public Text WakeWordStateText;
-    public Text DictationStateText;
+    public Text DictationStateText;*/
 
     private string lastCommand;
-    private EventMessageObject userCommandMessage;
 
 
     private GameObject SpeechAssistant;
@@ -23,6 +23,10 @@ public class ASR : MonoBehaviour {
     SpeechSystemStatus WakeWordState;
     SpeechSystemStatus DictationState;
     private Boolean WantToChangeToWakeWordDetection = false;
+
+    //Unity Actions for EventManager
+    private UnityAction<EventMessageObject> EnableWakeWord;
+    private UnityAction<EventMessageObject> EnableSpeechToText;
 
     public string LastCommand
     {
@@ -48,6 +52,9 @@ public class ASR : MonoBehaviour {
         WWE = GetComponent<WakeWordEngine>();
         Debug.Log("Stt hinzugefügt");
 
+        EnableWakeWord = new UnityAction<EventMessageObject>(SwitchToWakeWordDetection);
+        EnableSpeechToText = new UnityAction<EventMessageObject>(SwitchToSpeechToText);
+
 
         //Registriere Events:
         //EventManager.StartListening()
@@ -70,29 +77,29 @@ public class ASR : MonoBehaviour {
         //STT = GameObject.Find(STT);
     }
 
+    private void OnEnable()
+    {
+        EventManager.StartListening(EventManager.keywordDetectedEvent, EnableSpeechToText);
+        EventManager.StartListening(EventManager.asrRequerstDetectedEvent, EnableWakeWord);
+    }
+
     public void AddWakeWords(String[] wordsToAdd)
     {
         WWE.AddWakeWords(wordsToAdd);
     }
 
-    public void SwitchToWakeWordDetection()
+    public void SwitchToWakeWordDetection(EventMessageObject args)
     {
         STT.StopDetection();
-        //object userCommandMessageObject = userCommandMessage;
-        EventManager.TriggerEvent("SpeechCommandRegocnized", userCommandMessage);
         WantToChangeToWakeWordDetection = true;
     }
 
-    public void SwitchToSpeechToText()
+    public void SwitchToSpeechToText(EventMessageObject args)
     {
         WWE.StopDetection();
         STT.StartDetection();
     }
 
-    public void Print(String heard)
-    {
-        sttText.text = heard;
-    }
 
     public void StopDictation()
     {

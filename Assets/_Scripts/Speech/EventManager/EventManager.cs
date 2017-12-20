@@ -7,6 +7,12 @@ public class EventManager : MonoBehaviour {
     private Dictionary<string, UnityEventWithParameter> eventDictonary;
     private static EventManager eventManager;
 
+    //Available Events:
+    public const string keywordDetectedEvent = "keyword Detected";
+    public const string asrRequerstDetectedEvent = "Speech Command Regocnized";
+    public const string nluAnswerDetectedEvent = "NLU answer recignized";
+
+
     public static EventManager instance
     {
         get
@@ -35,7 +41,7 @@ public class EventManager : MonoBehaviour {
         }
     }
 
-    public static void StartListening (string eventName, UnityAction<object> listener)
+    public static void StartListening (string eventName, UnityAction<EventMessageObject> listener)
     {
         UnityEventWithParameter thisEvent = null;
         if(instance.eventDictonary.TryGetValue (eventName, out thisEvent))
@@ -50,7 +56,7 @@ public class EventManager : MonoBehaviour {
         }
     }
 
-    public static void StopListening (string eventName, UnityAction<object> listener)
+    public static void StopListening (string eventName, UnityAction<EventMessageObject> listener)
     {
         if (eventManager == null) return;
         UnityEventWithParameter thisEvent = null;
@@ -69,7 +75,7 @@ public class EventManager : MonoBehaviour {
         }
     }*/ 
 
-    public static void TriggerEvent (string eventName, object args)
+    public static void TriggerEvent (string eventName, EventMessageObject args)
     {
         UnityEventWithParameter thisEvent = null;
         if (instance.eventDictonary.TryGetValue(eventName, out thisEvent))
@@ -81,7 +87,12 @@ public class EventManager : MonoBehaviour {
 
 }
 
-public class UnityEventWithParameter : UnityEvent<object>
+public class UnityEventWithParameter : UnityEvent<EventMessageObject>
 {
 
 }
+
+/*public class UnityEventWithParameter2 : UnityEvent<EventMessageObject>
+{
+
+}*/

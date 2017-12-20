@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
 
@@ -34,6 +35,11 @@ public class SpeechToText : MonoBehaviour {
         dictationRecognizer.DictationError += DictationRecognizer_DictationError;
 	}
 
+    private void OnEnable()
+    {
+        
+    }
+
     private void DictationRecognizer_DictationError(string error, int hresult)
     {
         Debug.Log("***ERROR: " + error);
@@ -41,9 +47,12 @@ public class SpeechToText : MonoBehaviour {
 
     private void DictationRecognizer_DictationResult(string text, ConfidenceLevel confidence)
     {
-        asr.Print(text);
+        //asr.Print(text);
         asr.LastCommand = text;
-        asr.SwitchToWakeWordDetection(text, asr.debugText);
+        EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, text));
+        Debug.Log("Trigger asrRequestDetected Event");
+        //asr.SwitchToWakeWordDetection();
+        //asr.SwitchToWakeWordDetection(text, asr.debugText);
         //_userCommand = text;
         //resultText.text = _userCommand;
         //Debug.Log(_userCommand);
