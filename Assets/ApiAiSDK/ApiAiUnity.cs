@@ -222,6 +222,7 @@ namespace ApiAiSDK.Unity
 
 		public AIResponse TextRequest(string request)
 		{
+            Debug.Log(request);
 			return apiAi.TextRequest(request);
 		}
 

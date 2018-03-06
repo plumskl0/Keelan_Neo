@@ -31,9 +31,28 @@ public class SpeechToText : MonoBehaviour {
     void Awake () {
         asr = GetComponent<ASR>();
         dictationRecognizer = new DictationRecognizer();
+        dictationRecognizer.InitialSilenceTimeoutSeconds = 20f;
         dictationRecognizer.DictationResult += DictationRecognizer_DictationResult;
         dictationRecognizer.DictationError += DictationRecognizer_DictationError;
-	}
+        dictationRecognizer.DictationComplete += (completionCause) =>
+        {
+            if(completionCause.Equals(DictationCompletionCause.TimeoutExceeded) || completionCause.Equals(DictationCompletionCause.PauseLimitExceeded))
+            {
+                Debug.LogErrorFormat("Dictation completed unsuccessfully: {0}.", completionCause);
+                EventManager.TriggerEvent(EventManager.ttsTimeout, new EventMessageObject(EventManager.ttsTimeout, completionCause.ToString()));
+            }
+            if(completionCause.Equals(DictationCompletionCause.AudioQualityFailure) || completionCause.Equals(DictationCompletionCause.MicrophoneUnavailable) || completionCause.Equals(DictationCompletionCause.NetworkFailure) || completionCause.Equals(DictationCompletionCause.UnknownError))
+            {
+                Debug.LogErrorFormat("Dictation completed unsuccessfully: {0}.", completionCause);
+                EventManager.TriggerEvent(EventManager.ttsError, new EventMessageObject(EventManager.ttsError, completionCause.ToString()));
+            }
+            
+        };
+         dictationRecognizer.DictationHypothesis += (text) =>
+         {
+             Debug.LogFormat("Dictation hypothesis: {0}", text);
+         };
+    }
 
     private void OnEnable()
     {
@@ -49,8 +68,8 @@ public class SpeechToText : MonoBehaviour {
     {
         //asr.Print(text);
         asr.LastCommand = text;
-        EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, text));
         Debug.Log("Trigger asrRequestDetected Event");
+        EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, text));
         //asr.SwitchToWakeWordDetection();
         //asr.SwitchToWakeWordDetection(text, asr.debugText);
         //_userCommand = text;

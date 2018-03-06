@@ -10,7 +10,7 @@ public class AlternateCarController : MonoBehaviour {
     public float maxTorque = 300f;
     public float brakeTorque = 30000f;
 
-    public float maxSpeed = 30f;
+    //public float maxSpeed = 30f;
 
     public Transform[] wheels;
 
@@ -63,29 +63,41 @@ public class AlternateCarController : MonoBehaviour {
         if (sharedData.GetPlayerControl())
         {
             if (sharedData.SelectedControl == SharedFields.WiiControl && wiiRemote != null)
-                {
+            {
                 Vector2 buttonMovement = wiiDaten.getButtons();
                 float moveHorizontal = buttonMovement.x;
                 float moveVertical = buttonMovement.y;
 
                 torque = moveVertical * maxTorque;
-                    angle = moveHorizontal * maxAngle;
-                    handBrake = wiiRemote.Button.a ? brakeTorque : 0;
+                angle = moveHorizontal * maxAngle;
+                handBrake = wiiRemote.Button.a ? brakeTorque : 0;
 
-                }
+            }
 
-                //ansonsten nutzen die Tastatursteuerung
-                else
-                {
-                //angle = maxAngle * Input.GetAxis("Horizontal");
-                //torque = maxTorque * Input.GetAxis("Vertical");
-                //handBrake = Input.GetKey(KeyCode.Space) ? brakeTorque : 0;
+            //...ansonsten nutzen die Tastatursteuerung
+            else if (sharedData.SelectedControl == SharedFields.MTControl)
+            {
+
                 Vector2 keyboardMovement = GetKeyboardButtons();
                 angle = maxAngle * keyboardMovement.x;
-                //Debug.Log("horizontal = " +keyboardMovement.x);
                 torque = maxTorque * keyboardMovement.y;
-                //Debug.Log("vertical = " + keyboardMovement.y);
                 handBrake = Input.GetKey(sharedData.TBrakeKey) ? brakeTorque : 0;
+            }
+
+            //...bzw. den Autopiloten des Sprachassistenten
+            else if (sharedData.SelectedControl == SharedFields.VoiceAssistantControl)
+            {
+                //Debug.LogFormat("Voice Assistant Y- Achse: {0}", sharedData.AssistantYAchse);
+                angle = maxAngle * sharedData.AssistantXAchse;
+                torque = maxTorque * sharedData.AssistantYAchse;
+                handBrake = Input.GetKey(sharedData.TBrakeKey) ? brakeTorque : 0;
+            }
+            else
+            {
+                Debug.LogError("Die Player Control wurde auf einen ungültigen Wert gelegt.");
+                angle = 0;
+                torque = 0;
+                handBrake = brakeTorque;
             }
 
         } 
@@ -98,10 +110,11 @@ public class AlternateCarController : MonoBehaviour {
 
 
         // Höchstgeschwindigkeit des Autos
-        if (rb.velocity.magnitude >= maxSpeed)
+        if (rb.velocity.magnitude >= sharedData.currentMaxSpeed)    //Die Länge des Richtungsvektors dient als Geschwindigkeitsindikator
         {
-            rb.velocity = rb.velocity.normalized * maxSpeed;
+            rb.velocity = rb.velocity.normalized * sharedData.currentMaxSpeed;
         }
+        sharedData.currentSpeed = rb.velocity.magnitude;
 
         // Vordere Reifen lenken
         getCollider(FRONT_LEFT).steerAngle = angle;

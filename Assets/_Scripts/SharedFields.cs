@@ -32,6 +32,10 @@ public class SharedFields {
 
 
     private float timeNeededToLastLevel = 0;
+    public const float maxSpeed = 30f;  //der Sprachassistent manipuliert im Autopilot die maximale Geschwindigkeit -> das ist das Backup wenn er die Kontrolle wieder abgibt
+    public float currentMaxSpeed = 30f;
+    public float currentSpeed = 0;
+ 
 
 
     // Hat der Ball den Boden berührt -> ein Leben verlieren
@@ -171,6 +175,9 @@ public class SharedFields {
         }
     }
 
+
+
+
     // Spielersteuerung ein und abschalten
     //Tasteneinstellungen Speicher Tastatur
     private KeyCode[] tmpMouseControls = new KeyCode[6]; // 0 -> up, 1 -> down, 2-> left, 3 -> right, 4 -> reset, 5 -> brake
@@ -190,8 +197,61 @@ public class SharedFields {
     //Controllerauswahl
     public const string MTControl = "MausUndTastaturKontrolle";
     public const string WiiControl = "WiimoteKontrolle";
+    public const string VoiceAssistantControl = "FahrtrichtungUeberDenSprachassistentenSteuern";
     private string selectedControl = MTControl;
     private bool playerControl = false;
+    //Vom Sprachassistenten simulierte Movement Achsenbelegung
+    private float assistantXAchse = 0;
+    private float assistantYAchse = 0;
+
+    public float AssistantXAchse
+    {
+        get
+        {
+            return assistantXAchse;
+        }
+
+        set
+        {
+            if (value > 1f)
+            {
+                assistantXAchse = 1;
+            }
+            else if (value < -1f)
+            {
+                assistantXAchse = -1;
+            }
+            else
+            {
+                assistantXAchse = value;
+            }
+        }
+    }
+
+    public float AssistantYAchse
+    {
+        get
+        {
+            return assistantYAchse;
+        }
+
+        set
+        {
+            if (value > 1f)
+            {
+                assistantYAchse = 1;
+            }
+            else if (value < -1f)
+            {
+                assistantYAchse = -1;
+            }
+            else
+            {
+                assistantYAchse = value;
+            }
+        }
+    }
+
 
     // Mausempfindlichkeit
     public float sensitivity = 5f;

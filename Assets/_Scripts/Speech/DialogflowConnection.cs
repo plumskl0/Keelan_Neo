@@ -19,23 +19,40 @@ public class DialogflowConnection : MonoBehaviour
 
     private readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings
     {
-       //StringEscapeHandling = StringEscapeHandling.EscapeNonAscii;
-        //NullValueHandling = NullValueHandling.Ignore
+        //StringEscapeHandling = StringEscapeHandling.EscapeNonAscii;
+        NullValueHandling = NullValueHandling.Ignore
         //StringEscapeHandling = Newtonsoft.Json.StringEscapeHandling
     };
 
     private readonly Queue<Action> ExecuteOnMainThread = new Queue<Action>();
 
     // Use this for initialization
-    void Start()
+    IEnumerator Start()
     {
-        //const string ACCESS_TOKEN = "3485a96fb27744db83e78b8c4bc9e7b7";
+        // check access to the Microphone
+        yield return Application.RequestUserAuthorization(UserAuthorization.Microphone);
+        if (!Application.HasUserAuthorization(UserAuthorization.Microphone))
+        {
+            throw new NotSupportedException("Microphone using not authorized");
+        }
+
+        ServicePointManager.ServerCertificateValidationCallback = (a, b, c, d) =>
+        {
+            return true;
+        };
+
         const string ACCESS_TOKEN = "3634f11198d345b5aee6a88ec6a93065";
 
         var config = new AIConfiguration(ACCESS_TOKEN, SupportedLanguage.German);
 
         apiAiUnity = new ApiAiUnity();
         apiAiUnity.Initialize(config);
+        apiAiUnity.OnError += HandleOnError;
+    }
+
+    private void HandleOnError(object sender, AIErrorEventArgs e)
+    {
+        Debug.Log("******Fehler bei APIAI Module: " + e.Exception.Message);
     }
 
     // Update is called once per frame
@@ -46,6 +63,7 @@ public class DialogflowConnection : MonoBehaviour
             apiAiUnity.Update();
         }
     }
+
 
 
 
@@ -63,8 +81,8 @@ public class DialogflowConnection : MonoBehaviour
             //Debug.Log("Resolved query: " + response.Result.ResolvedQuery);
             //Debug.Log(response.Result.Metadata.IntentName);
 
-            //var outText = JsonConvert.SerializeObject(response, jsonSettings);
-            //Debug.Log("Result: " + outText);
+            var outText = JsonConvert.SerializeObject(response, jsonSettings);
+            Debug.Log("Result: " + outText);
 
             return response;
         }

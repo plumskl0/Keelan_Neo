@@ -71,7 +71,7 @@ public class ApiAiModule : MonoBehaviour
         apiAiUnity.Initialize(config);
 
         apiAiUnity.OnError += HandleOnError;
-        apiAiUnity.OnResult += HandleOnResult;
+        //apiAiUnity.OnResult += HandleOnResult;
     }
 
     void HandleOnResult(object sender, AIResponseEventArgs e)
@@ -112,21 +112,21 @@ public class ApiAiModule : MonoBehaviour
         }
 
         // dispatch stuff on main thread
-        while (ExecuteOnMainThread.Count > 0)
+        /*while (ExecuteOnMainThread.Count > 0)
         {
             ExecuteOnMainThread.Dequeue().Invoke();
-        }
+        }*/
     }
 
     private void RunInMainThread(Action action)
     {
         ExecuteOnMainThread.Enqueue(action);
     }
-
+    /*
     public void PluginInit()
     {
         
-    }
+    }*/
     
     public void StartListening()
     {

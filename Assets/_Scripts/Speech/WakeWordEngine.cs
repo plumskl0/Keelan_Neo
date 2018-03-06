@@ -18,7 +18,17 @@ public class WakeWordEngine : MonoBehaviour {
         AddWakeWords(new String[] { "computer", "Auto" });
         keywordRecognizer = new KeywordRecognizer(WakeWords.ToArray());
         keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
+        PhraseRecognitionSystem.OnError += (errorCode) =>
+        {
+            Debug.LogError(string.Format("***************Es ist ein Fehler in der WakeWord Engine aufgetreten: {0}", errorCode.ToString()));
 
+        };
+
+    }
+
+    private void PhraseRecognitionSystem_OnError(SpeechError errorCode)
+    {
+        throw new NotImplementedException();
     }
 
     private void KeywordRecognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)

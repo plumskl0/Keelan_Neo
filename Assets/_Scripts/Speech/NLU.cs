@@ -14,13 +14,11 @@ public class NLU : MonoBehaviour {
 
     }
 
-    public void UnderstandRequest (object query)
+    public void UnderstandRequest (string query)
     {
-        EventMessageObject queryMessage = (EventMessageObject) query;
-        string asrRequest = (string) queryMessage.MessageBody;
-        AIResponse dialogflowAnswer = dialogflowConnection.SendVoiceText(asrRequest);
-        EventManager.TriggerEvent(EventManager.nluAnswerDetectedEvent, new EventMessageObject(EventManager.nluAnswerDetectedEvent, dialogflowAnswer));
+        AIResponse dialogflowAnswer = dialogflowConnection.SendVoiceText(query);
         Debug.Log("Trigger NLUAnswerDetected Event");
+        EventManager.TriggerEvent(EventManager.nluAnswerDetectedEvent, new EventMessageObject(EventManager.nluAnswerDetectedEvent, dialogflowAnswer));
     }
 
    /* private AsrRequest marshalEventMessage(EventMessageObject eventMessage)

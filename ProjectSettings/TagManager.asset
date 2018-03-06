@@ -12,6 +12,8 @@ TagManager:
   - zielLevel2
   - zielLevel1
   - Teller
+  - Minimap
+  - MinimapBorder
   layers:
   - Default
   - TransparentFX
@@ -24,8 +26,8 @@ TagManager:
   - Teller
   - Ball
   - solid
-  - 
-  - 
+  - Mnimap
+  - Level
   - 
   - 
   - 

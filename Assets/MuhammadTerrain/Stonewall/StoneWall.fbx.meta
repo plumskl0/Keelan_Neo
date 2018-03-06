@@ -1,8 +1,58 @@
 fileFormatVersion: 2
 guid: e36de7c0a52748943880d971c66c679f
 ModelImporter:
-  serializedVersion: 19
+  serializedVersion: 22
   fileIDToRecycleName:
+    100000: stone_wall_lg_LOD0
+    100002: stone_wall_lg_LOD1
+    100004: stone_wall_med_LOD0
+    100006: stone_wall_med_LOD1
+    100008: stone_wall_sm_LOD0
+    100010: stone_wall_sm_LOD1
+    100012: //RootNode
+    100014: wall_cover_lg_LOD0
+    100016: wall_cover_lg_LOD1
+    100018: wall_cover_med_LOD0
+    100020: wall_cover_med_LOD1
+    100022: wall_cover_sm_LOD0
+    100024: wall_cover_sm_LOD1
+    400000: stone_wall_lg_LOD0
+    400002: stone_wall_lg_LOD1
+    400004: stone_wall_med_LOD0
+    400006: stone_wall_med_LOD1
+    400008: stone_wall_sm_LOD0
+    400010: stone_wall_sm_LOD1
+    400012: //RootNode
+    400014: wall_cover_lg_LOD0
+    400016: wall_cover_lg_LOD1
+    400018: wall_cover_med_LOD0
+    400020: wall_cover_med_LOD1
+    400022: wall_cover_sm_LOD0
+    400024: wall_cover_sm_LOD1
+    2300000: stone_wall_lg_LOD0
+    2300002: stone_wall_lg_LOD1
+    2300004: stone_wall_med_LOD0
+    2300006: stone_wall_med_LOD1
+    2300008: stone_wall_sm_LOD0
+    2300010: stone_wall_sm_LOD1
+    2300012: wall_cover_lg_LOD0
+    2300014: wall_cover_lg_LOD1
+    2300016: wall_cover_med_LOD0
+    2300018: wall_cover_med_LOD1
+    2300020: wall_cover_sm_LOD0
+    2300022: wall_cover_sm_LOD1
+    3300000: stone_wall_lg_LOD0
+    3300002: stone_wall_lg_LOD1
+    3300004: stone_wall_med_LOD0
+    3300006: stone_wall_med_LOD1
+    3300008: stone_wall_sm_LOD0
+    3300010: stone_wall_sm_LOD1
+    3300012: wall_cover_lg_LOD0
+    3300014: wall_cover_lg_LOD1
+    3300016: wall_cover_med_LOD0
+    3300018: wall_cover_med_LOD1
+    3300020: wall_cover_sm_LOD0
+    3300022: wall_cover_sm_LOD1
     4300000: stone_wall_sm_LOD1
     4300002: wall_cover_sm_LOD1
     4300004: stone_wall_med_LOD1
@@ -15,10 +65,54 @@ ModelImporter:
     4300018: wall_cover_med_LOD0
     4300020: stone_wall_sm_LOD0
     4300022: wall_cover_sm_LOD0
+    11100000: //RootNode
+    20500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: None__rockSmooth_jpg
+    second: {fileID: 2100000, guid: 10fa1e61d34a4844fa7f6a7272af4c8c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: None__wall_sm_vine_png
+    second: {fileID: 2100000, guid: 8bb9c6dbf17322449966c8bd5cb60caf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: vine_lg__vine_lg_png
+    second: {fileID: 2100000, guid: 4331b955dab6df64f857feef73be5d1b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: vine_med__vine_med_png
+    second: {fileID: 2100000, guid: 768b0d37a6bc5a444b58f5b722061a1d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: vine_sm__vine_sm_png
+    second: {fileID: 2100000, guid: 0bb56c9dcc6a0594ca86e5bd4fcdf2f7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wall_all__rockSmooth_jpg
+    second: {fileID: 2100000, guid: 10fa1e61d34a4844fa7f6a7272af4c8c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wall_lg_vine__wall_lg_vine_png
+    second: {fileID: 2100000, guid: 41b5b95fb3bc2ea4d8f0879a45b4d66d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wall_med_vine__wall_med_vine_png
+    second: {fileID: 2100000, guid: 95b5d570dbdae85478d7e81ca8aa91e8, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -31,12 +125,14 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
+    extraUserProperties: []
     clipAnimations: []
     isReadable: 1
   meshes:
@@ -46,13 +142,18 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    importVisibility: 0
     importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
@@ -62,6 +163,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 4
+    normalCalculationMode: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:

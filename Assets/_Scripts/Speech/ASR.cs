@@ -13,6 +13,8 @@ public class ASR : MonoBehaviour {
     public Text sttText;
     public Text WakeWordStateText;
     public Text DictationStateText;*/
+    public GameObject MicrophoneBorder;
+    private Image background;
 
     private string lastCommand;
 
@@ -20,8 +22,8 @@ public class ASR : MonoBehaviour {
     private GameObject SpeechAssistant;
     private SpeechToText STT;
     private WakeWordEngine WWE;
-    SpeechSystemStatus WakeWordState;
-    SpeechSystemStatus DictationState;
+    public SpeechSystemStatus WakeWordState;
+    public SpeechSystemStatus DictationState;
     private Boolean WantToChangeToWakeWordDetection = false;
 
     //Unity Actions for EventManager
@@ -51,6 +53,7 @@ public class ASR : MonoBehaviour {
         SpeechAssistant.AddComponent<WakeWordEngine>();
         WWE = GetComponent<WakeWordEngine>();
         Debug.Log("Stt hinzugefügt");
+        MicrophoneBorder = GameObject.Find("MicrophoneBorder");
 
         EnableWakeWord = new UnityAction<EventMessageObject>(SwitchToWakeWordDetection);
         EnableSpeechToText = new UnityAction<EventMessageObject>(SwitchToSpeechToText);
@@ -73,6 +76,9 @@ public class ASR : MonoBehaviour {
         //AddWakeWords(new String[] { "computer", "auto" });
         Debug.Log(PhraseRecognitionSystem.Status);
         WWE.keywordRecognizer.Start();
+
+        background = MicrophoneBorder.GetComponent<Image>();
+        StartCoroutine("FlashMicrophoneOverlay");
         //SwitchToWakeWordDetection();
         //STT = GameObject.Find(STT);
     }
@@ -96,6 +102,26 @@ public class ASR : MonoBehaviour {
 
     public void SwitchToSpeechToText(EventMessageObject args)
     {
+        //falls ein Aufruf zum Wechsel zu STT kommt bevor diese gestoppt wurde läuft die WWE noch nicht
+        if (WantToChangeToWakeWordDetection)
+        {
+            StartCoroutine("WaitForDictationStop");
+        }
+        else
+        {
+            WWE.StopDetection();
+            STT.StartDetection();
+        }
+    }
+
+    IEnumerator WaitForDictationStop ()
+    {
+        while (WantToChangeToWakeWordDetection)
+        {
+            Debug.Log("Warte auf Stop der Dictation");
+            yield return null;
+        }
+        Debug.Log("Dictation gestoppt - ich wechsle jetzt zu TTS");
         WWE.StopDetection();
         STT.StartDetection();
     }
@@ -106,7 +132,7 @@ public class ASR : MonoBehaviour {
         STT.StopDetection();
     }
 
-
+    /*
     public void SwitchToWakeWordDetection(String textHeard, Text textFieldToDisplay)
     {
         Debug.Log("VORHER Status Wakeword: " + PhraseRecognitionSystem.Status);
@@ -115,28 +141,6 @@ public class ASR : MonoBehaviour {
         //wakeWordText.text = "";
         STT.StopDetection();
         WantToChangeToWakeWordDetection = true;
-        /*DateTime timeout = waitXSeconds(5);
-        while (STT.dictationRecognizer.Status.Equals(SpeechSystemStatus.Running))
-        {
-            Debug.Log("warte bis DictationMode geschlossen ist");
-            if (timeout > DateTime.Now)
-            {
-                Debug.Log("Konnte Dictation nicht stoppen");
-                break;
-            }
-        };*/
-
-        //WWE.StartDetection();
-        /*timeout = waitXSeconds(5);
-        while (PhraseRecognitionSystem.Status.Equals(SpeechSystemStatus.Stopped))
-        {
-            Debug.Log("warte bis WakeWordEnginge startet");
-            if (timeout > DateTime.Now)
-            {
-                Debug.Log("Konnte WakeWordEngine nicht starten");
-                break;
-            }
-        };*/
 
         Debug.Log("Status Wakeword: " + PhraseRecognitionSystem.Status);
         Debug.Log("Status Dication: " + STT.dictationRecognizer.Status);
@@ -149,32 +153,11 @@ public class ASR : MonoBehaviour {
         Debug.Log("VORHER Status Wakeword: " + WakeWordState);
         Debug.Log("VORHER Status Dication: " + DictationState);
         WWE.StopDetection();
-        /*
-        DateTime timeout = waitXSeconds(5);
-        while (PhraseRecognitionSystem.Status.Equals(SpeechSystemStatus.Running))
-        {
-            Debug.Log("warte bis WakeWordEnginge geschlossen ist");
-            if (timeout > DateTime.Now)
-            {
-                Debug.Log("Konnte WakeWordEngine nicht stoppen");
-                break;
-            }
-        };*/
         STT.StartDetection();
-        /*timeout = waitXSeconds(5);
-        while (DictationState.Equals(SpeechSystemStatus.Stopped))
-        {
-            Debug.Log("warte bis DictationMode startet");
-            if (timeout.CompareTo(DateTime.Now) < 0)    //-> Deadline ueberschritten
-            {
-                Debug.Log("Konnte Dictation nicht starten");
-                break;
-            }
-        };*/
         Debug.Log("Status Wakeword: " + WakeWordState);
         Debug.Log("Status Dication: " + DictationState);
     }
-
+    */
 
     private DateTime waitXSeconds(double secondsToWait)
     {
@@ -183,11 +166,63 @@ public class ASR : MonoBehaviour {
         return endTime;
     }
 
+    IEnumerator FlashMicrophoneOverlay()
+    {
+        
+        int schalter = 0;
+        //DateTime wechselzeit = waitXSeconds(1);
+        for (; ; )
+        {
+            if (DictationState.Equals(SpeechSystemStatus.Running))
+            {
+                switch (schalter)
+                {
+                    case 0:
+                        //Debug.Log("Wechsel zu rot");
+                        background.color = Color.red;
+                        schalter = 1;
+                        break;
+                    case 1:
+                        //Debug.Log("Wechsel zu weis");
+                        background.color = Color.white;
+                        schalter = 0;
+                        break;
+                }
+            }
+            else if (WakeWordState.Equals(SpeechSystemStatus.Running))
+            {
+
+                //Debug.Log(string.Format("Endzeit: {0} {1} ist früher als aktuelle Zeit {2} {3}", wechselzeit.Second, wechselzeit.Millisecond,DateTime.Now.Second, DateTime.Now.Millisecond));
+                background.color = Color.blue;
+                schalter = 0;
+            }
+
+            else
+            {
+                Debug.Log(string.Format("*****ERROR: WWE Status: {0} ____ TTS Status:{1}", WakeWordState, DictationState));
+            }
+            yield return new WaitForSecondsRealtime(1f);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+       /* if (DictationState.Equals(SpeechSystemStatus.Running))
+        {
+            StartCoroutine("FlashMicrophoneOverlay");
+        }
+        */
+    }
+
+
     // Update is called once per frame
     void Update () {
         WakeWordState = PhraseRecognitionSystem.Status;
         DictationState = STT.dictationRecognizer.Status;
-
+        //lasse das Mikrofon Overlay blinken, falls TTS aktiv ist
+        /*if (DictationState.Equals(SpeechSystemStatus.Running))   {
+            StartCoroutine("FlashMicrophoneOverlay");
+        }*/
         //WakeWordStateText.text = WakeWordState.ToString();
         //DictationStateText.text = DictationState.ToString();
 

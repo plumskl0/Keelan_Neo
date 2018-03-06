@@ -10,7 +10,10 @@ public class EventManager : MonoBehaviour {
     //Available Events:
     public const string keywordDetectedEvent = "keyword Detected";
     public const string asrRequerstDetectedEvent = "Speech Command Regocnized";
-    public const string nluAnswerDetectedEvent = "NLU answer recignized";
+    public const string ttsTimeout = "noInputinTimeLimit";
+    public const string ttsError = "networkMicrophoneUnknownError";
+
+    public const string nluAnswerDetectedEvent = "NLU answer recognized";
 
 
     public static EventManager instance
