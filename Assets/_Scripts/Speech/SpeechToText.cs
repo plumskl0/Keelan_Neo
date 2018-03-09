@@ -6,9 +6,9 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
 
-public class SpeechToText : MonoBehaviour {
+public class SpeechToText : MonoBehaviour, ISpeechToTextInterface {
 
-    public DictationRecognizer dictationRecognizer;
+    private DictationRecognizer dictationRecognizer;
 
 //    private DictationRecognizer dictationRecognizer;
     private String _userCommand;
@@ -102,4 +102,9 @@ public class SpeechToText : MonoBehaviour {
     void Update () {
 		
 	}
+
+    public SpeechSystemStatus GetState()
+    {
+        return dictationRecognizer.Status;
+    }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class NLU : MonoBehaviour {
+public class NLU : MonoBehaviour, INaturalLanguageUnderstandingInterface {
 
     private DialogflowConnection dialogflowConnection;
 
@@ -20,25 +20,4 @@ public class NLU : MonoBehaviour {
         Debug.Log("Trigger NLUAnswerDetected Event");
         EventManager.TriggerEvent(EventManager.nluAnswerDetectedEvent, new EventMessageObject(EventManager.nluAnswerDetectedEvent, dialogflowAnswer));
     }
-
-   /* private AsrRequest marshalEventMessage(EventMessageObject eventMessage)
-    {
-
-    }
-
-    public struct AsrRequest
-    {
-        public string queryMessageObject;
-        string asr
-    }*/
-
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
 
-public class WakeWordEngine : MonoBehaviour {
+public class WakeWordEngine : MonoBehaviour, IWakeWordEngineInterface {
 
     //private string[] keywords = new String[] { "computer", "auto" };
     private List<String> WakeWords = new List<String>();
@@ -21,7 +21,6 @@ public class WakeWordEngine : MonoBehaviour {
         PhraseRecognitionSystem.OnError += (errorCode) =>
         {
             Debug.LogError(string.Format("***************Es ist ein Fehler in der WakeWord Engine aufgetreten: {0}", errorCode.ToString()));
-
         };
 
     }
@@ -45,6 +44,11 @@ public class WakeWordEngine : MonoBehaviour {
         {
             WakeWords.Add(s);
         }
+    }
+
+    public void InitDetection ()
+    {
+        keywordRecognizer.Start();
     }
 
     public void StartDetection()
@@ -78,4 +82,9 @@ public class WakeWordEngine : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public SpeechSystemStatus GetState()
+    {
+        return PhraseRecognitionSystem.Status;
+    }
 }

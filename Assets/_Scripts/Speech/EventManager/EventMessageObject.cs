@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EventMessageObject {
-    private string type;    //valid Types for Events in EventManager.cs
+    private string type;    //valid Types for Events are in EventManager.cs
     private string stringRequest;
     private AIResponse nluAnswer;
     private object messageBody;

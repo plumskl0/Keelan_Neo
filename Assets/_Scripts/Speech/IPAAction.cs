@@ -8,8 +8,8 @@ public class IPAAction : MonoBehaviour {
     //public Canvas MiniMap;
 
     //Map Objekte
-    public GameObject mapBorder;
-    public Camera minimapKamera;
+    private GameObject mapBorder;
+    private Camera minimapKamera;
     private RectTransform mapBorderRectTransform;
     private RectTransform mapOverlayRect;
     private RectTransform mapRect;
@@ -20,7 +20,7 @@ public class IPAAction : MonoBehaviour {
 
 
     //Feineinstellungsvariablen:
-    public float beschleunigungszeit = 1f;
+    private float beschleunigungszeit = 1f;
 
 
     //Konstanten für gültige Aktionen des Agents

@@ -6,24 +6,24 @@ using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
 using UnityEngine.Events;
 
-public class ASR : MonoBehaviour {
+public class ASR : MonoBehaviour, IAutomaticSpeechInterface {
     //Debug Ausgabefelder 
     /*public Text debugText;
     public Text wakeWordText;
     public Text sttText;
     public Text WakeWordStateText;
     public Text DictationStateText;*/
-    public GameObject MicrophoneBorder;
+    private GameObject MicrophoneBorder;
     private Image background;
 
     private string lastCommand;
 
 
     private GameObject SpeechAssistant;
-    private SpeechToText STT;
-    private WakeWordEngine WWE;
-    public SpeechSystemStatus WakeWordState;
-    public SpeechSystemStatus DictationState;
+    private ISpeechToTextInterface STT;
+    private IWakeWordEngineInterface WWE;
+    private SpeechSystemStatus WakeWordState;
+    private SpeechSystemStatus DictationState;
     private Boolean WantToChangeToWakeWordDetection = false;
 
     //Unity Actions for EventManager
@@ -48,10 +48,10 @@ public class ASR : MonoBehaviour {
     private void Awake()
     {
         SpeechAssistant = gameObject;
-        SpeechAssistant.AddComponent<SpeechToText>();
-        STT = GetComponent<SpeechToText>();
-        SpeechAssistant.AddComponent<WakeWordEngine>();
-        WWE = GetComponent<WakeWordEngine>();
+        STT = SpeechAssistant.AddComponent<SpeechToText>();
+        //STT = GetComponent<SpeechToText>();
+        WWE = SpeechAssistant.AddComponent<WakeWordEngine>();
+        //WWE = GetComponent<WakeWordEngine>();
         Debug.Log("Stt hinzugefügt");
         MicrophoneBorder = GameObject.Find("MicrophoneBorder");
 
@@ -75,7 +75,8 @@ public class ASR : MonoBehaviour {
 
         //AddWakeWords(new String[] { "computer", "auto" });
         Debug.Log(PhraseRecognitionSystem.Status);
-        WWE.keywordRecognizer.Start();
+        //WWE.keywordRecognizer.Start();
+        WWE.InitDetection();
 
         background = MicrophoneBorder.GetComponent<Image>();
         StartCoroutine("FlashMicrophoneOverlay");
@@ -127,7 +128,7 @@ public class ASR : MonoBehaviour {
     }
 
 
-    public void StopDictation()
+    private void StopDictation()
     {
         STT.StopDetection();
     }
@@ -217,8 +218,8 @@ public class ASR : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        WakeWordState = PhraseRecognitionSystem.Status;
-        DictationState = STT.dictationRecognizer.Status;
+        WakeWordState = WWE.GetState();
+        DictationState = STT.GetState();
         //lasse das Mikrofon Overlay blinken, falls TTS aktiv ist
         /*if (DictationState.Equals(SpeechSystemStatus.Running))   {
             StartCoroutine("FlashMicrophoneOverlay");

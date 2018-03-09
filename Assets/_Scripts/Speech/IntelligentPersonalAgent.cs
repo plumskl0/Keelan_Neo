@@ -7,8 +7,8 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class IntelligentPersonalAgent : MonoBehaviour {
-    private ASR asr;
-    private NLU nlu;
+    private IAutomaticSpeechInterface asr;
+    private INaturalLanguageUnderstandingInterface nlu;
     private IPAAction actions;
     public Text debugText;
 
@@ -35,6 +35,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
         EventManager.StartListening(EventManager.asrRequerstDetectedEvent, CallNLU);
         EventManager.StartListening(EventManager.nluAnswerDetectedEvent, HandleIntent);
         //EventManager.StartListening("SpeechCommandRegocnized", nlu.UnderstandRequest());
+
     }
 
     public void HandleIntent (EventMessageObject nluAnswer)
@@ -58,8 +59,8 @@ public class IntelligentPersonalAgent : MonoBehaviour {
         if (slotsMissing)
         {
             Debug.Log("Es fehlen noch Slotbelegungen. Ich gebe die Kontrolle an TTS");
-            Debug.Log("WWE Status " + asr.WakeWordState);
-            Debug.Log("STT Status " + asr.DictationState);
+            //Debug.Log("WWE Status " + asr.WakeWordState);
+            //Debug.Log("STT Status " + asr.DictationState);
             EventManager.TriggerEvent(EventManager.keywordDetectedEvent, new EventMessageObject(EventManager.keywordDetectedEvent, "Slots fehlen"));
             actions.DisplayText(debugText, nluResponse.Result.Fulfillment.Speech);
         }
@@ -76,8 +77,16 @@ public class IntelligentPersonalAgent : MonoBehaviour {
             actions.DisplayText(debugText, nluResponse.Result.Fulfillment.Speech);
 
             String intent = nluResponse.Result.Metadata.IntentName;
+            Result nluResultObj = nluResponse.Result;
+
             String action = nluResponse.Result.Action;
             switch (action) {
+                case IPAAction.moveCar:
+                    String groesseneinheit = nluResultObj.GetStringParameter("Groesseneinheit");
+                    String direction = nluResultObj.GetStringParameter("MoveDirection");
+                    actions.MoveCar(groesseneinheit, direction);
+                    break;
+
 
                 //Open Map Intent
                 case IPAAction.openMap:
@@ -91,8 +100,8 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                     break;
 
                 case IPAAction.changeMapFixedStep:
-                    String groesseneinheit = nluResponse.Result.GetStringParameter("Groesseneinheit");
-                    String direction = nluResponse.Result.GetStringParameter("Direction");
+                    groesseneinheit = nluResponse.Result.GetStringParameter("Groesseneinheit");
+                    direction = nluResponse.Result.GetStringParameter("Direction");
                     if (direction.Length==0)
                     {
                         direction = nluResponse.Result.GetStringParameter("MoveDirection");
@@ -104,11 +113,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                     actions.SetMinimapFokusOnCar();
                     break;
 
-                case IPAAction.moveCar:
-                    groesseneinheit = nluResponse.Result.GetStringParameter("Groesseneinheit");
-                    direction = nluResponse.Result.GetStringParameter("MoveDirection");
-                    actions.MoveCar(groesseneinheit, direction);
-                    break;
+
 
                 case IPAAction.wantToSetContext:
                     int firstFreeContext = context.Length;
@@ -181,8 +186,10 @@ public class IntelligentPersonalAgent : MonoBehaviour {
         }
 
         else if (messageType.Equals(EventManager.nluAnswerDetectedEvent))
+
         {
             debugText.text = "NLU answer detected: " + messageBody ;
+                 
         }
 
 
