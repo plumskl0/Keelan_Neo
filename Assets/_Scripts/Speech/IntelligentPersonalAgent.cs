@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class IntelligentPersonalAgent : MonoBehaviour {
     private IAutomaticSpeechInterface asr;
     private INaturalLanguageUnderstandingInterface nlu;
+    private WindowsVoice tts;
     private IPAAction actions;
     public Text debugText;
 
@@ -23,6 +24,8 @@ public class IntelligentPersonalAgent : MonoBehaviour {
         asr = gameObject.AddComponent<ASR>();
         nlu = gameObject.AddComponent<NLU>();
         actions = gameObject.AddComponent<IPAAction>();
+        tts = gameObject.AddComponent<WindowsVoice>();
+
 
         CallNLU = new UnityAction<EventMessageObject>(SendTextToNLU);
         Print = new UnityAction<EventMessageObject>(PrintMessageBody);
@@ -63,6 +66,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
             //Debug.Log("STT Status " + asr.DictationState);
             EventManager.TriggerEvent(EventManager.keywordDetectedEvent, new EventMessageObject(EventManager.keywordDetectedEvent, "Slots fehlen"));
             actions.DisplayText(debugText, nluResponse.Result.Fulfillment.Speech);
+            WindowsVoice.speak(string.Format("Es fehlen noch Slots. {0}", nluResponse.Result.Fulfillment.Speech), delay: 0f);
         }
 
         //ansonsten rufe die Handler auf
@@ -150,6 +154,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
 
                 default:
                     Debug.Log(string.Format("Der Intent {0} wurde im IntentHandler nicht registiert.", intent));
+                    WindowsVoice.speak("Test Test", 0f);
                     break;
             }
         }

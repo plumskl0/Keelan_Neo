@@ -32,8 +32,8 @@ public class SharedFields {
 
 
     private float timeNeededToLastLevel = 0;
-    public const float maxSpeed = 30f;  //der Sprachassistent manipuliert im Autopilot die maximale Geschwindigkeit -> das ist das Backup wenn er die Kontrolle wieder abgibt
-    public float currentMaxSpeed = 30f;
+    public const float maxSpeed = 20f;  //der Sprachassistent manipuliert im Autopilot die maximale Geschwindigkeit -> das ist das Backup wenn er die Kontrolle wieder abgibt
+    public float currentMaxSpeed = 20f;
     public float currentSpeed = 0;
  
 
