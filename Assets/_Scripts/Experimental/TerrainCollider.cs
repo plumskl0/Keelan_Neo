@@ -14,6 +14,7 @@ public class TerrainCollider : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
+        //wenn der Teller das Terrain berührt ist das Auto wahrscheinlich umgefallen -> muss wieder aufgestellt werden
         if (other.gameObject.CompareTag("Teller"))
             setResetAccordingToTag(other.gameObject.tag);
     }
@@ -21,10 +22,10 @@ public class TerrainCollider : MonoBehaviour {
     private void setResetAccordingToTag(string tag)
     {
         sharedData.LostLife = true;
-        sharedData.CarReset = true;
+        sharedData.CarResetNeeded = true;
 
         if (tag.Equals("Ball"))
-            sharedData.BallReset = true;
+            sharedData.BallResetNeeded = true;
             
     }
 }

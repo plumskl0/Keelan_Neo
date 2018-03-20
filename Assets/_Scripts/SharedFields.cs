@@ -24,18 +24,33 @@ public class SharedFields {
     private SharedFields()
     {
         LostLife = false;
-        CarReset = false;
-        BallReset = false;
+        CarResetNeeded = false;
+        BallResetNeeded = false;
         PayedCoin = false;
         CoinCount = 0;
     }
 
-
+    public bool debugMode = true;
     private float timeNeededToLastLevel = 0;
     public const float maxSpeed = 20f;  //der Sprachassistent manipuliert im Autopilot die maximale Geschwindigkeit -> das ist das Backup wenn er die Kontrolle wieder abgibt
     public float currentMaxSpeed = 20f;
     public float currentSpeed = 0;
- 
+
+    //Controllerauswahl
+    public const string MTControl = "MausUndTastaturKontrolle";
+    public const string WiiControl = "WiimoteKontrolle";
+    public const string VoiceAssistantControl = "FahrtrichtungUeberDenSprachassistentenSteuern";
+    //private string selectedControl = MTControl;
+    private string selectedControl = VoiceAssistantControl;
+    private bool playerControl = false;
+
+    //Vom Sprachassistenten simulierte Movement Achsenbelegung
+    private float assistantXAchse = 0;
+    private float assistantZAchse = 0;
+    //...simulierte Tellerbewegungen/neigungen
+    public float assistantPlateXAchse = 0;
+    public float assistantPlateZAchse = 0;
+
 
 
     // Hat der Ball den Boden berührt -> ein Leben verlieren
@@ -146,10 +161,10 @@ public class SharedFields {
     }
 
     // Hat der Ball den Boden berührt -> Fahrzeug reset
-    public bool CarReset { get; set; }
+    public bool CarResetNeeded { get; set; }
 
     // Hat der Teller den Boden berührt -> ein Leben verlieren aber ball nicht reseten
-    public bool BallReset { get; set; }
+    public bool BallResetNeeded { get; set; }
 
     // Wurde für ein Special mit einer Münze bezahlt
     public bool PayedCoin { get; set; }
@@ -194,15 +209,7 @@ public class SharedFields {
     private ButtonData wLeftKey = ButtonData.;
     private ButtonData wRightKey = KeyCode.D;*/
 
-    //Controllerauswahl
-    public const string MTControl = "MausUndTastaturKontrolle";
-    public const string WiiControl = "WiimoteKontrolle";
-    public const string VoiceAssistantControl = "FahrtrichtungUeberDenSprachassistentenSteuern";
-    private string selectedControl = MTControl;
-    private bool playerControl = false;
-    //Vom Sprachassistenten simulierte Movement Achsenbelegung
-    private float assistantXAchse = 0;
-    private float assistantYAchse = 0;
+
 
     public float AssistantXAchse
     {
@@ -232,22 +239,22 @@ public class SharedFields {
     {
         get
         {
-            return assistantYAchse;
+            return assistantZAchse;
         }
 
         set
         {
             if (value > 1f)
             {
-                assistantYAchse = 1;
+                assistantZAchse = 1;
             }
             else if (value < -1f)
             {
-                assistantYAchse = -1;
+                assistantZAchse = -1;
             }
             else
             {
-                assistantYAchse = value;
+                assistantZAchse = value;
             }
         }
     }

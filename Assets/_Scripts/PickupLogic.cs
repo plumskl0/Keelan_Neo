@@ -63,7 +63,10 @@ public class PickupLogic : MonoBehaviour {
 
         if (sharedData.LostLife)
         {
-            removeLife();
+            if (!sharedData.debugMode)
+            {
+                removeLife();
+            }
             sharedData.LostLife = false;
         }
 
