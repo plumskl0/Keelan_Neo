@@ -1,0 +1,4 @@
+-reference:NewJSon=Assets\ML-Agents\Plugins\JSON\Newtonsoft.Json.dll
+-reference:fastJ=Assets\ApiAiSDK\lib\fastJSON.dll
+/reference:NewJSon=Assets\ML-Agents\Plugins\JSON\Newtonsoft.Json.dll
+/reference:fastJ=Assets\ApiAiSDK\lib\fastJSON.dll

@@ -1,15 +1,15 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System;
-using System.IO;
-using System.Collections;
-using System.Reflection;
+﻿extern alias NewJSon;
+extern alias fastJ;
+
 using ApiAiSDK;
 using ApiAiSDK.Model;
 using ApiAiSDK.Unity;
-using Newtonsoft.Json;
-using System.Net;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+//using Newtonsoft.Json;
+using System.Net;
+using UnityEngine;
 
 public class DialogflowConnection : MonoBehaviour
 {
@@ -17,10 +17,16 @@ public class DialogflowConnection : MonoBehaviour
     private AudioSource aud;
     //public AudioClip listeningSound;
 
-    private readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings
+    /*private readonly fastJSON.JSONParameters jsons = new JSONParameters
+    {
+        NullValueHandling = NullValueHandling.Ignore
+    };*/
+
+
+   private readonly NewJSon::Newtonsoft.Json.JsonSerializerSettings jsonSettings = new NewJSon::Newtonsoft.Json.JsonSerializerSettings
     {
         //StringEscapeHandling = StringEscapeHandling.EscapeNonAscii;
-        NullValueHandling = NullValueHandling.Ignore
+        NullValueHandling = NewJSon::Newtonsoft.Json.NullValueHandling.Ignore
         //StringEscapeHandling = Newtonsoft.Json.StringEscapeHandling
     };
 
@@ -80,8 +86,8 @@ public class DialogflowConnection : MonoBehaviour
         {
             //Debug.Log("Resolved query: " + response.Result.ResolvedQuery);
             //Debug.Log(response.Result.Metadata.IntentName);
-
-            var outText = JsonConvert.SerializeObject(response, jsonSettings);
+            //var outText = fastJSON.JSON.ToJSON(response);
+            var outText = NewJSon::Newtonsoft.Json.JsonConvert.SerializeObject(response, jsonSettings);
             Debug.Log("Result: " + outText);
 
             return response;

@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿extern alias NewJSon;
+extern alias fastJ;
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -217,7 +220,7 @@ public class ExternalCommunicator : Communicator
     {
         sender.Send(Encoding.ASCII.GetBytes("CONFIG_REQUEST"));
         Receive();
-        var resetParams = JsonConvert.DeserializeObject<ResetParametersMessage>(rMessageString.ToString());
+        var resetParams = NewJSon::Newtonsoft.Json.JsonConvert.DeserializeObject<ResetParametersMessage>(rMessageString.ToString());
         academy.SetIsInference(!resetParams.train_model);
         return resetParams.parameters;
     }
@@ -248,7 +251,7 @@ public class ExternalCommunicator : Communicator
     /// Sends Academy parameters to external agent
     private void SendParameters(AcademyParameters envParams)
     {
-        string envMessage = JsonConvert.SerializeObject(envParams, Formatting.Indented);
+        string envMessage = NewJSon::Newtonsoft.Json.JsonConvert.SerializeObject(envParams, NewJSon::Newtonsoft.Json.Formatting.Indented);
         sender.Send(Encoding.ASCII.GetBytes(envMessage));
     }
 
@@ -411,7 +414,7 @@ public class ExternalCommunicator : Communicator
     {
         sender.Send(Encoding.ASCII.GetBytes("STEPPING"));
         ReceiveAll();
-        rMessage = JsonConvert.DeserializeObject<AgentMessage>(rMessageString.ToString());
+        rMessage = NewJSon::Newtonsoft.Json.JsonConvert.DeserializeObject<AgentMessage>(rMessageString.ToString());
 
         foreach (Brain brain in brains)
         {

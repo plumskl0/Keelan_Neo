@@ -5,18 +5,21 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/menu.unity
     guid: e2570dd78a2ddbb4086eb1804eb6c482
   - enabled: 1
     path: Assets/_Scenes/Level1.unity
     guid: f14fdc06e82105e47a48914f22d2a6d7
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/main.unity
     guid: 34a20f3c2d93c514c884b794414ba29a
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/Level2.unity
     guid: 98363227044cfae499bf1a66981aedd6
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/Level3.unity
-    guid: 00000000000000000000000000000000
+    guid: fe884cb30e1382f49a5a0b375010b768
+  - enabled: 0
+    path: Assets/ML-Agents/Examples/3DBall/3DBall.unity
+    guid: 6f62a2ccb3830437ea4e85a617e856b3

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿extern alias NewJSon;
+extern alias fastJ;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -203,8 +205,8 @@ public class Monitor : MonoBehaviour
     {
         try
         {
-            return JsonConvert.DeserializeObject<float[]>(
-                JsonConvert.SerializeObject(input, Formatting.None));
+            return NewJSon::Newtonsoft.Json.JsonConvert.DeserializeObject<float[]>(
+                NewJSon::Newtonsoft.Json.JsonConvert.SerializeObject(input, NewJSon::Newtonsoft.Json.Formatting.None));
         }
         catch
         {
@@ -213,8 +215,8 @@ public class Monitor : MonoBehaviour
         try
         {
             return new float[1]
-            {JsonConvert.DeserializeObject<float>(
-                    JsonConvert.SerializeObject(input, Formatting.None))
+            {NewJSon::Newtonsoft.Json.JsonConvert.DeserializeObject<float>(
+                    NewJSon::Newtonsoft.Json.JsonConvert.SerializeObject(input, NewJSon::Newtonsoft.Json.Formatting.None))
             };
         }
         catch
@@ -281,7 +283,7 @@ public class Monitor : MonoBehaviour
                             origin.x + paddingwidth + keyPixelWidth,
                             origin.y - (index + 1) * keyPixelHeight,
                             keyPixelWidth, keyPixelHeight),
-                        JsonConvert.SerializeObject(displayValues[key].value, Formatting.None), valueStyle);
+                        NewJSon::Newtonsoft.Json.JsonConvert.SerializeObject(displayValues[key].value, NewJSon::Newtonsoft.Json.Formatting.None), valueStyle);
 
                 }
                 else if (displayValues[key].monitorDisplayType == MonitorType.slider)

@@ -31,7 +31,7 @@ public class PlateAgent : Agent {
     {
         //to do: Startposition für jedes Level einfügen
         Scene myScene = SceneManager.GetActiveScene();
-
+        Debug.Log("*********reset Car");
         switch (myScene.name)
         {
             case "Level1":
@@ -41,7 +41,10 @@ public class PlateAgent : Agent {
                 Debug.LogError("Beim Trainieren des PLate Controllers wurde für das aktuelle Level kein Reset Verhalten definiert");
                 break;
         }
+        sharedData.assistantPlateXAchse = 0;
+        sharedData.assistantPlateZAchse = 0;
         resetCarScript.ResetBall();
+        Debug.Log("Ball reseted");
     }
 
     List<float> obeservation = new List<float>();
@@ -75,13 +78,30 @@ public class PlateAgent : Agent {
 
     public override void AgentAction(float[] vectorAction, string textAction)
     {
+        float abstand = plateTransform.position.y - ballTransform.position.y;
+        bool ballHeruntergefallen;
+        if( plateTransform.position.y > ballTransform.position.y)  {
+            ballHeruntergefallen = true;
+        }
+        else 
+        {
+            ballHeruntergefallen = false;
+        }
+
+        Debug.LogFormat("plate: {0}, ball: {1}____ abstand: {2}", plateTransform.position.y, ballTransform.position.y, abstand);
+
+
         //Rewards...:
         //...harte Strafe für herunterfallen des Balles
-        if(sharedData.LostLife) //evtl. in separaten Check umwandeln -> paralle Fahrzeuge Training, würde einen Reset auslösen sobald irgendein Auto Mist baut
+        if(ballHeruntergefallen) //evtl. in separaten Check umwandeln -> paralle Fahrzeuge Training, würde einen Reset auslösen sobald irgendein Auto Mist baut
             //müsste im debug Modus ausführen damit das Spiel nicht schnell zu ende ist wenn die leben leer sind
         {
             Done();
             AddReward(-1.0f);
+        }
+        else
+        {
+            AddReward(0.1f);
         }
 
         //Actions -> lenke die Plattform:
