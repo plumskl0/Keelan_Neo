@@ -819,13 +819,13 @@ MonoBehaviour:
     - 
     vectorActionSpaceType: 1
     vectorObservationSpaceType: 1
-  brainType: 2
+  brainType: 3
   CoreBrains:
-  - {fileID: 1943316557}
-  - {fileID: 1332981407}
-  - {fileID: 1253224449}
-  - {fileID: 1439755651}
-  instanceID: 44620
+  - {fileID: 345458316}
+  - {fileID: 1781799450}
+  - {fileID: 1787195391}
+  - {fileID: 948682656}
+  instanceID: 19188
 --- !u!1001 &303734674
 Prefab:
   m_ObjectHideFlags: 0
@@ -1075,6 +1075,34 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224479525356259422, guid: 79b24e1f013323440815fe0fa47114a2,
     type: 2}
   m_PrefabInternal: {fileID: 325696324}
+--- !u!114 &345458316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41e9bda8f3cf1492fa74926a530f6f70, type: 3}
+  m_Name: (Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  broadcast: 1
+  continuousPlayerActions:
+  - key: 273
+    index: 0
+    value: 0
+  - key: 274
+    index: 0
+    value: 0
+  - key: 276
+    index: 0
+    value: 0
+  - key: 275
+    index: 0
+    value: 0
+  discretePlayerActions: []
+  defaultAction: 0
+  brain: {fileID: 234839189}
 --- !u!1 &349964625
 GameObject:
   m_ObjectHideFlags: 0
@@ -2842,6 +2870,29 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: e8449808043a6114eb825a7cbbf749bf, type: 3}
   m_PrefabInternal: {fileID: 1839186760}
+--- !u!114 &948682656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b23992c8eb17439887f5e944bf04a40, type: 3}
+  m_Name: (Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  broadcast: 1
+  graphModel: {fileID: 4900000, guid: a6bb6d69a8afbb64f96b89d3c27b19b8, type: 3}
+  graphScope: 
+  graphPlaceholders: []
+  BatchSizePlaceholderName: batch_size
+  VectorObservationPlacholderName: vector_observation
+  RecurrentInPlaceholderName: recurrent_in
+  RecurrentOutPlaceholderName: recurrent_out
+  VisualObservationPlaceholderName: []
+  ActionPlaceholderName: action
+  PreviousActionPlaceholderName: prev_action
+  brain: {fileID: 234839189}
 --- !u!1 &951030423
 GameObject:
   m_ObjectHideFlags: 0
@@ -3524,36 +3575,11 @@ Transform:
   m_PrefabParentObject: {fileID: 4129627345464146, guid: 35738091052be7340853f6f1ec425c31,
     type: 2}
   m_PrefabInternal: {fileID: 1236522050}
---- !u!114 &1253224449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35813a1be64e144f887d7d5f15b963fa, type: 3}
-  m_Name: (Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  brain: {fileID: 234839189}
 --- !u!223 &1297002400 stripped
 Canvas:
   m_PrefabParentObject: {fileID: 223209876948264266, guid: 79b24e1f013323440815fe0fa47114a2,
     type: 2}
   m_PrefabInternal: {fileID: 325696324}
---- !u!114 &1332981407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 943466ab374444748a364f9d6c3e2fe2, type: 3}
-  m_Name: (Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  broadcast: 1
-  brain: {fileID: 0}
 --- !u!1001 &1340324387
 Prefab:
   m_ObjectHideFlags: 0
@@ -3878,29 +3904,6 @@ MonoBehaviour:
     targetFrameRate: 60
   resetParameters:
     resetParameters: []
---- !u!114 &1439755651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b23992c8eb17439887f5e944bf04a40, type: 3}
-  m_Name: (Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  broadcast: 1
-  graphModel: {fileID: 0}
-  graphScope: 
-  graphPlaceholders: []
-  BatchSizePlaceholderName: batch_size
-  VectorObservationPlacholderName: vector_observation
-  RecurrentInPlaceholderName: recurrent_in
-  RecurrentOutPlaceholderName: recurrent_out
-  VisualObservationPlaceholderName: []
-  ActionPlaceholderName: action
-  PreviousActionPlaceholderName: prev_action
-  brain: {fileID: 0}
 --- !u!1001 &1451623863
 Prefab:
   m_ObjectHideFlags: 0
@@ -4643,6 +4646,31 @@ Canvas:
   m_PrefabParentObject: {fileID: 223605149709390802, guid: 0e807cfedcade944e9ebf33441024230,
     type: 2}
   m_PrefabInternal: {fileID: 2031246163}
+--- !u!114 &1781799450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 943466ab374444748a364f9d6c3e2fe2, type: 3}
+  m_Name: (Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  broadcast: 1
+  brain: {fileID: 0}
+--- !u!114 &1787195391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35813a1be64e144f887d7d5f15b963fa, type: 3}
+  m_Name: (Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  brain: {fileID: 234839189}
 --- !u!1 &1792663941
 GameObject:
   m_ObjectHideFlags: 0
@@ -4997,6 +5025,7 @@ MonoBehaviour:
     onDemandDecision: 0
     numberOfActionsBetweenDecisions: 5
   positiveRewardsText: {fileID: 2035110404}
+  positiveRewardsThisRoundText: {fileID: 0}
   negativeRewardsText: {fileID: 814233350}
 --- !u!1001 &1942538109
 Prefab:
@@ -5049,34 +5078,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4129627345464146, guid: 35738091052be7340853f6f1ec425c31,
     type: 2}
   m_PrefabInternal: {fileID: 1942538109}
---- !u!114 &1943316557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41e9bda8f3cf1492fa74926a530f6f70, type: 3}
-  m_Name: (Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  broadcast: 1
-  continuousPlayerActions:
-  - key: 273
-    index: 0
-    value: 0
-  - key: 274
-    index: 0
-    value: 0
-  - key: 276
-    index: 0
-    value: 0
-  - key: 275
-    index: 0
-    value: 0
-  discretePlayerActions: []
-  defaultAction: 0
-  brain: {fileID: 234839189}
 --- !u!1001 &1945143263
 Prefab:
   m_ObjectHideFlags: 0
