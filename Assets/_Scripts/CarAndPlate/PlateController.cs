@@ -157,7 +157,7 @@ public class PlateController : MonoBehaviour {
             }
             else if (sharedData.SelectedControl == SharedFields.VoiceAssistantControl)
             {
-                plateTransform.localRotation = Quaternion.Euler(sharedData.assistantPlateXAchse* angle, 0f, -sharedData.assistantPlateZAchse*angle);
+                //plateTransform.localRotation = Quaternion.Euler(sharedData.assistantPlateXAchse* angle, 0f, -sharedData.assistantPlateZAchse*angle);
             }
 
             else

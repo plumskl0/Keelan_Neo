@@ -29,13 +29,16 @@ public class Ball3DAgent : Agent
             if ((gameObject.transform.rotation.z < 0.25f && action_z > 0f) ||
                 (gameObject.transform.rotation.z > -0.25f && action_z < 0f))
             {
+
                 gameObject.transform.Rotate(new Vector3(0, 0, 1), action_z);
+                Debug.LogFormat("actionZ: {0} + neuer Z Winkel: {1}", action_z, gameObject.transform.eulerAngles.z);
             }
             float action_x = 2f * Mathf.Clamp(vectorAction[1], -1f, 1f);
             if ((gameObject.transform.rotation.x < 0.25f && action_x > 0f) ||
                 (gameObject.transform.rotation.x > -0.25f && action_x < 0f))
             {
                 gameObject.transform.Rotate(new Vector3(1, 0, 0), action_x);
+                Debug.LogFormat("actionX: {0} + neuer Z Winkel: {1}", action_x, gameObject.transform.eulerAngles.x);
             }
 
             SetReward(0.1f);

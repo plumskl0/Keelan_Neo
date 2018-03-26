@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Scenes/menu.unity
     guid: e2570dd78a2ddbb4086eb1804eb6c482
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/Level1.unity
     guid: f14fdc06e82105e47a48914f22d2a6d7
   - enabled: 0
@@ -23,3 +23,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/ML-Agents/Examples/3DBall/3DBall.unity
     guid: 6f62a2ccb3830437ea4e85a617e856b3
+  - enabled: 0
+    path: Assets/ML-Agents/Examples/3DBall/3DBall 1.unity
+    guid: aa0c45ec3da3cc04186dfe02b6163b96
+  - enabled: 1
+    path: Assets/_Scenes/Level1Debug.unity
+    guid: d92d00cbb11c9284f860baffb975395d

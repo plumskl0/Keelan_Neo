@@ -772,6 +772,30 @@ Prefab:
       propertyPath: m_Name
       value: Game11
       objectReference: {fileID: 0}
+    - target: {fileID: 4014323973652284, guid: ff026d63a00abdc48ad6ddcff89aba04, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0.069583125
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014323973652284, guid: ff026d63a00abdc48ad6ddcff89aba04, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0.0049145464
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014323973652284, guid: ff026d63a00abdc48ad6ddcff89aba04, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0.0702813
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014323973652284, guid: ff026d63a00abdc48ad6ddcff89aba04, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.99508524
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014323973652284, guid: ff026d63a00abdc48ad6ddcff89aba04, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014323973652284, guid: ff026d63a00abdc48ad6ddcff89aba04, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 8.08
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ff026d63a00abdc48ad6ddcff89aba04, type: 2}
   m_IsPrefabParent: 0
