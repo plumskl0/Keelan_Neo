@@ -32,16 +32,21 @@ public class SharedFields {
 
     public bool debugMode = true;
     private float timeNeededToLastLevel = 0;
-    public const float maxSpeed = 20f;  //der Sprachassistent manipuliert im Autopilot die maximale Geschwindigkeit -> das ist das Backup wenn er die Kontrolle wieder abgibt
-    public float currentMaxSpeed = 20f;
+    public const float maxSpeed = 30f;  //der Sprachassistent manipuliert im Autopilot die maximale Geschwindigkeit -> das ist das Backup wenn er die Kontrolle wieder abgibt
+    public float currentMaxSpeed = 30f;
     public float currentSpeed = 0;
 
     //Controllerauswahl
     public const string MTControl = "MausUndTastaturKontrolle";
     public const string WiiControl = "WiimoteKontrolle";
-    public const string VoiceAssistantControl = "FahrtrichtungUeberDenSprachassistentenSteuern";
-    //private string selectedControl = MTControl;
-    private string selectedControl = VoiceAssistantControl;
+    private string selectedControl = MTControl;
+    public bool plateAutopilot = false; //true falls der Sprachassistent steuert
+    private bool carAutopilot = false;
+    private bool trainingMode = true; //für TensorFlowTraining muss das Auto sich selbstständig bewegen
+    public bool trainingRouteNeedsUpdate = false;
+
+    public Dictionary<int, Vector3> trainingsFahrroute = new Dictionary<int, Vector3>();
+
     private bool playerControl = false;
 
     //Vom Sprachassistenten simulierte Movement Achsenbelegung
@@ -255,6 +260,46 @@ public class SharedFields {
             else
             {
                 assistantZAchse = value;
+            }
+        }
+    }
+
+    public bool TrainingMode
+    {
+        get
+        {
+            return trainingMode;
+        }
+
+        set
+        {
+            if (CarAutopilot)
+            {
+                throw new System.Exception("Versuch den Trainingsmodus einzuschalten, während Autopilot aktiv ist");
+            }
+            else
+            {
+                trainingMode = value;
+            }
+        }
+    }
+
+    public bool CarAutopilot
+    {
+        get
+        {
+            return carAutopilot;
+        }
+
+        set
+        {
+            if (TrainingMode)
+            {
+                throw new System.Exception("Versuch den Autopiloten einzuschalten, während Trainingsmodus aktiv ist");
+            }
+            else
+            {
+                carAutopilot = value;
             }
         }
     }

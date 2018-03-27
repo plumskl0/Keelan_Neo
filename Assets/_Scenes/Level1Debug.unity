@@ -1067,6 +1067,11 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: Level1
       objectReference: {fileID: 0}
+    - target: {fileID: 224661882401064370, guid: 79b24e1f013323440815fe0fa47114a2,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: -2.6929932
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 79b24e1f013323440815fe0fa47114a2, type: 2}
   m_IsPrefabParent: 0
@@ -2556,6 +2561,16 @@ Prefab:
         type: 2}
       propertyPath: m_AnchoredPosition.y
       value: -1.699997
+      objectReference: {fileID: 0}
+    - target: {fileID: 224146122530290620, guid: f17f2dbd6f1a59643a4bba07e66a562f,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: -1.2000122
+      objectReference: {fileID: 0}
+    - target: {fileID: 224890788757840960, guid: f17f2dbd6f1a59643a4bba07e66a562f,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.9000015
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f17f2dbd6f1a59643a4bba07e66a562f, type: 2}
@@ -5023,7 +5038,7 @@ MonoBehaviour:
     maxStep: 5000
     resetOnDone: 1
     onDemandDecision: 0
-    numberOfActionsBetweenDecisions: 5
+    numberOfActionsBetweenDecisions: 1
   positiveRewardsText: {fileID: 2035110404}
   positiveRewardsThisRoundText: {fileID: 0}
   negativeRewardsText: {fileID: 814233350}

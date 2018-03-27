@@ -25,34 +25,49 @@ public class PlateAgent : Agent {
         resetCarScript = GetComponent<ResetCar>();
         carRgBody = GetComponent<Rigidbody>();
 
+
+        //Transform playerObjectsTransform = gameObject.GetComponentInParent<Transform>();
         GameObject ball = GameObject.Find("Golfball_G");
+        //GameObject ball = gameObject.GetComponentInParent<Transform>().Find("")
         ballRgBody = ball.GetComponent<Rigidbody>();
         ballTransform = ball.GetComponent<Transform>();
+
+        /*GameObject ball = playerObjectsTransform.Find("Golfball_G").gameObject;
+        ballRgBody = ball.GetComponent<Rigidbody>();
+        ballTransform = ball.GetComponent<Transform>();
+        plateTransform = transform.Find("CarModel").Find("Teller").GetComponent<Transform>();*/
+
         plateTransform = GameObject.Find("Teller").GetComponent<Transform>();
 
-	}
+    }
 
     public override void AgentReset()
     {
-        //to do: Startposition für jedes Level einfügen
-        Scene myScene = SceneManager.GetActiveScene();
-        Debug.Log("*********reset Car");
-        switch (myScene.name)
+        if (sharedData.TrainingMode)
         {
-            case "Level1":
-                resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false); //Level1
-                break;
-            case "Level1Debug":
-                resetCarScript.CarReset();
-                break;
-            default:
-                Debug.LogError("Beim Trainieren des PLate Controllers wurde für das aktuelle Level kein Reset Verhalten definiert");
-                break;
+            //to do: Startposition für jedes Level einfügen
+            Scene myScene = SceneManager.GetActiveScene();
+            Debug.Log("*********reset Car");
+            switch (myScene.name)
+            {
+                case "Level1":
+                    resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false); //Level1
+                    break;
+                case "Level1Debug":
+                    resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false);
+                    break;
+                case "Level1Training":
+                    resetCarScript.CarReset();
+                    break;
+                default:
+                    Debug.LogError("Beim Trainieren des PLate Controllers wurde für das aktuelle Level kein Reset Verhalten definiert");
+                    break;
+            }
+            sharedData.assistantPlateXAchse = 0;
+            sharedData.assistantPlateZAchse = 0;
+            resetCarScript.ResetBall();
+            Debug.Log("Ball reseted");
         }
-        sharedData.assistantPlateXAchse = 0;
-        sharedData.assistantPlateZAchse = 0;
-        resetCarScript.ResetBall();
-        Debug.Log("Ball reseted");
     }
 
     List<float> obeservation = new List<float>();
@@ -90,63 +105,76 @@ public class PlateAgent : Agent {
     float positiveRewardsThisRound = 0;
     public override void AgentAction(float[] vectorAction, string textAction)
     {
-        float abstand = plateTransform.position.y - ballTransform.position.y;
-        bool ballHeruntergefallen;
-        if( plateTransform.position.y > ballTransform.position.y)  {
-            ballHeruntergefallen = true;
-        }
-        else 
+        if (sharedData.TrainingMode)
         {
-            ballHeruntergefallen = false;
-        }
+            if (sharedData.trainingRouteNeedsUpdate)
+            {
+                AddReward(5.0f);
+                Done();
+                sharedData.trainingRouteNeedsUpdate = false;
+            }
 
-        Debug.LogFormat("plate: {0}, ball: {1}____ abstand: {2}", plateTransform.position.y, ballTransform.position.y, abstand);
+            float abstand = plateTransform.position.y - ballTransform.position.y;
+            bool ballHeruntergefallen;
+            if (plateTransform.position.y > ballTransform.position.y)
+            {
+                ballHeruntergefallen = true;
+            }
+            else
+            {
+                ballHeruntergefallen = false;
+            }
+
+            //Debug.LogFormat("plate: {0}, ball: {1}____ abstand: {2}", plateTransform.position.y, ballTransform.position.y, abstand);
 
 
-        //Rewards...:
-        //...harte Strafe für herunterfallen des Balles
-        if(ballHeruntergefallen) //evtl. in separaten Check umwandeln -> paralle Fahrzeuge Training, würde einen Reset auslösen sobald irgendein Auto Mist baut
+            //Rewards...:
+            //...harte Strafe für herunterfallen des Balles
+            //if(ballHeruntergefallen) //evtl. in separaten Check umwandeln -> paralle Fahrzeuge Training, würde einen Reset auslösen sobald irgendein Auto Mist baut
             //müsste im debug Modus ausführen damit das Spiel nicht schnell zu ende ist wenn die leben leer sind
-        {
-            Done();
-            AddReward(-1.0f);
-            negativeRewards -= 1.0f;
-            negativeRewardsText.text = negativeRewards.ToString();
-            positiveRewardsThisRound = 0;
-            
-        }
-        else
-        {
-            float action_z = 2f * Mathf.Clamp(vectorAction[0], -1f, 1f);
-            if ((plateTransform.rotation.z < 0.25f && action_z > 0f) ||
-                (plateTransform.rotation.z > -0.25f && action_z < 0f))
+            if (sharedData.LostLife)
             {
-                plateTransform.Rotate(new Vector3(0, 0, 1), action_z);
+                Debug.Log("habe Leben verloren");
+                Done();
+                AddReward(-1.0f);
+                negativeRewards -= 1.0f;
+                positiveRewardsThisRound = 0;
+                sharedData.LostLife = false;
+
             }
-            float action_x = 2f * Mathf.Clamp(vectorAction[1], -1f, 1f);
-            if ((plateTransform.rotation.x < 0.25f && action_x > 0f) ||
-                (plateTransform.rotation.x > -0.25f && action_x < 0f))
+            else
             {
-                plateTransform.Rotate(new Vector3(1, 0, 0), action_x);
+                float action_z = 2f * Mathf.Clamp(vectorAction[0], -1f, 1f);
+                if ((plateTransform.rotation.z < 0.25f && action_z > 0f) ||
+                    (plateTransform.rotation.z > -0.25f && action_z < 0f))
+                {
+                    plateTransform.Rotate(new Vector3(0, 0, 1), action_z);
+                }
+                float action_x = 2f * Mathf.Clamp(vectorAction[1], -1f, 1f);
+                if ((plateTransform.rotation.x < 0.25f && action_x > 0f) ||
+                    (plateTransform.rotation.x > -0.25f && action_x < 0f))
+                {
+                    plateTransform.Rotate(new Vector3(1, 0, 0), action_x);
+                }
+
+                //SetReward(0.1f);
+                positiveRewards += 0.1f;
+                positiveRewardsThisRound += 0.1f;
+
+                AddReward(0.1f);
             }
 
-            SetReward(0.1f);
-            positiveRewards += 0.1f;
-            positiveRewardsThisRound += 0.1f;
-            
-            //AddReward(0.1f);
-        }
+            if (positiveRewardsText != null && positiveRewardsThisRoundText != null && negativeRewardsText != null)
+            {
+                positiveRewardsText.text = positiveRewards.ToString();
+                positiveRewardsThisRoundText.text = positiveRewardsThisRound.ToString();
+                negativeRewardsText.text = negativeRewards.ToString();
+            }
 
-        if(positiveRewardsText != null && positiveRewardsThisRoundText != null && negativeRewardsText != null)
-        {
-            positiveRewardsText.text = positiveRewards.ToString();
-            positiveRewardsThisRoundText.text = positiveRewardsThisRound.ToString();
-            negativeRewardsText.text = negativeRewards.ToString();
+            //Actions -> lenke die Plattform:
+            //sharedData.assistantPlateXAchse = Mathf.Clamp(vectorAction[0], -1, 1);
+            //sharedData.assistantPlateZAchse = Mathf.Clamp(vectorAction[1], -1, 1);
         }
-
-        //Actions -> lenke die Plattform:
-        //sharedData.assistantPlateXAchse = Mathf.Clamp(vectorAction[0], -1, 1);
-        //sharedData.assistantPlateZAchse = Mathf.Clamp(vectorAction[1], -1, 1);
     }
 
 

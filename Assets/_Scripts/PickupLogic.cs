@@ -67,7 +67,10 @@ public class PickupLogic : MonoBehaviour {
             {
                 removeLife();
             }
-            sharedData.LostLife = false;
+            if (!sharedData.TrainingMode)
+            {
+                sharedData.LostLife = false;
+            }
         }
 
         if (sharedData.PayedCoin)

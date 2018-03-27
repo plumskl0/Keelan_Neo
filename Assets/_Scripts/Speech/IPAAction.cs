@@ -161,7 +161,7 @@ public class IPAAction : MonoBehaviour {
     private IEnumerator CarAccelerationForTimeperiod(float _accelerationTimeSeconds, float groesseneinheit, String _direction)
     {
         DateTime startTime = DateTime.Now;
-        sharedData.SelectedControl = SharedFields.VoiceAssistantControl;    //stelle auf Steuerung per Sprache
+        sharedData.CarAutopilot = true;    //stelle auf Steuerung per Sprache
 
 
         if(_direction.Equals(Direction.forwards) || _direction.Equals(Direction.back))

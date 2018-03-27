@@ -29,7 +29,7 @@ public class zielbereichErreicht : MonoBehaviour {
     int anzahlGewonnen = 0;
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.tag.ToString());
+        //Debug.Log(other.tag.ToString());
         if(other.CompareTag("zielbereich"))
         {
             //Debug.Log("LadeBild");

@@ -59,119 +59,126 @@ public class PlateController : MonoBehaviour {
     {
         if (sharedData.GetPlayerControl())
         {
-            if (sharedData.SelectedControl == SharedFields.WiiControl && wiiRemote != null)
+            if (sharedData.plateAutopilot || sharedData.TrainingMode)
             {
-                float accel_x;
-                float accel_y;
-                float accel_z;
-
-                Vector3 accel = wiiDaten.GetAccelVector();
-                accel_x = accel[0];
-                accel_z = accel[2];
-
-                accel_y = accel[1];
-
-
-                //Ueberspringe #Tiltaenderungen definiert durch tellerSmoothingFactor
-                //Berechne den Mittelwert der uebersprungenen Werte
-
-                frameSummeZ += -accel_z;
-                frameSummeX += -accel_x;
-                //Debug.Log("frameSummeZ: " + frameSummeZ);
-                //Debug.Log("frameSummeX: " + frameSummeX);
-                frameCount++;
-
-
-                //Ansonsten ändere Tilt
-                if (!(frameCount < tellerSmoothinFactor))
+                //Neigung wird im Moment im Plate Agent direkt gemacht
+            }
+            else    //falls kein Autopilot eingeschaltet ist, greift die im Menu gewählte Steuerung
+            {
+                if (sharedData.SelectedControl == SharedFields.WiiControl && wiiRemote != null)
                 {
-                    //Cage nach links und rechts kippen
-                    float z = (frameSummeZ / tellerSmoothinFactor) * 90;
-                    Debug.Log(z);
-                    //cage.localRotation = Quaternion.Euler(0f, 0f, z);
+                    float accel_x;
+                    float accel_y;
+                    float accel_z;
 
-                    //Cage nach vorne und hinten kippen
-                    float x = (frameSummeX / tellerSmoothinFactor) * 90;
-                    //Debug.Log("Verändere Tellerwinkel");
-                    //cage.localRotation = Quaternion.Euler(0f, 0f, z);
+                    Vector3 accel = wiiDaten.GetAccelVector();
+                    accel_x = accel[0];
+                    accel_z = accel[2];
 
-                    //Ignoriere Ausreiser indem nur Neigungen berücksichtigt werden, welche den Winkel um mindestens x Grad veraendert
-                    //float aktuelleNeigungX = plateTransform.eulerAngles.x -360f;
-                    //float aktuelleNeigungZ = plateTransform.eulerAngles.z- 360f;
-                    //float aktuelleNeigungX = plateTransform.
-                    float aktuelleNeigungX = plateTransform.localEulerAngles.x;
-                    float aktuelleNeigungZ = plateTransform.localEulerAngles.z;
-                    //Debug.Log(aktuelleNeigungZ);
+                    accel_y = accel[1];
 
-                    if (aktuelleNeigungX < 90)
+
+                    //Ueberspringe #Tiltaenderungen definiert durch tellerSmoothingFactor
+                    //Berechne den Mittelwert der uebersprungenen Werte
+
+                    frameSummeZ += -accel_z;
+                    frameSummeX += -accel_x;
+                    //Debug.Log("frameSummeZ: " + frameSummeZ);
+                    //Debug.Log("frameSummeX: " + frameSummeX);
+                    frameCount++;
+
+
+                    //Ansonsten ändere Tilt
+                    if (!(frameCount < tellerSmoothinFactor))
                     {
-                        aktuelleNeigungX = aktuelleNeigungX;
+                        //Cage nach links und rechts kippen
+                        float z = (frameSummeZ / tellerSmoothinFactor) * 90;
+                        Debug.Log(z);
+                        //cage.localRotation = Quaternion.Euler(0f, 0f, z);
+
+                        //Cage nach vorne und hinten kippen
+                        float x = (frameSummeX / tellerSmoothinFactor) * 90;
+                        //Debug.Log("Verändere Tellerwinkel");
+                        //cage.localRotation = Quaternion.Euler(0f, 0f, z);
+
+                        //Ignoriere Ausreiser indem nur Neigungen berücksichtigt werden, welche den Winkel um mindestens x Grad veraendert
+                        //float aktuelleNeigungX = plateTransform.eulerAngles.x -360f;
+                        //float aktuelleNeigungZ = plateTransform.eulerAngles.z- 360f;
+                        //float aktuelleNeigungX = plateTransform.
+                        float aktuelleNeigungX = plateTransform.localEulerAngles.x;
+                        float aktuelleNeigungZ = plateTransform.localEulerAngles.z;
+                        //Debug.Log(aktuelleNeigungZ);
+
+                        if (aktuelleNeigungX < 90)
+                        {
+                            aktuelleNeigungX = aktuelleNeigungX;
+                        }
+                        if (aktuelleNeigungX > 270)
+                        {
+                            aktuelleNeigungX = aktuelleNeigungX - 360;
+                        }
+
+
+                        if (aktuelleNeigungZ < 90)
+                        {
+                            aktuelleNeigungZ = aktuelleNeigungZ;
+                        }
+                        if (aktuelleNeigungZ > 270)
+                        {
+                            aktuelleNeigungZ = aktuelleNeigungZ - 360;
+                        }
+
+
+
+                        //Debug.Log(aktuelleNeigungX);
+                        //Debug.Log(aktuelleNeigungZ);
+                        if (Math.Abs(aktuelleNeigungX - x) > minAenderungswinkel || Math.Abs(aktuelleNeigungZ - z) > minAenderungswinkel)
+                        {
+                            plateTransform.localRotation = Quaternion.Euler(x, 0f, z);
+                            //Debug.Log("habe versucht Neigung zu aendern");
+                            //Debug.Log(wiiKalibrierung.wiiRemote.GetAccelVector());
+                        }
+
+                        //Setze Mittelwert und Frame Count auf 0 fuer naechste Runde auf 0
+                        frameSummeX = 0;
+                        frameSummeZ = 0;
+                        frameCount = 0;
                     }
-                    if (aktuelleNeigungX > 270)
-                    {
-                        aktuelleNeigungX = aktuelleNeigungX - 360;
-                    }
-
-
-                    if (aktuelleNeigungZ < 90)
-                    {
-                        aktuelleNeigungZ = aktuelleNeigungZ;
-                    }
-                    if (aktuelleNeigungZ > 270)
-                    {
-                        aktuelleNeigungZ = aktuelleNeigungZ - 360;
-                    }
-
-
-
-                    //Debug.Log(aktuelleNeigungX);
-                    //Debug.Log(aktuelleNeigungZ);
-                    if (Math.Abs(aktuelleNeigungX - x) > minAenderungswinkel || Math.Abs(aktuelleNeigungZ - z) > minAenderungswinkel)
-                    {
-                        plateTransform.localRotation = Quaternion.Euler(x, 0f, z);
-                        //Debug.Log("habe versucht Neigung zu aendern");
-                        //Debug.Log(wiiKalibrierung.wiiRemote.GetAccelVector());
-                    }
-
-                    //Setze Mittelwert und Frame Count auf 0 fuer naechste Runde auf 0
-                    frameSummeX = 0;
-                    frameSummeZ = 0;
-                    frameCount = 0;
                 }
+                else if (sharedData.SelectedControl == SharedFields.MTControl)
+                {
+                    // Mausbewegung
+                    mouseX += Input.GetAxis("Mouse X") * sharedData.sensitivity;
+                    mouseY += Input.GetAxis("Mouse Y") * sharedData.sensitivity;
+
+                    mouseY = Mathf.Clamp(mouseY, -angle, angle);
+                    mouseX = Mathf.Clamp(mouseX, -angle, angle);
+
+                    // Winkel min und max einstellen mit Clamp
+                    y = mouseY;
+                    z = mouseX;
+
+                    // Teller bewegen
+                    plateTransform.localRotation = Quaternion.Euler(y, 0f, z);
+                }
+                /*else if (sharedData.SelectedControl == SharedFields.VoiceAssistantControl)
+                {
+                    //plateTransform.localRotation = Quaternion.Euler(sharedData.assistantPlateXAchse* angle, 0f, -sharedData.assistantPlateZAchse*angle);
+                }*/
+
+                else
+                {
+                    //Ansonsten steuere Neigung ueber Tastatur
+                    y = Input.GetAxis("VerticalPlate") * angle;
+                    z = Input.GetAxis("HorizontalPlate") * angle;
+
+                    plateTransform.localRotation = Quaternion.Euler(y, 0f, z);
+                }
+
+                // Evtl. einbauen aber muss noch besprochen werden
+                //if (sharedData.CarReset)
+                //    resetPlateRotation();
             }
-            else if (sharedData.SelectedControl == SharedFields.MTControl)
-            {
-                // Mausbewegung
-                mouseX += Input.GetAxis("Mouse X") * sharedData.sensitivity;
-                mouseY += Input.GetAxis("Mouse Y") * sharedData.sensitivity;
-
-                mouseY = Mathf.Clamp(mouseY, -angle, angle);
-                mouseX = Mathf.Clamp(mouseX, -angle, angle);
-
-                // Winkel min und max einstellen mit Clamp
-                y = mouseY;
-                z = mouseX;
-
-                // Teller bewegen
-                plateTransform.localRotation = Quaternion.Euler(y, 0f, z);
-            }
-            else if (sharedData.SelectedControl == SharedFields.VoiceAssistantControl)
-            {
-                //plateTransform.localRotation = Quaternion.Euler(sharedData.assistantPlateXAchse* angle, 0f, -sharedData.assistantPlateZAchse*angle);
-            }
-
-            else
-            {
-                //Ansonsten steuere Neigung ueber Tastatur
-                y = Input.GetAxis("VerticalPlate") * angle;
-                z = Input.GetAxis("HorizontalPlate") * angle;
-
-                plateTransform.localRotation = Quaternion.Euler(y, 0f, z);
-            }
-
-            // Evtl. einbauen aber muss noch besprochen werden
-            //if (sharedData.CarReset)
-            //    resetPlateRotation();
         }
     }
 
