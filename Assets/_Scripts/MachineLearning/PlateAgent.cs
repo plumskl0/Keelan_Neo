@@ -204,10 +204,10 @@ public class PlateAgent : Agent {
                 }*/
 
                 //SetReward(0.1f);
-                positiveRewards += 0.1f;
-                positiveRewardsThisRound += 0.1f;
+                positiveRewards += 0.01f;
+                positiveRewardsThisRound += 0.01f;
 
-                AddReward(0.1f);
+                AddReward(0.01f);
             }
 
             if (positiveRewardsText != null && positiveRewardsThisRoundText != null && negativeRewardsText != null)
