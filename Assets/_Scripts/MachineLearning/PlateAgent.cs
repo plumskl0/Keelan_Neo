@@ -17,7 +17,18 @@ public class PlateAgent : Agent {
     public Text positiveRewardsThisRoundText;
     public Text negativeRewardsText;
 
-
+    private void Awake()
+    {
+    //to do:später wieder einschalten -> für debugging besser selbst setzen
+     /*   if (brain.brainType.Equals(BrainType.External))
+        {
+            sharedData.TrainingMode = true;
+        }
+        else if (brain.brainType.Equals(BrainType.Internal))
+        {
+            sharedData.TrainingMode = false;
+        }*/
+    }
 
     // Use this for initialization
     void Start () {
@@ -55,6 +66,7 @@ public class PlateAgent : Agent {
                     break;
                 case "Level1Debug":
                     resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false);
+                    carTransform.localRotation = Quaternion.Euler(0f, 58.077f, 0f);
                     break;
                 case "Level1Training":
                     resetCarScript.CarReset();
@@ -67,6 +79,7 @@ public class PlateAgent : Agent {
             sharedData.assistantPlateZAchse = 0;
             resetCarScript.ResetBall();
             Debug.Log("Ball reseted");
+
         }
     }
 
@@ -105,7 +118,7 @@ public class PlateAgent : Agent {
     float positiveRewardsThisRound = 0;
     public override void AgentAction(float[] vectorAction, string textAction)
     {
-        if (sharedData.TrainingMode)
+        if (sharedData.TrainingMode || sharedData.plateAutopilot)
         {
             if (sharedData.trainingRouteNeedsUpdate)
             {
@@ -144,7 +157,40 @@ public class PlateAgent : Agent {
             }
             else
             {
-                float action_z = 2f * Mathf.Clamp(vectorAction[0], -1f, 1f);
+                Debug.Log(textAction);
+                float x = Mathf.Clamp(vectorAction[0], -1, 1);
+                float z = Mathf.Clamp(vectorAction[1], -1, 1);
+                float achsenaenderung = 0.03f;
+
+                if(x< sharedData.assistantPlateXAchse)
+                {
+                    sharedData.assistantPlateXAchse -= achsenaenderung; 
+                }
+
+                else if (x > sharedData.assistantPlateXAchse)
+                {
+                    sharedData.assistantPlateXAchse += achsenaenderung;
+                }
+
+                if (z < sharedData.assistantPlateZAchse)
+                {
+                    sharedData.assistantPlateZAchse -= achsenaenderung;
+                }
+
+                else if (z > sharedData.assistantPlateZAchse)
+                {
+                    sharedData.assistantPlateZAchse += achsenaenderung;
+                }
+
+
+
+                //Actions -> lenke die Plattform:
+                //sharedData.assistantPlateXAchse = Mathf.Clamp(vectorAction[0], -1, 1);
+                //sharedData.assistantPlateZAchse = Mathf.Clamp(vectorAction[1], -1, 1);
+
+
+
+                /*float action_z = 2f * Mathf.Clamp(vectorAction[0], -1f, 1f);
                 if ((plateTransform.rotation.z < 0.25f && action_z > 0f) ||
                     (plateTransform.rotation.z > -0.25f && action_z < 0f))
                 {
@@ -155,7 +201,7 @@ public class PlateAgent : Agent {
                     (plateTransform.rotation.x > -0.25f && action_x < 0f))
                 {
                     plateTransform.Rotate(new Vector3(1, 0, 0), action_x);
-                }
+                }*/
 
                 //SetReward(0.1f);
                 positiveRewards += 0.1f;
@@ -170,10 +216,6 @@ public class PlateAgent : Agent {
                 positiveRewardsThisRoundText.text = positiveRewardsThisRound.ToString();
                 negativeRewardsText.text = negativeRewards.ToString();
             }
-
-            //Actions -> lenke die Plattform:
-            //sharedData.assistantPlateXAchse = Mathf.Clamp(vectorAction[0], -1, 1);
-            //sharedData.assistantPlateZAchse = Mathf.Clamp(vectorAction[1], -1, 1);
         }
     }
 

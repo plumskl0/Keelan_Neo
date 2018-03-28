@@ -24,6 +24,7 @@ public class AlternateCarController : MonoBehaviour {
     private int stepsBelow = 5;
     private int stepsAbove = 1;
     private int frameCountThisTrainingRoute = 0;
+    private int frameDurationThisRoute = 0;
 
     string dirPathTrainingRoute = "Assets/TrainingRoutes/"; //Ordner in dem die Trainingsrouten liegen
     int dirFileCount;
@@ -102,6 +103,16 @@ public class AlternateCarController : MonoBehaviour {
             }
         }
         read.Close();
+        int currentMax = 0;
+        foreach (int n in sharedData.trainingsFahrroute.Keys)
+        {
+            if (n>currentMax)
+            {
+                currentMax = n;
+            }
+        }
+        frameDurationThisRoute = currentMax;
+        Debug.Log("max Frame: " + frameDurationThisRoute);
     }
 
     public void Update()
@@ -135,19 +146,25 @@ public class AlternateCarController : MonoBehaviour {
                 moveVertical = sharedData.AssistantYAchse;
                 handBrake = Input.GetKey(sharedData.TBrakeKey) ? brakeTorque : 0;   //todo: Assistant muss auch einen Bremswert setzen
             }
-            else if (sharedData.TrainingMode)
+            else if (sharedData.TrainingMode || sharedData.plateAutopilot)  //todo: plateAutopilot soll eigentlich nicht zum laden einer Karte führen
             {
-                // Platzhalter COde: ____hier muss ich ein Dict auslesen -> (Framecount, Keystroke)
                 if (! sharedData.trainingsFahrroute.ContainsKey(frameCountThisTrainingRoute))
                 {
-                    Debug.Log("Frame Count this Training Route = " + frameCountThisTrainingRoute);
-                    Debug.Log("Traingsstrecke beendet... Agent Reset");
-                    sharedData.trainingRouteNeedsUpdate = true;
-                    frameCountThisTrainingRoute = 0;
-                    LoadTrainingRoute();
-                    moveHorizontal = 0;
-                    moveVertical = 0;
-                    handBrake = brakeTorque;
+                    if (frameCountThisTrainingRoute > frameDurationThisRoute)
+                    {
+                        Debug.Log("Frame Count this Training Route = " + frameCountThisTrainingRoute);
+                        Debug.Log("Traingsstrecke beendet... Agent Reset");
+                        sharedData.trainingRouteNeedsUpdate = true;
+                        frameCountThisTrainingRoute = 0;
+                        LoadTrainingRoute();
+                        moveHorizontal = 0;
+                        moveVertical = 0;
+                        handBrake = brakeTorque;
+                    }
+                    else
+                    {
+                        Debug.LogError("Liste unvollständig");
+                    }
                 }
                 else
                 {
