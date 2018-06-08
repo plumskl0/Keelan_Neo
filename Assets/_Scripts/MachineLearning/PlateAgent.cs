@@ -86,6 +86,7 @@ public class PlateAgent : Agent {
     List<float> obeservation = new List<float>();
     public override void CollectObservations()
     {
+        /*
         //Auto...:
 
         AddVectorObs(carTransform.position.x);           //...Position
@@ -108,6 +109,10 @@ public class PlateAgent : Agent {
         AddVectorObs(ballRgBody.velocity.y);
         AddVectorObs(ballRgBody.velocity.z);
         AddVectorObs(ballRgBody.velocity.sqrMagnitude);        //...Geschwindigkeit
+        */
+        AddVectorObs(carRgBody.velocity);
+        AddVectorObs(plateTransform.rotation.eulerAngles);
+        AddVectorObs(ballTransform.position);
 
 
     }
@@ -157,6 +162,7 @@ public class PlateAgent : Agent {
             }
             else
             {
+                /* nur vorübergehend raus, unten ist ähnlicher code zu unity bsp
                 Debug.Log(textAction);
                 float x = Mathf.Clamp(vectorAction[0], -1, 1);
                 float z = Mathf.Clamp(vectorAction[1], -1, 1);
@@ -181,7 +187,7 @@ public class PlateAgent : Agent {
                 {
                     sharedData.assistantPlateZAchse += achsenaenderung;
                 }
-
+                */
 
 
                 //Actions -> lenke die Plattform:
@@ -190,7 +196,7 @@ public class PlateAgent : Agent {
 
 
 
-                /*float action_z = 2f * Mathf.Clamp(vectorAction[0], -1f, 1f);
+                float action_z = 2f * Mathf.Clamp(vectorAction[0], -1f, 1f);
                 if ((plateTransform.rotation.z < 0.25f && action_z > 0f) ||
                     (plateTransform.rotation.z > -0.25f && action_z < 0f))
                 {
@@ -201,7 +207,7 @@ public class PlateAgent : Agent {
                     (plateTransform.rotation.x > -0.25f && action_x < 0f))
                 {
                     plateTransform.Rotate(new Vector3(1, 0, 0), action_x);
-                }*/
+                }
 
                 //SetReward(0.1f);
                 positiveRewards += 0.01f;

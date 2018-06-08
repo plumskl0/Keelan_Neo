@@ -36,6 +36,7 @@ public class AlternateCarController : MonoBehaviour {
     private wiiKalibrierung wiiDaten;
     public Wiimote wiiRemote;
     private SharedFields sharedData = SharedFields.Instance;
+    public bool activateTrainingMode = false; 
 
     // Use this for initialization
     void Start () {
@@ -43,6 +44,7 @@ public class AlternateCarController : MonoBehaviour {
         
         sharedData.SetCursorVisible(false);
         sharedData.SetPlayerControl(true);
+        sharedData.TrainingMode = activateTrainingMode;
 
         if (GameObject.Find("wiiMote") != null) //beim debuggen ist sonst wiiMote nullReferenz
         {

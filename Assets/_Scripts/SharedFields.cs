@@ -42,7 +42,7 @@ public class SharedFields {
     private string selectedControl = MTControl;
     public bool plateAutopilot = false; //true falls der Sprachassistent steuert
     private bool carAutopilot = false;
-    private bool trainingMode = true; //für TensorFlowTraining muss das Auto sich selbstständig bewegen
+    private bool trainingMode = false; //für TensorFlowTraining muss das Auto sich selbstständig bewegen
     public bool trainingRouteNeedsUpdate = false;
 
     public Dictionary<int, Vector3> trainingsFahrroute = new Dictionary<int, Vector3>();
