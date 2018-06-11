@@ -54,7 +54,7 @@ public class SharedFields {
     private float assistantZAchse = 0;
     //...simulierte Tellerbewegungen/neigungen
     public float assistantPlateXAchse = 0;
-    public float assistantPlateZAchse = 0;
+    public float assistantPlateZAchse = 0.5f;
 
 
 

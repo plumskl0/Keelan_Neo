@@ -6,6 +6,10 @@ using WiimoteApi;
 
 public class PlateController : MonoBehaviour {
 
+    //GameObject die Position von Teller und Ball während des Spiels anzeigen; Vermutung: sind nicht zentiert
+    public GameObject tellerPosSphere;
+    public GameObject ballPosSphere;
+
     public float angle = 25f;
     public int tellerSmoothinFactor = 3;    //glättet Messwerte über die angegebene Anzahl von Frames
     public int minAenderungswinkel = 3;     //nur wenn sich die Neigung, um mindestens diesen Winkel aendert wird die Tellerneigung veraendert
@@ -15,6 +19,7 @@ public class PlateController : MonoBehaviour {
 
     //public Transform plateTransform;
     private Transform plateTransform;
+    private Transform ballTransform; //für debugzwecke -> zeige Pos von teller und Ball
 
     private float y;
     private float z;
@@ -31,6 +36,7 @@ public class PlateController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         plateTransform = GetComponent<Transform>();
+        ballTransform = GameObject.Find("Golfball_G").GetComponent<Transform>();
         
         //playerControl = GetComponent<AlternateCarController>().getPlayerControl();
         if (GameObject.Find("wiiMote") != null) //beim debuggen ist sonst wiiMote null
@@ -46,6 +52,13 @@ public class PlateController : MonoBehaviour {
 
         //wiiDaten = GetComponent<wiiKalibrierung>();
         //wiiRemote = wiiDaten.wiiRemote;
+    }
+
+    private void Update()
+    {
+        ballPosSphere.transform.position = ballTransform.position;
+        Debug.Log("Ball Position:" + ballTransform.position);
+        tellerPosSphere.transform.position = plateTransform.position;
     }
 
 

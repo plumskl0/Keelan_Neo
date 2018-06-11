@@ -6,7 +6,6 @@ using UnityEngine;
 using WiimoteApi;
 
 public class AlternateCarController : MonoBehaviour {
-
     public float maxAngle = 30f;
     public float maxTorque = 300f;
     public float brakeTorque = 30000f;
@@ -28,6 +27,8 @@ public class AlternateCarController : MonoBehaviour {
 
     string dirPathTrainingRoute = "Assets/TrainingRoutes/"; //Ordner in dem die Trainingsrouten liegen
     int dirFileCount;
+    List<FileInfo> trainingFiles = new List<FileInfo>();
+    
 
     private Rigidbody rb;
 
@@ -60,6 +61,15 @@ public class AlternateCarController : MonoBehaviour {
         DirectoryInfo dir = new DirectoryInfo(dirPathTrainingRoute);
         dirFileCount = dir.GetFiles().Length - dir.GetFiles("*.meta").Length;
         Debug.Log("init anzahl files: " + dirFileCount);
+        foreach  (FileInfo file in dir.EnumerateFiles())
+        {
+            if (!(file.Name.Contains("meta")))
+            {
+                Debug.Log("Füge File hinzu:" + file.Name);
+                trainingFiles.Add(file);
+                Debug.Log("Jetztiger File Count: " + trainingFiles.Count);
+            }
+        }
 
         //Lade eine Strecke, falls der Trainingsmodus aktiv ist
         if (sharedData.TrainingMode)
@@ -80,8 +90,9 @@ public class AlternateCarController : MonoBehaviour {
             throw new Exception("Für das Training wurden keine Trainingsrouten gefunden");
         }
         int randomFileNumber = UnityEngine.Random.Range(0, dirFileCount);
-        Debug.Log("Nehmen File Nummer: " + randomFileNumber);
-        StreamReader read = new StreamReader(dirPathTrainingRoute + randomFileNumber);
+        Debug.Log("Nehmen File Nummer: " + randomFileNumber + " mit Namen: " + trainingFiles[randomFileNumber].Name);
+        //StreamReader read = new StreamReader(dirPathTrainingRoute + randomFileNumber);
+        StreamReader read = new StreamReader(dirPathTrainingRoute + trainingFiles[randomFileNumber].Name);
         string s = read.ReadToEnd();
         string[] keyValueArray = s.Split(';');
         foreach (string t in keyValueArray)

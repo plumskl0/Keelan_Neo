@@ -16,6 +16,9 @@ public class PlateAgent : Agent {
     public Text positiveRewardsText;
     public Text positiveRewardsThisRoundText;
     public Text negativeRewardsText;
+    public Text negativeRewardsThisRoundText;
+    public Text abstandBallzuTellermitte;
+    public Text xVel, yVel, zVel;
 
     private void Awake()
     {
@@ -67,6 +70,7 @@ public class PlateAgent : Agent {
                 case "Level1Debug":
                     resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false);
                     carTransform.localRotation = Quaternion.Euler(0f, 58.077f, 0f);
+                    plateTransform.rotation = Quaternion.Euler(45f, 0f, 0f);
                     break;
                 case "Level1Training":
                     resetCarScript.CarReset();
@@ -111,8 +115,17 @@ public class PlateAgent : Agent {
         AddVectorObs(ballRgBody.velocity.sqrMagnitude);        //...Geschwindigkeit
         */
         AddVectorObs(carRgBody.velocity);
+        xVel.text = carRgBody.velocity.x.ToString();
+        yVel.text = carRgBody.velocity.y.ToString();
+        zVel.text = carRgBody.velocity.z.ToString();
+
+
         AddVectorObs(plateTransform.rotation.eulerAngles);
         AddVectorObs(ballTransform.position);
+
+
+        //AddVectorObs(verbindungsvektor);
+
 
 
     }
@@ -120,6 +133,7 @@ public class PlateAgent : Agent {
 
     float negativeRewards = 0;
     float positiveRewards = 0;
+    float negativeRewardsThisRound = 0;
     float positiveRewardsThisRound = 0;
     public override void AgentAction(float[] vectorAction, string textAction)
     {
@@ -154,15 +168,15 @@ public class PlateAgent : Agent {
             {
                 Debug.Log("habe Leben verloren");
                 Done();
-                AddReward(-1.0f);
+                AddReward(-10.0f);
                 negativeRewards -= 1.0f;
                 positiveRewardsThisRound = 0;
+                negativeRewardsThisRound = 0;
                 sharedData.LostLife = false;
 
             }
             else
             {
-                /* nur vorübergehend raus, unten ist ähnlicher code zu unity bsp
                 Debug.Log(textAction);
                 float x = Mathf.Clamp(vectorAction[0], -1, 1);
                 float z = Mathf.Clamp(vectorAction[1], -1, 1);
@@ -187,7 +201,8 @@ public class PlateAgent : Agent {
                 {
                     sharedData.assistantPlateZAchse += achsenaenderung;
                 }
-                */
+                Debug.LogFormat("x-Achse: {0}  und y-Achse: {1}", sharedData.assistantPlateXAchse, sharedData.assistantPlateZAchse);
+                
 
 
                 //Actions -> lenke die Plattform:
@@ -195,7 +210,7 @@ public class PlateAgent : Agent {
                 //sharedData.assistantPlateZAchse = Mathf.Clamp(vectorAction[1], -1, 1);
 
 
-
+                /*
                 float action_z = 2f * Mathf.Clamp(vectorAction[0], -1f, 1f);
                 if ((plateTransform.rotation.z < 0.25f && action_z > 0f) ||
                     (plateTransform.rotation.z > -0.25f && action_z < 0f))
@@ -208,19 +223,36 @@ public class PlateAgent : Agent {
                 {
                     plateTransform.Rotate(new Vector3(1, 0, 0), action_x);
                 }
+                */
 
                 //SetReward(0.1f);
                 positiveRewards += 0.01f;
                 positiveRewardsThisRound += 0.01f;
 
                 AddReward(0.01f);
+
+                //Abstand zwischen Ball und Tellermittelpunkt berechnen
+                Vector3 tellermitte = plateTransform.position;
+                Vector3 ballposition = ballTransform.position;
+                Vector3 verbindungsvektor = ballposition - tellermitte;
+                float ballAbstandZuTellermitte = verbindungsvektor.magnitude;
+                abstandBallzuTellermitte.text = ballAbstandZuTellermitte.ToString();
+                Debug.Log("Abstand Ball zu Tellermite: " + ballAbstandZuTellermitte);
+                //todo: füge Bestrafung hinzu je weiter der Ball von der Mitte weg ist
+                float abstandbestrafung = -0.01f *  Mathf.Clamp(1f * ballAbstandZuTellermitte, 0,1);
+                AddReward(abstandbestrafung);
+                negativeRewards += abstandbestrafung;
+                negativeRewardsThisRound += abstandbestrafung;
+
+
             }
 
-            if (positiveRewardsText != null && positiveRewardsThisRoundText != null && negativeRewardsText != null)
+            if (positiveRewardsText != null && positiveRewardsThisRoundText != null && negativeRewardsText != null && negativeRewardsThisRoundText != null)
             {
                 positiveRewardsText.text = positiveRewards.ToString();
                 positiveRewardsThisRoundText.text = positiveRewardsThisRound.ToString();
                 negativeRewardsText.text = negativeRewards.ToString();
+                negativeRewardsThisRoundText.text = negativeRewardsThisRound.ToString();
             }
         }
     }
