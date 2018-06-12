@@ -21,7 +21,7 @@ public class TerrainCollider : MonoBehaviour {
 
     private void setResetAccordingToTag(string tag)
     {
-        //Debug.LogError("Verliere Leben");
+        Debug.LogError("Lebensverlust bei Terrain erkannt");
         sharedData.LostLife = true;
         sharedData.CarResetNeeded = true;
 

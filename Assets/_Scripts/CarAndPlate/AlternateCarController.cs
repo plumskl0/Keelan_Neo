@@ -37,7 +37,16 @@ public class AlternateCarController : MonoBehaviour {
     private wiiKalibrierung wiiDaten;
     public Wiimote wiiRemote;
     private SharedFields sharedData = SharedFields.Instance;
-    public bool activateTrainingMode = false; 
+
+    //Training und Debug Möglichkeiten per Editor einschalten:
+    public bool activateTrainingMode = false;
+    public bool activateDebugMode = false;
+
+    private void Awake()
+    {
+        sharedData.TrainingMode = activateTrainingMode;
+        sharedData.debugMode = activateDebugMode;
+    }
 
     // Use this for initialization
     void Start () {
@@ -45,7 +54,6 @@ public class AlternateCarController : MonoBehaviour {
         
         sharedData.SetCursorVisible(false);
         sharedData.SetPlayerControl(true);
-        sharedData.TrainingMode = activateTrainingMode;
 
         if (GameObject.Find("wiiMote") != null) //beim debuggen ist sonst wiiMote nullReferenz
         {
@@ -132,7 +140,7 @@ public class AlternateCarController : MonoBehaviour {
     {
         if (!sharedData.TrainingMode)
         {
-            Debug.Log("****Füge neue Trainingsdaten Hinzu");
+            //Debug.Log("****Füge neue Trainingsdaten Hinzu");
             sharedData.trainingsFahrroute.Add(Time.frameCount, new Vector3(moveHorizontal, moveVertical, handBrake));
         }
     }
@@ -455,11 +463,11 @@ public class AlternateCarController : MonoBehaviour {
                 String valueString = string.Format("({0}.{1}.{2})", item.Value.x, item.Value.y, item.Value.z);
                 String concat = string.Format("[{0}|{1}]", item.Key, valueString);
                 //KeyValuePair<int, String> n = new KeyValuePair<int, string>(item.Key, valueString);
-                Debug.Log(concat);
+                //Debug.Log(concat);
                 if (item.Key < sharedData.trainingsFahrroute.Count)
                 {
                     writer.Write(concat);
-                    Debug.Log(sharedData.trainingsFahrroute.Count);
+                    //Debug.Log(sharedData.trainingsFahrroute.Count);
                     writer.Write(";");
                 }
                 else if (item.Key == sharedData.trainingsFahrroute.Count)

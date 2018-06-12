@@ -4,7 +4,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlateAgent : Agent {
+public class PlateAgent : Agent
+{
+
+    //Trainingsanreize
+    public float incentiveLostLife = -5f;
+    public float incentiveFinishedRoute = 5f;
+    public float incentiveBallStillOnPlate = 0.01f;
+    public float incentiveFactorDistanceBallToPlateCenter = 0.01f;
+
+
+
     private Transform carTransform;
     private ResetCar resetCarScript;
     private Rigidbody carRgBody;
@@ -22,19 +32,20 @@ public class PlateAgent : Agent {
 
     private void Awake()
     {
-    //to do:später wieder einschalten -> für debugging besser selbst setzen
-     /*   if (brain.brainType.Equals(BrainType.External))
-        {
-            sharedData.TrainingMode = true;
-        }
-        else if (brain.brainType.Equals(BrainType.Internal))
-        {
-            sharedData.TrainingMode = false;
-        }*/
+        //to do:später wieder einschalten -> für debugging besser selbst setzen
+        /*   if (brain.brainType.Equals(BrainType.External))
+           {
+               sharedData.TrainingMode = true;
+           }
+           else if (brain.brainType.Equals(BrainType.Internal))
+           {
+               sharedData.TrainingMode = false;
+           }*/
     }
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         carTransform = GetComponent<Transform>();
         resetCarScript = GetComponent<ResetCar>();
         carRgBody = GetComponent<Rigidbody>();
@@ -70,7 +81,7 @@ public class PlateAgent : Agent {
                 case "Level1Debug":
                     resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false);
                     carTransform.localRotation = Quaternion.Euler(0f, 58.077f, 0f);
-                    plateTransform.rotation = Quaternion.Euler(45f, 0f, 0f);
+                    plateTransform.rotation = Quaternion.Euler(30f, 0f, 0f); //todo: zurückstellen auf neutral | Schrägstellung der Plate ist für Übung ohne Autobewegung
                     break;
                 case "Level1Training":
                     resetCarScript.CarReset();
@@ -86,6 +97,7 @@ public class PlateAgent : Agent {
 
         }
     }
+
 
     List<float> obeservation = new List<float>();
     public override void CollectObservations()
@@ -114,7 +126,9 @@ public class PlateAgent : Agent {
         AddVectorObs(ballRgBody.velocity.z);
         AddVectorObs(ballRgBody.velocity.sqrMagnitude);        //...Geschwindigkeit
         */
-        AddVectorObs(carRgBody.velocity);
+
+
+        //AddVectorObs(carRgBody.velocity);
         xVel.text = carRgBody.velocity.x.ToString();
         yVel.text = carRgBody.velocity.y.ToString();
         zVel.text = carRgBody.velocity.z.ToString();
@@ -137,125 +151,182 @@ public class PlateAgent : Agent {
     float positiveRewardsThisRound = 0;
     public override void AgentAction(float[] vectorAction, string textAction)
     {
-        if (sharedData.TrainingMode || sharedData.plateAutopilot)
+        bool takeAktion = sharedData.TrainingMode || sharedData.plateAutopilot; //reine Simulation der Belohnungen falls Autopilot den Teller nicht steuern soll
+
+
+        if (sharedData.trainingRouteNeedsUpdate)    //Route zu Ende geschafft -> Reset
         {
-            if (sharedData.trainingRouteNeedsUpdate)
+            positiveRewards += incentiveFinishedRoute;
+            positiveRewardsThisRound += incentiveFinishedRoute;
+
+            if (takeAktion)
             {
-                AddReward(5.0f);
+                AddReward(incentiveFinishedRoute);
                 Done();
                 sharedData.trainingRouteNeedsUpdate = false;
             }
+        }
 
-            float abstand = plateTransform.position.y - ballTransform.position.y;
-            bool ballHeruntergefallen;
-            if (plateTransform.position.y > ballTransform.position.y)
+        float abstand = plateTransform.position.y - ballTransform.position.y;
+        bool ballHeruntergefallen;
+        if (plateTransform.position.y > ballTransform.position.y)
+        {
+            ballHeruntergefallen = true;
+        }
+        else
+        {
+            ballHeruntergefallen = false;
+        }
+
+        //Debug.LogFormat("plate: {0}, ball: {1}____ abstand: {2}", plateTransform.position.y, ballTransform.position.y, abstand);
+
+
+        //Rewards...:
+        //...harte Strafe für herunterfallen des Balles
+        //if(ballHeruntergefallen) //evtl. in separaten Check umwandeln -> paralle Fahrzeuge Training, würde einen Reset auslösen sobald irgendein Auto Mist baut
+        //müsste im debug Modus ausführen damit das Spiel nicht schnell zu ende ist wenn die leben leer sind
+        Debug.Log("******LostLife =" + sharedData.LostLife);
+        if (sharedData.LostLife)    //Leben verloren -> Reset
+        {
+            negativeRewards += incentiveLostLife;
+            positiveRewardsThisRound = 0;
+            negativeRewardsThisRound = 0;
+            Debug.Log("habe Leben verloren");
+
+            if (sharedData.debugMode)   //simuliere Ball Reset im Debug Mode
             {
-                ballHeruntergefallen = true;
-            }
-            else
-            {
-                ballHeruntergefallen = false;
-            }
-
-            //Debug.LogFormat("plate: {0}, ball: {1}____ abstand: {2}", plateTransform.position.y, ballTransform.position.y, abstand);
-
-
-            //Rewards...:
-            //...harte Strafe für herunterfallen des Balles
-            //if(ballHeruntergefallen) //evtl. in separaten Check umwandeln -> paralle Fahrzeuge Training, würde einen Reset auslösen sobald irgendein Auto Mist baut
-            //müsste im debug Modus ausführen damit das Spiel nicht schnell zu ende ist wenn die leben leer sind
-            if (sharedData.LostLife)
-            {
-                Debug.Log("habe Leben verloren");
-                Done();
-                AddReward(-10.0f);
-                negativeRewards -= 1.0f;
-                positiveRewardsThisRound = 0;
-                negativeRewardsThisRound = 0;
+                resetCarScript.ResetBall(); //TODO: könnte in Konflikt treten mit Strecken Ermittlung für Trainingsdaten -> Testspieler fährt anders wenn Ball immer wieder kommt
                 sharedData.LostLife = false;
 
             }
-            else
+
+            if (takeAktion)
             {
-                Debug.Log(textAction);
-                float x = Mathf.Clamp(vectorAction[0], -1, 1);
-                float z = Mathf.Clamp(vectorAction[1], -1, 1);
-                float achsenaenderung = 0.03f;
+                Done();
+                AddReward(incentiveLostLife);
+                sharedData.LostLife = false;
+            }
 
-                if(x< sharedData.assistantPlateXAchse)
-                {
-                    sharedData.assistantPlateXAchse -= achsenaenderung; 
-                }
-
-                else if (x > sharedData.assistantPlateXAchse)
-                {
-                    sharedData.assistantPlateXAchse += achsenaenderung;
-                }
-
-                if (z < sharedData.assistantPlateZAchse)
-                {
-                    sharedData.assistantPlateZAchse -= achsenaenderung;
-                }
-
-                else if (z > sharedData.assistantPlateZAchse)
-                {
-                    sharedData.assistantPlateZAchse += achsenaenderung;
-                }
-                Debug.LogFormat("x-Achse: {0}  und y-Achse: {1}", sharedData.assistantPlateXAchse, sharedData.assistantPlateZAchse);
-                
+        }
+        else //Ball noch auf Teller -> weiter
+        {
+            Debug.Log(textAction);
+            if (takeAktion)
+            {
+                RotatePlateByMiniSteps(vectorAction[0], vectorAction[1]);
+            }
 
 
-                //Actions -> lenke die Plattform:
-                //sharedData.assistantPlateXAchse = Mathf.Clamp(vectorAction[0], -1, 1);
-                //sharedData.assistantPlateZAchse = Mathf.Clamp(vectorAction[1], -1, 1);
+
+            //Actions -> lenke die Plattform:
+            //sharedData.assistantPlateXAchse = Mathf.Clamp(vectorAction[0], -1, 1);
+            //sharedData.assistantPlateZAchse = Mathf.Clamp(vectorAction[1], -1, 1);
 
 
-                /*
-                float action_z = 2f * Mathf.Clamp(vectorAction[0], -1f, 1f);
-                if ((plateTransform.rotation.z < 0.25f && action_z > 0f) ||
-                    (plateTransform.rotation.z > -0.25f && action_z < 0f))
-                {
-                    plateTransform.Rotate(new Vector3(0, 0, 1), action_z);
-                }
-                float action_x = 2f * Mathf.Clamp(vectorAction[1], -1f, 1f);
-                if ((plateTransform.rotation.x < 0.25f && action_x > 0f) ||
-                    (plateTransform.rotation.x > -0.25f && action_x < 0f))
-                {
-                    plateTransform.Rotate(new Vector3(1, 0, 0), action_x);
-                }
-                */
 
-                //SetReward(0.1f);
-                positiveRewards += 0.01f;
-                positiveRewardsThisRound += 0.01f;
 
-                AddReward(0.01f);
+            //SetReward(0.1f);
+            positiveRewards += incentiveBallStillOnPlate;
+            positiveRewardsThisRound += incentiveBallStillOnPlate;
 
-                //Abstand zwischen Ball und Tellermittelpunkt berechnen
-                Vector3 tellermitte = plateTransform.position;
-                Vector3 ballposition = ballTransform.position;
-                Vector3 verbindungsvektor = ballposition - tellermitte;
-                float ballAbstandZuTellermitte = verbindungsvektor.magnitude;
-                abstandBallzuTellermitte.text = ballAbstandZuTellermitte.ToString();
-                Debug.Log("Abstand Ball zu Tellermite: " + ballAbstandZuTellermitte);
-                //todo: füge Bestrafung hinzu je weiter der Ball von der Mitte weg ist
-                float abstandbestrafung = -0.01f *  Mathf.Clamp(1f * ballAbstandZuTellermitte, 0,1);
+            //Abstand zwischen Ball und Tellermittelpunkt berechnen
+            Vector3 tellermitte = plateTransform.position;
+            Vector3 ballposition = ballTransform.position;
+            Vector3 verbindungsvektor = ballposition - tellermitte; //kommmt noch raus -> debug
+            float ballAbstandZuTellermitte = DistanceBetweenTwoPoints(tellermitte, ballposition);
+            abstandBallzuTellermitte.text = ballAbstandZuTellermitte.ToString();
+            Debug.Log("Abstand Ball zu Tellermite: " + ballAbstandZuTellermitte);
+            //todo: füge Bestrafung hinzu je weiter der Ball von der Mitte weg ist
+            float abstandbestrafung = -incentiveFactorDistanceBallToPlateCenter * Mathf.Clamp(1f * ballAbstandZuTellermitte, 0, 1);
+            Debug.Log("**Abstandsbestrafung: " + abstandbestrafung);
+            negativeRewards += abstandbestrafung;
+            negativeRewardsThisRound += abstandbestrafung;
+
+            if (takeAktion)
+            {
+                //Belohnung, dass der Ball noch auf auf dem Teller ist, vermindert je weiter er von der Mitte entfernt ist
+                AddReward(incentiveBallStillOnPlate);
                 AddReward(abstandbestrafung);
-                negativeRewards += abstandbestrafung;
-                negativeRewardsThisRound += abstandbestrafung;
-
-
             }
 
-            if (positiveRewardsText != null && positiveRewardsThisRoundText != null && negativeRewardsText != null && negativeRewardsThisRoundText != null)
-            {
-                positiveRewardsText.text = positiveRewards.ToString();
-                positiveRewardsThisRoundText.text = positiveRewardsThisRound.ToString();
-                negativeRewardsText.text = negativeRewards.ToString();
-                negativeRewardsThisRoundText.text = negativeRewardsThisRound.ToString();
-            }
+
+        }
+
+        UpdateTrainingLogs();
+
+    }
+
+    //Unterschiedliche Strategien, um die Agent Action in Tellerneigung umzusetzen:
+    private void RotatePlateByMiniSteps(float actionX, float actionZ)
+    {
+        float x = Mathf.Clamp(actionX, -1, 1);
+        float z = Mathf.Clamp(actionZ, -1, 1);
+        float achsenaenderung = 0.03f;
+
+        if (actionX < sharedData.assistantPlateXAchse)
+        {
+            sharedData.assistantPlateXAchse -= achsenaenderung;
+        }
+
+        else if (actionX > sharedData.assistantPlateXAchse)
+        {
+            sharedData.assistantPlateXAchse += achsenaenderung;
+        }
+
+        if (actionZ < sharedData.assistantPlateZAchse)
+        {
+            sharedData.assistantPlateZAchse -= achsenaenderung;
+        }
+
+        else if (actionZ > sharedData.assistantPlateZAchse)
+        {
+            sharedData.assistantPlateZAchse += achsenaenderung;
+        }
+        Debug.LogFormat("x-Achse: {0}  und y-Achse: {1}", sharedData.assistantPlateXAchse, sharedData.assistantPlateZAchse);
+    }
+
+    private void RotatePlateLikeUnityExample(float actionX, float actionZ)
+    {
+
+        float action_z = 2f * Mathf.Clamp(actionZ, -1f, 1f);
+        if ((plateTransform.rotation.z < 0.25f && action_z > 0f) ||
+        (plateTransform.rotation.z > -0.25f && action_z < 0f))
+        {
+            plateTransform.Rotate(new Vector3(0, 0, 1), action_z);
+        }
+        float action_x = 2f * Mathf.Clamp(actionX, -1f, 1f);
+        if ((plateTransform.rotation.x < 0.25f && action_x > 0f) ||
+        (plateTransform.rotation.x > -0.25f && action_x < 0f))
+        {
+            plateTransform.Rotate(new Vector3(1, 0, 0), action_x);
+        }
+
+    }
+
+    //Hilfsmethoden:
+    private float DistanceBetweenTwoPoints(Vector3 x, Vector3 y)
+    {
+        Vector3 verbindungsvektor = x - y;
+        float ballAbstandZuTellermitte = verbindungsvektor.magnitude;
+        return ballAbstandZuTellermitte;
+    }
+
+    private void UpdateTrainingLogs()
+    {
+        if (positiveRewardsText != null && positiveRewardsThisRoundText != null && negativeRewardsText != null && negativeRewardsThisRoundText != null)
+        {
+            positiveRewardsText.text = positiveRewards.ToString();
+            positiveRewardsThisRoundText.text = positiveRewardsThisRound.ToString();
+            negativeRewardsText.text = negativeRewards.ToString();
+            negativeRewardsThisRoundText.text = negativeRewardsThisRound.ToString();
+        }
+        else
+        {
+            Debug.LogError("Es fehlt mindestens ein Verweis auf Trainingslog Objekte");
         }
     }
+
+
 
 
 

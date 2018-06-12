@@ -30,7 +30,10 @@ public class SharedFields {
         CoinCount = 0;
     }
 
-    public bool debugMode = true;
+    //Debug Mode Verhalten: 
+    // keine Leben verlieren, automatischer Ball Reset, simuliert Bestrafungen des Trainingsmode
+    public bool debugMode = false;
+
     private float timeNeededToLastLevel = 0;
     public const float maxSpeed = 30f;  //der Sprachassistent manipuliert im Autopilot die maximale Geschwindigkeit -> das ist das Backup wenn er die Kontrolle wieder abgibt
     public float currentMaxSpeed = 30f;

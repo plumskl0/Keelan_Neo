@@ -63,12 +63,14 @@ public class PickupLogic : MonoBehaviour {
 
         if (sharedData.LostLife)
         {
-            if (!sharedData.debugMode)
+            if (!(sharedData.TrainingMode || sharedData.debugMode))
             {
+                //Schritt 1: Entferne Leben - je nach Modus
                 removeLife();
-            }
-            if (!sharedData.TrainingMode)
-            {
+
+                //Schritt 2: Setze Bool LostLife zurück, damit man wieder Leben verlieren kann
+                //  Ausnahme: Trainingsmode, da dort selbst per Agent Reset gemacht
+                //  Momentan erfolgt Life&Ball Reset auch im Debug Mode automatisch -> evtl. später geändert
                 sharedData.LostLife = false;
             }
         }

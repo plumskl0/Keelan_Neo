@@ -57,7 +57,7 @@ public class PlateController : MonoBehaviour {
     private void Update()
     {
         ballPosSphere.transform.position = ballTransform.position;
-        Debug.Log("Ball Position:" + ballTransform.position);
+        //Debug.Log("Ball Position:" + ballTransform.position);
         tellerPosSphere.transform.position = plateTransform.position;
     }
 
