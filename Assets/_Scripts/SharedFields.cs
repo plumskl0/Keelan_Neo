@@ -58,6 +58,8 @@ public class SharedFields {
     //...simulierte Tellerbewegungen/neigungen
     public float assistantPlateXAchse = 0;
     public float assistantPlateZAchse = 0.5f;
+    //Maximaler Neigungswinkel des Tellers:
+    public float plateMaxAngle = 45f;
 
 
 

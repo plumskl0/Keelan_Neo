@@ -8,7 +8,7 @@ public class CreatePlate : MonoBehaviour {
     private int plateParts = 18;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
         createPlate();
 	}
 

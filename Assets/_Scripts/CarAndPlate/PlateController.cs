@@ -10,7 +10,7 @@ public class PlateController : MonoBehaviour {
     public GameObject tellerPosSphere;
     public GameObject ballPosSphere;
 
-    public float angle = 25f;
+    //public float angle = 25f;
     public int tellerSmoothinFactor = 3;    //glättet Messwerte über die angegebene Anzahl von Frames
     public int minAenderungswinkel = 3;     //nur wenn sich die Neigung, um mindestens diesen Winkel aendert wird die Tellerneigung veraendert
 
@@ -37,7 +37,10 @@ public class PlateController : MonoBehaviour {
     void Start () {
         plateTransform = GetComponent<Transform>();
         ballTransform = GameObject.Find("Golfball_G").GetComponent<Transform>();
-        
+        sharedData.assistantPlateXAchse = 0.5f;
+        Debug.Log(sharedData.assistantPlateXAchse + "   ist xWert der Platte bei Start");
+        //sharedData.assistantPlateZAchse = 0.5f;
+
         //playerControl = GetComponent<AlternateCarController>().getPlayerControl();
         if (GameObject.Find("wiiMote") != null) //beim debuggen ist sonst wiiMote null
         {
@@ -70,12 +73,13 @@ public class PlateController : MonoBehaviour {
 
     private void FixedUpdate()
     {
+        Debug.Log(sharedData.assistantPlateXAchse + "   ist xWert der Platte bei Update");
         if (sharedData.GetPlayerControl())
         {
             if (sharedData.plateAutopilot || sharedData.TrainingMode)
             {
-                plateTransform.localRotation = Quaternion.Euler(sharedData.assistantPlateXAchse * angle, 0f, sharedData.assistantPlateZAchse * angle);
-
+                plateTransform.localRotation = Quaternion.Euler(sharedData.assistantPlateXAchse * sharedData.plateMaxAngle, 0f, sharedData.assistantPlateZAchse * sharedData.plateMaxAngle);
+                Debug.Log(plateTransform.localRotation.eulerAngles.x);
                 //Neigung wird im Moment im Plate Agent direkt gemacht
             }
             else    //falls kein Autopilot eingeschaltet ist, greift die im Menu gewählte Steuerung
@@ -166,8 +170,8 @@ public class PlateController : MonoBehaviour {
                     mouseX += Input.GetAxis("Mouse X") * sharedData.sensitivity;
                     mouseY += Input.GetAxis("Mouse Y") * sharedData.sensitivity;
 
-                    mouseY = Mathf.Clamp(mouseY, -angle, angle);
-                    mouseX = Mathf.Clamp(mouseX, -angle, angle);
+                    mouseY = Mathf.Clamp(mouseY, -sharedData.plateMaxAngle, sharedData.plateMaxAngle);
+                    mouseX = Mathf.Clamp(mouseX, -sharedData.plateMaxAngle, sharedData.plateMaxAngle);
 
                     // Winkel min und max einstellen mit Clamp
                     y = mouseY;
@@ -184,8 +188,8 @@ public class PlateController : MonoBehaviour {
                 else
                 {
                     //Ansonsten steuere Neigung ueber Tastatur
-                    y = Input.GetAxis("VerticalPlate") * angle;
-                    z = Input.GetAxis("HorizontalPlate") * angle;
+                    y = Input.GetAxis("VerticalPlate") * sharedData.plateMaxAngle;
+                    z = Input.GetAxis("HorizontalPlate") * sharedData.plateMaxAngle;
 
                     plateTransform.localRotation = Quaternion.Euler(y, 0f, z);
                 }
@@ -199,7 +203,7 @@ public class PlateController : MonoBehaviour {
 
     private void resetPlateRotation()
     {
-        plateTransform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+         
         mouseX = 0;
         mouseY = 0;
         y = 0;

@@ -81,7 +81,7 @@ public class PlateAgent : Agent
                 case "Level1Debug":
                     resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false);
                     carTransform.localRotation = Quaternion.Euler(0f, 58.077f, 0f);
-                    plateTransform.rotation = Quaternion.Euler(30f, 0f, 0f); //todo: zurückstellen auf neutral | Schrägstellung der Plate ist für Übung ohne Autobewegung
+                    //plateTransform.rotation = Quaternion.Euler(75f, 0f, 0f); //todo: zurückstellen auf neutral | Schrägstellung der Plate ist für Übung ohne Autobewegung
                     break;
                 case "Level1Training":
                     resetCarScript.CarReset();
@@ -90,8 +90,14 @@ public class PlateAgent : Agent
                     Debug.LogError("Beim Trainieren des PLate Controllers wurde für das aktuelle Level kein Reset Verhalten definiert");
                     break;
             }
-            sharedData.assistantPlateXAchse = 0;
-            sharedData.assistantPlateZAchse = 0;
+            //Zufallswerte für Tellerneigung:
+            float randomX = Random.Range(-0.5f, 0.5f);
+            float randomZ = Random.Range(-0.5f, 0.5f);
+            sharedData.assistantPlateXAchse = randomX;
+            sharedData.assistantPlateZAchse = randomZ;
+
+            //sharedData.assistantPlateXAchse = 0;
+            //sharedData.assistantPlateZAchse = 0;
             resetCarScript.ResetBall();
             Debug.Log("Ball reseted");
 
@@ -210,10 +216,10 @@ public class PlateAgent : Agent
         }
         else //Ball noch auf Teller -> weiter
         {
-            Debug.Log(textAction);
             if (takeAktion)
             {
-                RotatePlateByMiniSteps(vectorAction[0], vectorAction[1]);
+                //RotatePlateByMiniSteps(vectorAction[0], vectorAction[1]);
+                RotatePlateLikeUnityExample(vectorAction[0], vectorAction[1]);
             }
 
 
@@ -235,10 +241,10 @@ public class PlateAgent : Agent
             Vector3 verbindungsvektor = ballposition - tellermitte; //kommmt noch raus -> debug
             float ballAbstandZuTellermitte = DistanceBetweenTwoPoints(tellermitte, ballposition);
             abstandBallzuTellermitte.text = ballAbstandZuTellermitte.ToString();
-            Debug.Log("Abstand Ball zu Tellermite: " + ballAbstandZuTellermitte);
+            //Debug.Log("Abstand Ball zu Tellermite: " + ballAbstandZuTellermitte);
             //todo: füge Bestrafung hinzu je weiter der Ball von der Mitte weg ist
             float abstandbestrafung = -incentiveFactorDistanceBallToPlateCenter * Mathf.Clamp(1f * ballAbstandZuTellermitte, 0, 1);
-            Debug.Log("**Abstandsbestrafung: " + abstandbestrafung);
+            //Debug.Log("**Abstandsbestrafung: " + abstandbestrafung);
             negativeRewards += abstandbestrafung;
             negativeRewardsThisRound += abstandbestrafung;
 
@@ -292,13 +298,21 @@ public class PlateAgent : Agent
         if ((plateTransform.rotation.z < 0.25f && action_z > 0f) ||
         (plateTransform.rotation.z > -0.25f && action_z < 0f))
         {
-            plateTransform.Rotate(new Vector3(0, 0, 1), action_z);
+            float zielwinkel = plateTransform.rotation.eulerAngles.z + action_z;
+            Debug.Log(zielwinkel + " -----> ist zielwinkel");
+            //zahl * winkelmax = zielwinkel -> zielwinkel/winkelmax = zahl
+            Debug.Log("ist neuer zWert: " + zielwinkel / sharedData.plateMaxAngle);
+            sharedData.assistantPlateZAchse = zielwinkel / sharedData.plateMaxAngle;
+            //plateTransform.Rotate(new Vector3(0, 0, 1), action_z);
         }
         float action_x = 2f * Mathf.Clamp(actionX, -1f, 1f);
         if ((plateTransform.rotation.x < 0.25f && action_x > 0f) ||
         (plateTransform.rotation.x > -0.25f && action_x < 0f))
         {
-            plateTransform.Rotate(new Vector3(1, 0, 0), action_x);
+            float zielwinkel = plateTransform.rotation.eulerAngles.x + action_x;
+            //zahl * winkelmax = zielwinkel -> zielwinkel/winkelmax = zahl
+            sharedData.assistantPlateXAchse = zielwinkel / sharedData.plateMaxAngle;
+            //plateTransform.Rotate(new Vector3(1, 0, 0), action_x);
         }
 
     }
