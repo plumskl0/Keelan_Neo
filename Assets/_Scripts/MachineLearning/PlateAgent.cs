@@ -218,8 +218,8 @@ public class PlateAgent : Agent
         {
             if (takeAktion)
             {
-                //RotatePlateByMiniSteps(vectorAction[0], vectorAction[1]);
-                RotatePlateLikeUnityExample(vectorAction[0], vectorAction[1]);
+                RotatePlateByMiniSteps(vectorAction[0], vectorAction[1]);
+                //RotatePlateLikeUnityExample(vectorAction[0], vectorAction[1]);
             }
 
 

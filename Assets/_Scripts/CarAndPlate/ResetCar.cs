@@ -7,7 +7,7 @@ public class ResetCar : MonoBehaviour {
 
     public Text resetCarText;
 
-    public Rigidbody ballRGBody;
+    private Rigidbody ballRGBody;
     private Rigidbody carRGBody;
 
     public Transform ballResetPosition;
@@ -24,7 +24,20 @@ public class ResetCar : MonoBehaviour {
     {
         carControl = GetComponent<AlternateCarController>();
         carRGBody = GetComponent<Rigidbody>();
-        ballRGBody = GameObject.Find("Golfball_G").GetComponent<Rigidbody>();
+        //ballRGBody = GameObject.Find("Golfball_G").GetComponent<Rigidbody>();
+        if(gameObject.CompareTag("Player"))
+        {
+            ballRGBody = gameObject.transform.parent.Find("Golfball_G").GetComponent<Rigidbody>();
+        }
+        else if(gameObject.CompareTag("Trainingsfahrzeug"))
+        {
+            ballRGBody = gameObject.transform.parent.Find("Trainingsball").GetComponent<Rigidbody>();
+        }
+        
+        else
+        {
+            Debug.LogError("Reset Script: Ich habe keinen Ball gefunden");
+        }
         clearResetText();
     }
 
@@ -76,16 +89,20 @@ public class ResetCar : MonoBehaviour {
         transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
         carRGBody.velocity = Vector3.zero;
 
-        sharedData.SetPlayerControl(true);
+        if (transform.CompareTag("Player")) //belasse die zentralen Informationen, falls Trainingsfahrzeuge die Funktion nutzen
+        {
+            sharedData.SetPlayerControl(true);
 
-        if (sharedData.BallResetNeeded)
-            ResetBall();
+            if (sharedData.BallResetNeeded)
+                ResetBall();
 
-        clearResetText();
-        reset = false;
-        sharedData.CarResetNeeded = false;
-
+            clearResetText();
+            reset = false;
+            sharedData.CarResetNeeded = false;
+        }
     }
+
+
 
     public void ResetBall()
     {
@@ -98,7 +115,10 @@ public class ResetCar : MonoBehaviour {
 
         // Falls der Ball noch rollt die Geschwindigkeit entfernen
         ballRGBody.velocity = Vector3.zero;
-        sharedData.BallResetNeeded = false;
+        if (transform.CompareTag("Player"))
+        {
+            sharedData.BallResetNeeded = false;
+        }
     }
 
     private bool isCarResetButtonPressed()

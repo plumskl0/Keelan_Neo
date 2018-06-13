@@ -80,7 +80,7 @@ public class PlateController : MonoBehaviour {
             {
                 plateTransform.localRotation = Quaternion.Euler(sharedData.assistantPlateXAchse * sharedData.plateMaxAngle, 0f, sharedData.assistantPlateZAchse * sharedData.plateMaxAngle);
                 Debug.Log(plateTransform.localRotation.eulerAngles.x);
-                //Neigung wird im Moment im Plate Agent direkt gemacht
+                
             }
             else    //falls kein Autopilot eingeschaltet ist, greift die im Menu gewählte Steuerung
             {

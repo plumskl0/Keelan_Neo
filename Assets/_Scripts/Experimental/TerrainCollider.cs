@@ -9,7 +9,13 @@ public class TerrainCollider : MonoBehaviour {
     private void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.CompareTag("Ball"))
-           setResetAccordingToTag(col.gameObject.tag);
+            setResetAccordingToTag(col.gameObject.tag);
+        else if (col.gameObject.CompareTag("Trainingsball"))    //falls ein Trainingsball aufprallt dürfen die Spielmechanismen nicht geändert werden
+        {
+            //Suche das zum Ball gehörende Auto und sage ihm, dass es den Ball verloren hat
+            col.transform.parent.Find("TrainingCarv8").GetComponent<PlateAgentForTrainingCars>().LostLife = true;
+        }
+
     }
 
     private void OnTriggerEnter(Collider other)

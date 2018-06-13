@@ -14,6 +14,8 @@ TagManager:
   - Teller
   - Minimap
   - MinimapBorder
+  - Trainingsball
+  - Trainingsfahrzeug
   layers:
   - Default
   - TransparentFX
@@ -29,12 +31,12 @@ TagManager:
   - Mnimap
   - Level
   - Auto
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Trainingsball1
+  - Trainingsf1
+  - Trainingsf2
+  - Trainingsf3
+  - Trainingsball2
+  - Trainingsball3
   - 
   - 
   - 
