@@ -30,3 +30,6 @@ sysinfo.txt
 *.unitypackage
 *.exe
 test_Data/
+
+#Datenbankmetadaten
+*.ide*
