@@ -166,7 +166,7 @@ public class IPAAction : MonoBehaviour {
 
         if(_direction.Equals(Direction.forwards) || _direction.Equals(Direction.back))
         {
-            sharedData.currentMaxSpeed = SharedFields.maxSpeed;
+            sharedData.currentMaxSpeed = sharedData.maxSpeed;
         }
 
         while (DateTime.Now < (startTime.AddSeconds(_accelerationTimeSeconds)))

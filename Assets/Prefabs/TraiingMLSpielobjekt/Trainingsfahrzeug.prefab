@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 65296072208693442}
   - component: {fileID: 33493130984969296}
   - component: {fileID: 23262901595701646}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: South (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4291943109847112}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 65810636201107362}
   - component: {fileID: 33523757139774136}
   - component: {fileID: 23008922489770304}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: West (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 65837191199889964}
   - component: {fileID: 33616811141580390}
   - component: {fileID: 23315089980623250}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 65594219219929672}
   - component: {fileID: 33123622810544710}
   - component: {fileID: 23855576719991800}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: East (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,8 +154,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4174059820099962}
   - component: {fileID: 65164530477583166}
-  m_Layer: 8
-  m_Name: Teller
+  m_Layer: 15
+  m_Name: Trainingsteller
   m_TagString: Teller
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -231,7 +231,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4243537451543138}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Part2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,7 +294,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4909568196968598}
   - component: {fileID: 114664401144388300}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: PlateCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -378,7 +378,7 @@ GameObject:
   - component: {fileID: 33794257528795128}
   - component: {fileID: 65567402986736438}
   - component: {fileID: 23234667769383908}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -428,7 +428,7 @@ GameObject:
   - component: {fileID: 65023989872391984}
   - component: {fileID: 33279067847466934}
   - component: {fileID: 23209534851593470}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: North (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,7 +463,7 @@ GameObject:
   - component: {fileID: 33495963255982038}
   - component: {fileID: 65296422208150784}
   - component: {fileID: 23630331533842372}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -482,9 +482,8 @@ GameObject:
   - component: {fileID: 65157344254585506}
   - component: {fileID: 114123207879372528}
   - component: {fileID: 114965754111155768}
-  - component: {fileID: 114879612021364924}
-  - component: {fileID: 114496065193600416}
-  - component: {fileID: 114107001261441834}
+  - component: {fileID: 114619979203729956}
+  - component: {fileID: 114592444863459076}
   m_Layer: 15
   m_Name: Trainingsfahrzeug
   m_TagString: Trainingsfahrzeug
@@ -515,7 +514,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4772793862793286}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Teller1_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -564,7 +563,7 @@ GameObject:
   - component: {fileID: 4109416338343866}
   - component: {fileID: 33506102736124896}
   - component: {fileID: 23826370025707504}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2029,25 +2028,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114107001261441834
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1704515001887602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f1dbc552bba42e47802b79fce4ebc65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxAngle: 30
-  maxTorque: 400
-  brakeTorque: 30000
-  wheels:
-  - {fileID: 4384820231133418}
-  - {fileID: 4157773646767622}
-  - {fileID: 4192034742038482}
-  - {fileID: 4759520414324938}
 --- !u!114 &114123207879372528
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2060,7 +2040,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   power: 10
---- !u!114 &114496065193600416
+--- !u!114 &114592444863459076
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -2068,7 +2048,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 1704515001887602}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c0b1c169753b543b4725b3f9331280, type: 3}
+  m_Script: {fileID: 11500000, guid: a12e064263c561d4b8f82d1098863b6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxWheelAngle: 30
+  maxTorque: 300
+  brakeTorque: 30000
+  wheels:
+  - {fileID: 4384820231133418}
+  - {fileID: 4157773646767622}
+  - {fileID: 4192034742038482}
+  - {fileID: 4759520414324938}
+  activateTrainingMode: 0
+  activateDebugMode: 0
+  maxSpeed: 30
+  stepsToAxisMax: 0.01
+--- !u!114 &114619979203729956
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1704515001887602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dc8a1b0c3b617a4997bdb3a2518921d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   brain: {fileID: 0}
@@ -2082,6 +2085,18 @@ MonoBehaviour:
   incentiveFinishedRoute: 5
   incentiveBallStillOnPlate: 0.01
   incentiveFactorDistanceBallToPlateCenter: 0.01
+  autoname: 
+  ballname: 
+  tellername: 
+  isTrainingCar: 0
+  positiveRewardsText: {fileID: 0}
+  positiveRewardsThisRoundText: {fileID: 0}
+  negativeRewardsText: {fileID: 0}
+  negativeRewardsThisRoundText: {fileID: 0}
+  abstandBallzuTellermitte: {fileID: 0}
+  xVel: {fileID: 0}
+  yVel: {fileID: 0}
+  zVel: {fileID: 0}
 --- !u!114 &114664401144388300
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2093,21 +2108,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 945df722ad4a45f4bb24897ab4a91143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114879612021364924
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1704515001887602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a6ae704be95a6d42b3eee3e28233a7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endbildschirm: {fileID: 0}
-  coinCount: 0
-  coinCountText: {fileID: 0}
-  timeNeededText: {fileID: 0}
 --- !u!114 &114965754111155768
 MonoBehaviour:
   m_ObjectHideFlags: 1

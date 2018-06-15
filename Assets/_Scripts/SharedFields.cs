@@ -35,7 +35,7 @@ public class SharedFields {
     public bool debugMode = false;
 
     private float timeNeededToLastLevel = 0;
-    public const float maxSpeed = 30f;  //der Sprachassistent manipuliert im Autopilot die maximale Geschwindigkeit -> das ist das Backup wenn er die Kontrolle wieder abgibt
+    public float maxSpeed = 30f;  //der Sprachassistent manipuliert im Autopilot die maximale Geschwindigkeit -> das ist das Backup wenn er die Kontrolle wieder abgibt
     public float currentMaxSpeed = 30f;
     public float currentSpeed = 0;
 
@@ -59,7 +59,13 @@ public class SharedFields {
     public float assistantPlateXAchse = 0;
     public float assistantPlateZAchse = 0.5f;
     //Maximaler Neigungswinkel des Tellers:
-    public float plateMaxAngle = 45f;
+    public float plateMaxAngle = 85f;
+
+    //Belohnungen für PlateAgents:
+    public float incentiveLostLife = -5f;
+    public float incentiveFinishedRoute = 5f;
+    public float incentiveBallStillOnPlate = 0.01f;
+    public float incentiveFactorDistanceBallToPlateCenter = 0.01f;
 
 
 

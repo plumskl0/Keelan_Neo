@@ -78,8 +78,8 @@ public class PlateController : MonoBehaviour {
         {
             if (sharedData.plateAutopilot || sharedData.TrainingMode)
             {
-                plateTransform.localRotation = Quaternion.Euler(sharedData.assistantPlateXAchse * sharedData.plateMaxAngle, 0f, sharedData.assistantPlateZAchse * sharedData.plateMaxAngle);
-                Debug.Log(plateTransform.localRotation.eulerAngles.x);
+                //plateTransform.localRotation = Quaternion.Euler(sharedData.assistantPlateXAchse * sharedData.plateMaxAngle, 0f, sharedData.assistantPlateZAchse * sharedData.plateMaxAngle);
+                //Debug.Log(plateTransform.localRotation.eulerAngles.x);
                 
             }
             else    //falls kein Autopilot eingeschaltet ist, greift die im Menu gewählte Steuerung

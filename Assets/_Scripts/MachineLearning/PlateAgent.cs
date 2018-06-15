@@ -13,7 +13,17 @@ public class PlateAgent : Agent
     public float incentiveBallStillOnPlate = 0.01f;
     public float incentiveFactorDistanceBallToPlateCenter = 0.01f;
 
+    //Trainingsautos haben eigene Variablen für die Steuerung
+    private float plateXAxis;
+    private float plateZAxis;
+    private bool lostLife;
+    private bool trainingRouteFinished;
+    public string autoname, ballname, tellername;
+    public bool isTrainingCar;	//zeigt ob Trainings oder Player Auto
 
+    float ballAbstandZuTellermitte;
+
+    
 
     private Transform carTransform;
     private ResetCar resetCarScript;
@@ -21,6 +31,7 @@ public class PlateAgent : Agent
     private Rigidbody ballRgBody;
     private Transform ballTransform;
     private Transform plateTransform;
+    private Transform playerObjectsTransform;
     private SharedFields sharedData = SharedFields.Instance;
 
     public Text positiveRewardsText;
@@ -41,6 +52,27 @@ public class PlateAgent : Agent
            {
                sharedData.TrainingMode = false;
            }*/
+
+        switch (gameObject.tag)
+        {
+            case "Player":
+                isTrainingCar = false;
+                autoname = "Car Prototype v8";
+                ballname = "Golfball_G";
+                tellername = "Teller";
+
+                break;
+            case "Trainingsfahrzeug":
+                isTrainingCar = true;
+                autoname = "TrainingCarv8";
+                ballname = "Trainingsball";
+                tellername = "Trainingsteller";
+                break;
+            default:
+                Debug.LogError("Das Fahrzeug hat keinen gültigen Tag.");
+                autoname = ballname = tellername = string.Empty;
+                break;
+        }
     }
 
     // Use this for initialization
@@ -51,9 +83,13 @@ public class PlateAgent : Agent
         carRgBody = GetComponent<Rigidbody>();
 
 
-        //Transform playerObjectsTransform = gameObject.GetComponentInParent<Transform>();
-        GameObject ball = GameObject.Find("Golfball_G");
-        //GameObject ball = gameObject.GetComponentInParent<Transform>().Find("")
+        
+
+        //Suche für das Auto die dazugehörenden: PlayerObjects, Ball, Teller:
+        playerObjectsTransform = gameObject.transform.parent;
+        //Debug.Log("*****Mein Name ist: " + playerObjectsTransform.name);
+        GameObject ball = playerObjectsTransform.Find(ballname).gameObject;
+        //Debug.Log("*****Mein Name ist: "+ ball.name);
         ballRgBody = ball.GetComponent<Rigidbody>();
         ballTransform = ball.GetComponent<Transform>();
 
@@ -62,9 +98,17 @@ public class PlateAgent : Agent
         ballTransform = ball.GetComponent<Transform>();
         plateTransform = transform.Find("CarModel").Find("Teller").GetComponent<Transform>();*/
 
-        plateTransform = GameObject.Find("Teller").GetComponent<Transform>();
+        plateTransform = gameObject.transform.Find("CarModel").Find(tellername).GetComponent<Transform>();
+        //Debug.Log("*****Mein Name ist: " + plateTransform.name);
 
-    }
+
+        //Im Editor veränderbare Belohnungen in sharedData schreiben
+        sharedData.incentiveLostLife = incentiveLostLife;
+        sharedData.incentiveFinishedRoute = incentiveFinishedRoute;
+        sharedData.incentiveBallStillOnPlate = incentiveBallStillOnPlate;
+        sharedData.incentiveFactorDistanceBallToPlateCenter = incentiveFactorDistanceBallToPlateCenter;
+
+}
 
     public override void AgentReset()
     {
@@ -91,10 +135,15 @@ public class PlateAgent : Agent
                     break;
             }
             //Zufallswerte für Tellerneigung:
-            float randomX = Random.Range(-0.5f, 0.5f);
-            float randomZ = Random.Range(-0.5f, 0.5f);
-            sharedData.assistantPlateXAchse = randomX;
-            sharedData.assistantPlateZAchse = randomZ;
+            float randomX = Random.Range(-1f, 1f);
+            float randomZ = Random.Range(-1f, 1f);
+            plateXAxis = randomX;
+            plateZAxis = randomZ;
+            if (!isTrainingCar)
+            {
+                sharedData.assistantPlateXAchse = randomX;
+                sharedData.assistantPlateZAchse = randomZ;
+            }
 
             //sharedData.assistantPlateXAchse = 0;
             //sharedData.assistantPlateZAchse = 0;
@@ -104,6 +153,14 @@ public class PlateAgent : Agent
         }
     }
 
+    public void ObserveLikeUnityExample()
+    {
+        //Wie Unity 3D Ball Beispiel:
+        AddVectorObs(plateTransform.rotation.z);
+        AddVectorObs(plateTransform.rotation.x);
+        AddVectorObs(ballTransform.position - plateTransform.position);
+        AddVectorObs(ballRgBody.velocity);
+    }
 
     List<float> obeservation = new List<float>();
     public override void CollectObservations()
@@ -140,14 +197,44 @@ public class PlateAgent : Agent
         zVel.text = carRgBody.velocity.z.ToString();
 
 
-        AddVectorObs(plateTransform.rotation.eulerAngles);
-        AddVectorObs(ballTransform.position);
+        //AddVectorObs(plateTransform.rotation.eulerAngles);
+        //AddVectorObs(ballTransform.position);
+
+        //Wie Unity 3D Ball Beispiel:
+        ObserveLikeUnityExample();
 
 
         //AddVectorObs(verbindungsvektor);
 
 
 
+    }
+
+    //LostLife und TrainingRouteFinished sind für Trainingsautos:
+    public bool LostLife
+    {
+        get
+        {
+            return lostLife;
+        }
+
+        set
+        {
+            lostLife = value;
+        }
+    }
+
+    public bool TrainingRouteFinished
+    {
+        get
+        {
+            return trainingRouteFinished;
+        }
+
+        set
+        {
+            trainingRouteFinished = value;
+        }
     }
 
 
@@ -162,39 +249,26 @@ public class PlateAgent : Agent
 
         if (sharedData.trainingRouteNeedsUpdate)    //Route zu Ende geschafft -> Reset
         {
-            positiveRewards += incentiveFinishedRoute;
-            positiveRewardsThisRound += incentiveFinishedRoute;
+            positiveRewards += sharedData.incentiveFinishedRoute;
+            positiveRewardsThisRound += sharedData.incentiveFinishedRoute;
 
             if (takeAktion)
             {
-                AddReward(incentiveFinishedRoute);
+                AddReward(sharedData.incentiveFinishedRoute);
                 Done();
                 sharedData.trainingRouteNeedsUpdate = false;
             }
         }
 
-        float abstand = plateTransform.position.y - ballTransform.position.y;
-        bool ballHeruntergefallen;
-        if (plateTransform.position.y > ballTransform.position.y)
-        {
-            ballHeruntergefallen = true;
-        }
-        else
-        {
-            ballHeruntergefallen = false;
-        }
-
-        //Debug.LogFormat("plate: {0}, ball: {1}____ abstand: {2}", plateTransform.position.y, ballTransform.position.y, abstand);
-
-
+  
         //Rewards...:
         //...harte Strafe für herunterfallen des Balles
         //if(ballHeruntergefallen) //evtl. in separaten Check umwandeln -> paralle Fahrzeuge Training, würde einen Reset auslösen sobald irgendein Auto Mist baut
         //müsste im debug Modus ausführen damit das Spiel nicht schnell zu ende ist wenn die leben leer sind
-        Debug.Log("******LostLife =" + sharedData.LostLife);
-        if (sharedData.LostLife)    //Leben verloren -> Reset
+        Debug.Log("******LostLife =" + LostLife);
+        if (LostLife)    //Leben verloren -> Reset
         {
-            negativeRewards += incentiveLostLife;
+            negativeRewards += sharedData.incentiveLostLife;
             positiveRewardsThisRound = 0;
             negativeRewardsThisRound = 0;
             Debug.Log("habe Leben verloren");
@@ -202,15 +276,23 @@ public class PlateAgent : Agent
             if (sharedData.debugMode)   //simuliere Ball Reset im Debug Mode
             {
                 resetCarScript.ResetBall(); //TODO: könnte in Konflikt treten mit Strecken Ermittlung für Trainingsdaten -> Testspieler fährt anders wenn Ball immer wieder kommt
-                sharedData.LostLife = false;
+                LostLife = false;
+                if (!isTrainingCar) //PickUp Logic überwacht LostLife
+                {
+                    sharedData.LostLife = false;
+                }
 
             }
 
             if (takeAktion)
             {
                 Done();
-                AddReward(incentiveLostLife);
-                sharedData.LostLife = false;
+                AddReward(sharedData.incentiveLostLife);
+                LostLife = false;
+                if (!isTrainingCar) //PickUp Logic überwacht LostLife
+                {
+                    sharedData.LostLife = false;
+                }
             }
 
         }
@@ -218,32 +300,39 @@ public class PlateAgent : Agent
         {
             if (takeAktion)
             {
+                /*float[] alteNeigungsvariablen = new float[] { plateXAxis, plateZAxis };
                 RotatePlateByMiniSteps(vectorAction[0], vectorAction[1]);
-                //RotatePlateLikeUnityExample(vectorAction[0], vectorAction[1]);
+                Debug.LogFormat("Mein Name ist: {6} Die alten Neigungsvars: {0} {1} \n Aktionen: {2} {3} \n Die neuen: {4} {5}", alteNeigungsvariablen[0], alteNeigungsvariablen[1], vectorAction[0], vectorAction[1], plateXAxis, plateZAxis, playerObjectsTransform.name);*/
+
+                RotatePlateLikeUnityExample(vectorAction[0], vectorAction[1]);
+
+                //RotatePlatePerDirectFloat(vectorAction[0], vectorAction[1]);
+
+                if (!isTrainingCar) //Das Hauptauto muss die Steuerungsdaten zentral vermerken, damit bei einem Moduswechsel übernommen werden kann
+                {
+                    sharedData.assistantPlateXAchse = plateXAxis;
+                    sharedData.assistantPlateZAchse = plateZAxis;
+                }
             }
 
 
 
-            //Actions -> lenke die Plattform:
-            //sharedData.assistantPlateXAchse = Mathf.Clamp(vectorAction[0], -1, 1);
-            //sharedData.assistantPlateZAchse = Mathf.Clamp(vectorAction[1], -1, 1);
+
 
 
 
 
             //SetReward(0.1f);
-            positiveRewards += incentiveBallStillOnPlate;
-            positiveRewardsThisRound += incentiveBallStillOnPlate;
+            positiveRewards += sharedData.incentiveBallStillOnPlate;
+            positiveRewardsThisRound += sharedData.incentiveBallStillOnPlate;
 
             //Abstand zwischen Ball und Tellermittelpunkt berechnen
             Vector3 tellermitte = plateTransform.position;
             Vector3 ballposition = ballTransform.position;
             Vector3 verbindungsvektor = ballposition - tellermitte; //kommmt noch raus -> debug
-            float ballAbstandZuTellermitte = DistanceBetweenTwoPoints(tellermitte, ballposition);
-            abstandBallzuTellermitte.text = ballAbstandZuTellermitte.ToString();
+            ballAbstandZuTellermitte = DistanceBetweenTwoPoints(tellermitte, ballposition);
             //Debug.Log("Abstand Ball zu Tellermite: " + ballAbstandZuTellermitte);
-            //todo: füge Bestrafung hinzu je weiter der Ball von der Mitte weg ist
-            float abstandbestrafung = -incentiveFactorDistanceBallToPlateCenter * Mathf.Clamp(1f * ballAbstandZuTellermitte, 0, 1);
+            float abstandbestrafung = -sharedData.incentiveFactorDistanceBallToPlateCenter * Mathf.Clamp(1f * ballAbstandZuTellermitte, 0, 1);
             //Debug.Log("**Abstandsbestrafung: " + abstandbestrafung);
             negativeRewards += abstandbestrafung;
             negativeRewardsThisRound += abstandbestrafung;
@@ -251,44 +340,48 @@ public class PlateAgent : Agent
             if (takeAktion)
             {
                 //Belohnung, dass der Ball noch auf auf dem Teller ist, vermindert je weiter er von der Mitte entfernt ist
-                AddReward(incentiveBallStillOnPlate);
+                AddReward(sharedData.incentiveBallStillOnPlate);
                 AddReward(abstandbestrafung);
             }
 
 
         }
 
-        UpdateTrainingLogs();
+        if (!isTrainingCar)
+        {
+            UpdateTrainingLogs();
+        }
 
     }
 
     //Unterschiedliche Strategien, um die Agent Action in Tellerneigung umzusetzen:
-    private void RotatePlateByMiniSteps(float actionX, float actionZ)
+    private void RotatePlateByMiniSteps(float x, float z)
     {
-        float x = Mathf.Clamp(actionX, -1, 1);
-        float z = Mathf.Clamp(actionZ, -1, 1);
+        float actionX = Mathf.Clamp(x, -1, 1);
+        float actionZ = Mathf.Clamp(z, -1, 1);
         float achsenaenderung = 0.03f;
 
-        if (actionX < sharedData.assistantPlateXAchse)
+        if (actionX < plateXAxis)
         {
-            sharedData.assistantPlateXAchse -= achsenaenderung;
+            plateXAxis -= achsenaenderung;
         }
 
-        else if (actionX > sharedData.assistantPlateXAchse)
+        else if (actionX > plateXAxis)
         {
-            sharedData.assistantPlateXAchse += achsenaenderung;
+            plateXAxis += achsenaenderung;
         }
 
-        if (actionZ < sharedData.assistantPlateZAchse)
+        if (actionZ < plateZAxis)
         {
-            sharedData.assistantPlateZAchse -= achsenaenderung;
+            plateZAxis -= achsenaenderung;
         }
 
-        else if (actionZ > sharedData.assistantPlateZAchse)
+        else if (actionZ > plateZAxis)
         {
-            sharedData.assistantPlateZAchse += achsenaenderung;
+            plateZAxis += achsenaenderung;
         }
-        Debug.LogFormat("x-Achse: {0}  und y-Achse: {1}", sharedData.assistantPlateXAchse, sharedData.assistantPlateZAchse);
+        Debug.LogFormat("x-Achse: {0}  und y-Achse: {1}", plateXAxis, plateZAxis);
+        plateTransform.localRotation = Quaternion.Euler(plateXAxis * sharedData.plateMaxAngle, 0f, plateZAxis * sharedData.plateMaxAngle);
     }
 
     private void RotatePlateLikeUnityExample(float actionX, float actionZ)
@@ -298,24 +391,33 @@ public class PlateAgent : Agent
         if ((plateTransform.rotation.z < 0.25f && action_z > 0f) ||
         (plateTransform.rotation.z > -0.25f && action_z < 0f))
         {
-            float zielwinkel = plateTransform.rotation.eulerAngles.z + action_z;
+            /*float zielwinkel = plateTransform.rotation.eulerAngles.z + action_z;
             Debug.Log(zielwinkel + " -----> ist zielwinkel");
             //zahl * winkelmax = zielwinkel -> zielwinkel/winkelmax = zahl
             Debug.Log("ist neuer zWert: " + zielwinkel / sharedData.plateMaxAngle);
-            sharedData.assistantPlateZAchse = zielwinkel / sharedData.plateMaxAngle;
-            //plateTransform.Rotate(new Vector3(0, 0, 1), action_z);
+            plateZAxis = zielwinkel / sharedData.plateMaxAngle;*/
+            plateTransform.Rotate(new Vector3(0, 0, 1), action_z);
         }
         float action_x = 2f * Mathf.Clamp(actionX, -1f, 1f);
         if ((plateTransform.rotation.x < 0.25f && action_x > 0f) ||
         (plateTransform.rotation.x > -0.25f && action_x < 0f))
         {
-            float zielwinkel = plateTransform.rotation.eulerAngles.x + action_x;
+            /*float zielwinkel = plateTransform.rotation.eulerAngles.x + action_x;
             //zahl * winkelmax = zielwinkel -> zielwinkel/winkelmax = zahl
-            sharedData.assistantPlateXAchse = zielwinkel / sharedData.plateMaxAngle;
-            //plateTransform.Rotate(new Vector3(1, 0, 0), action_x);
+            plateXAxis = zielwinkel / sharedData.plateMaxAngle;*/
+            plateTransform.Rotate(new Vector3(1, 0, 0), action_x);
         }
-
     }
+
+    private void RotatePlatePerDirectFloat(float actionX, float actionZ)
+    {
+        //Actions -> lenke die Plattform:
+        plateXAxis = Mathf.Clamp(actionX, -1, 1);
+        plateZAxis = Mathf.Clamp(actionZ, -1, 1);
+
+        plateTransform.localRotation = Quaternion.Euler(plateXAxis * sharedData.plateMaxAngle, 0f, plateZAxis * sharedData.plateMaxAngle);
+    }
+
 
     //Hilfsmethoden:
     private float DistanceBetweenTwoPoints(Vector3 x, Vector3 y)
@@ -327,12 +429,13 @@ public class PlateAgent : Agent
 
     private void UpdateTrainingLogs()
     {
-        if (positiveRewardsText != null && positiveRewardsThisRoundText != null && negativeRewardsText != null && negativeRewardsThisRoundText != null)
+        if (positiveRewardsText != null && positiveRewardsThisRoundText != null && negativeRewardsText != null && negativeRewardsThisRoundText != null && abstandBallzuTellermitte != null)
         {
             positiveRewardsText.text = positiveRewards.ToString();
             positiveRewardsThisRoundText.text = positiveRewardsThisRound.ToString();
             negativeRewardsText.text = negativeRewards.ToString();
             negativeRewardsThisRoundText.text = negativeRewardsThisRound.ToString();
+            abstandBallzuTellermitte.text = ballAbstandZuTellermitte.ToString();
         }
         else
         {

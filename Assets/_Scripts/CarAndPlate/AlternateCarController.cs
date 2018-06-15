@@ -5,8 +5,9 @@ using System.IO;
 using UnityEngine;
 using WiimoteApi;
 
-public class AlternateCarController : MonoBehaviour {
-    public float maxAngle = 30f;
+public class AlternateCarController : MonoBehaviour
+{
+    public float maxWheelAngle = 30f;
     public float maxTorque = 300f;
     public float brakeTorque = 30000f;
 
@@ -27,8 +28,9 @@ public class AlternateCarController : MonoBehaviour {
 
     string dirPathTrainingRoute = "Assets/TrainingRoutes/"; //Ordner in dem die Trainingsrouten liegen
     int dirFileCount;
+    private PlateAgent myPlateAgent;
     List<FileInfo> trainingFiles = new List<FileInfo>();
-    
+    private Dictionary<int, Vector3> trainingsFahrroute = new Dictionary<int, Vector3>();
 
     private Rigidbody rb;
 
@@ -41,35 +43,51 @@ public class AlternateCarController : MonoBehaviour {
     //Training und Debug Möglichkeiten per Editor einschalten:
     public bool activateTrainingMode = false;
     public bool activateDebugMode = false;
+    public float maxSpeed = 30f;
 
     private void Awake()
     {
-        sharedData.TrainingMode = activateTrainingMode;
-        sharedData.debugMode = activateDebugMode;
+
     }
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         rb = GetComponent<Rigidbody>();
-        
-        sharedData.SetCursorVisible(false);
-        sharedData.SetPlayerControl(true);
+        myPlateAgent = gameObject.GetComponent<PlateAgent>();
 
-        if (GameObject.Find("wiiMote") != null) //beim debuggen ist sonst wiiMote nullReferenz
+        //Sollte nur von Player Auto übernommen werden
+        if (!myPlateAgent.isTrainingCar)
         {
-            wiiDaten = GameObject.Find("wiiMote").GetComponent<wiiKalibrierung>();
-            wiiRemote = wiiDaten.wiiRemote;
+            sharedData.TrainingMode = activateTrainingMode;
+            sharedData.debugMode = activateDebugMode;
+            sharedData.currentMaxSpeed = maxSpeed;
+            sharedData.maxSpeed = maxSpeed;
         }
-        else
+
+
+
+        if (!myPlateAgent.isTrainingCar)
         {
-            wiiDaten = null;
-            wiiRemote = null;
+            sharedData.SetCursorVisible(false);
+            sharedData.SetPlayerControl(true);
+
+            if (GameObject.Find("wiiMote") != null) //beim debuggen ist sonst wiiMote nullReferenz
+            {
+                wiiDaten = GameObject.Find("wiiMote").GetComponent<wiiKalibrierung>();
+                wiiRemote = wiiDaten.wiiRemote;
+            }
+            else
+            {
+                wiiDaten = null;
+                wiiRemote = null;
+            }
         }
 
         DirectoryInfo dir = new DirectoryInfo(dirPathTrainingRoute);
         dirFileCount = dir.GetFiles().Length - dir.GetFiles("*.meta").Length;
         Debug.Log("init anzahl files: " + dirFileCount);
-        foreach  (FileInfo file in dir.EnumerateFiles())
+        foreach (FileInfo file in dir.EnumerateFiles())
         {
             if (!(file.Name.Contains("meta")))
             {
@@ -83,17 +101,17 @@ public class AlternateCarController : MonoBehaviour {
         if (sharedData.TrainingMode)
         {
             LoadTrainingRoute();
-        }        
+        }
     }
 
-    private void LoadTrainingRoute ()
+    private void LoadTrainingRoute()
     {
-        sharedData.trainingsFahrroute.Clear();
-        foreach (int i in sharedData.trainingsFahrroute.Keys)
+        trainingsFahrroute.Clear();
+        foreach (int i in trainingsFahrroute.Keys)
         {
             Debug.LogFormat("Vorhandener Key: {0}", i);
         }
-        if(dirFileCount == 0)
+        if (dirFileCount == 0)
         {
             throw new Exception("Für das Training wurden keine Trainingsrouten gefunden");
         }
@@ -120,14 +138,14 @@ public class AlternateCarController : MonoBehaviour {
                 //Debug.Log("floatStrings converted to floats: " + finalValues);
 
                 //string valueVector = 
-                sharedData.trainingsFahrroute.Add(Int32.Parse(keyAndValue[0]), finalValues);
+                trainingsFahrroute.Add(Int32.Parse(keyAndValue[0]), finalValues);
             }
         }
         read.Close();
         int currentMax = 0;
-        foreach (int n in sharedData.trainingsFahrroute.Keys)
+        foreach (int n in trainingsFahrroute.Keys)
         {
-            if (n>currentMax)
+            if (n > currentMax)
             {
                 currentMax = n;
             }
@@ -138,7 +156,7 @@ public class AlternateCarController : MonoBehaviour {
 
     public void Update()
     {
-        if (!sharedData.TrainingMode)
+        if (!sharedData.TrainingMode && !myPlateAgent.isTrainingCar)
         {
             //Debug.Log("****Füge neue Trainingsdaten Hinzu");
             sharedData.trainingsFahrroute.Add(Time.frameCount, new Vector3(moveHorizontal, moveVertical, handBrake));
@@ -160,22 +178,18 @@ public class AlternateCarController : MonoBehaviour {
 
         if (sharedData.GetPlayerControl())
         {
-            if (sharedData.CarAutopilot)
+            // im Trainingsmodus verhalten sich alle Autos gleich, im Debug Mode soll aber nur das Hauptauto ein Training simulieren
+            if (sharedData.TrainingMode || (sharedData.debugMode && !myPlateAgent.isTrainingCar))
             {
-                //Debug.LogFormat("Voice Assistant Y- Achse: {0}", sharedData.AssistantYAchse);
-                moveHorizontal = sharedData.AssistantXAchse;
-                moveVertical = sharedData.AssistantYAchse;
-                handBrake = Input.GetKey(sharedData.TBrakeKey) ? brakeTorque : 0;   //todo: Assistant muss auch einen Bremswert setzen
-            }
-            else if (sharedData.TrainingMode || sharedData.plateAutopilot)  //todo: plateAutopilot soll eigentlich nicht zum laden einer Karte führen
-            {
-                if (! sharedData.trainingsFahrroute.ContainsKey(frameCountThisTrainingRoute))
+                if (!trainingsFahrroute.ContainsKey(frameCountThisTrainingRoute))
                 {
+                    //teile Auto ggf. mit, dass die Route fertig ist:
                     if (frameCountThisTrainingRoute > frameDurationThisRoute)
                     {
                         Debug.Log("Frame Count this Training Route = " + frameCountThisTrainingRoute);
                         Debug.Log("Traingsstrecke beendet... Agent Reset");
-                        sharedData.trainingRouteNeedsUpdate = true;
+
+                        myPlateAgent.TrainingRouteFinished = true;
                         frameCountThisTrainingRoute = 0;
                         LoadTrainingRoute();
                         moveHorizontal = 0;
@@ -187,49 +201,63 @@ public class AlternateCarController : MonoBehaviour {
                         Debug.LogError("Liste unvollständig");
                     }
                 }
-                else
+                else //ansonsten weise die gespeicherten Keystrokes zu:
                 {
-                    Vector3 controls = sharedData.trainingsFahrroute[frameCountThisTrainingRoute];
+                    Vector3 controls = trainingsFahrroute[frameCountThisTrainingRoute];
                     moveHorizontal = controls.x;
                     moveVertical = controls.y;
                     handBrake = controls.z;
                 }
             }
+
+            //Car Autopilot Modus: -> nur Hauptauto fährt
+            else if (sharedData.CarAutopilot && !myPlateAgent.isTrainingCar)
+            {
+                //Debug.LogFormat("Voice Assistant Y- Achse: {0}", sharedData.AssistantYAchse);
+                moveHorizontal = sharedData.AssistantXAchse;
+                moveVertical = sharedData.AssistantYAchse;
+                handBrake = Input.GetKey(sharedData.TBrakeKey) ? brakeTorque : 0;   //todo: Assistant muss auch einen Bremswert setzen
+            }
+
+            // -> Fall: auto wird vom User gesteuert -> nur Hauptauto
             else
             {
-                if (sharedData.SelectedControl == SharedFields.WiiControl && wiiRemote != null)
+                if (!myPlateAgent.isTrainingCar)    //Trainigsauto dürfen die geteilten Steuerungsdaten nicht ändern
                 {
-                    Vector2 buttonMovement = wiiDaten.getButtons();
-                    moveHorizontal = buttonMovement.x;
-                    moveVertical = buttonMovement.y;
-                    handBrake = wiiRemote.Button.a ? brakeTorque : 0;
+                    if (sharedData.SelectedControl == SharedFields.WiiControl && wiiRemote != null)
+                    {
+                        Vector2 buttonMovement = wiiDaten.getButtons();
+                        moveHorizontal = buttonMovement.x;
+                        moveVertical = buttonMovement.y;
+                        handBrake = wiiRemote.Button.a ? brakeTorque : 0;
 
-                }
+                    }
 
-                //...ansonsten nutzen die Tastatursteuerung
-                else if (sharedData.SelectedControl == SharedFields.MTControl)
-                {
+                    //...ansonsten nutzen die Tastatursteuerung
+                    else if (sharedData.SelectedControl == SharedFields.MTControl)
+                    {
 
-                    Vector2 keyboardMovement = GetKeyboardButtons();
-                    moveVertical = keyboardMovement.x;
-                    moveHorizontal = keyboardMovement.y;
-                    handBrake = Input.GetKey(sharedData.TBrakeKey) ? brakeTorque : 0;
-                }
+                        Vector2 keyboardMovement = GetKeyboardButtons();
+                        moveVertical = keyboardMovement.x;
+                        moveHorizontal = keyboardMovement.y;
+                        handBrake = Input.GetKey(sharedData.TBrakeKey) ? brakeTorque : 0;
+                    }
 
-                //...bzw. den Autopiloten des Sprachassistenten
-                /* else if (sharedData.SelectedControl == SharedFields.VoiceAssistantControl)
-                 {
-                     //Debug.LogFormat("Voice Assistant Y- Achse: {0}", sharedData.AssistantYAchse);
-                     angle = maxAngle * sharedData.AssistantXAchse;
-                     torque = maxTorque * sharedData.AssistantYAchse;
-                     handBrake = Input.GetKey(sharedData.TBrakeKey) ? brakeTorque : 0;
-                 }*/
-                else
-                {
-                    Debug.LogError("Die Player Control wurde auf einen ungültigen Wert gelegt.");
-                    moveVertical = 0;
-                    moveHorizontal = 0;
-                    handBrake = brakeTorque;
+                    //...bzw. den Autopiloten des Sprachassistenten
+                    /* else if (sharedData.SelectedControl == SharedFields.VoiceAssistantControl)
+                     {
+                         //Debug.LogFormat("Voice Assistant Y- Achse: {0}", sharedData.AssistantYAchse);
+                         angle = maxAngle * sharedData.AssistantXAchse;
+                         torque = maxTorque * sharedData.AssistantYAchse;
+                         handBrake = Input.GetKey(sharedData.TBrakeKey) ? brakeTorque : 0;
+                     }*/
+                    else
+                    {
+                        Debug.LogError("Die Player Control wurde auf einen ungültigen Wert gelegt.");
+                        moveVertical = 0;
+                        moveHorizontal = 0;
+                        handBrake = brakeTorque;
+                    }
                 }
             }
             //Collect keystrokes for training:
@@ -240,7 +268,7 @@ public class AlternateCarController : MonoBehaviour {
                 sharedData.trainingsFahrroute.Add(Time.frameCount, new Vector3(moveHorizontal, moveVertical, handBrake));
             }*/
             //Debug.Log("Test");
-            angle = maxAngle * moveVertical;
+            angle = maxWheelAngle * moveVertical;
             torque = maxTorque * moveHorizontal;
         }
         else   //stellt die Reifen neutral wenn keine playerControll gegeben wird
@@ -257,7 +285,10 @@ public class AlternateCarController : MonoBehaviour {
         {
             rb.velocity = rb.velocity.normalized * sharedData.currentMaxSpeed;
         }
-        sharedData.currentSpeed = rb.velocity.magnitude;
+        if (!myPlateAgent.isTrainingCar)
+        {
+            sharedData.currentSpeed = rb.velocity.magnitude;
+        }
 
         // Vordere Reifen lenken
         getCollider(FRONT_LEFT).steerAngle = angle;
@@ -290,9 +321,9 @@ public class AlternateCarController : MonoBehaviour {
 
     private String lastVerticalAxisButtonPressend = no;
     private String lastHorizontalAxisButtonPressend = no;
-    float sumMoveHorizontal = 0;    
+    float sumMoveHorizontal = 0;
     float sumMoveVertical = 0;
-    public float stepsToAxisMax= 0.01f;
+    public float stepsToAxisMax = 0.01f;
 
     private Vector4 GetKeyboardButtons()
     {
@@ -312,12 +343,12 @@ public class AlternateCarController : MonoBehaviour {
 
             else if (sumMoveVertical > -1)
             {
-               // Debug.Log("move")
+                // Debug.Log("move")
                 sumMoveVertical -= stepsToAxisMax;
             }
             else
             {
-               // Debug.Log("dDown");
+                // Debug.Log("dDown");
                 sumMoveVertical = -1;
             }
             lastVerticalAxisButtonPressend = down;
@@ -390,7 +421,7 @@ public class AlternateCarController : MonoBehaviour {
             //Debug.Log("moveHorizontal ist jetzt: " + moveHorizontal);
         }
 
-        if(!axisButtonPressedThisFrame)
+        if (!axisButtonPressedThisFrame)
         {
             //Debug.Log("Setze Achsen zurück");
             lastVerticalAxisButtonPressend = no;
@@ -424,7 +455,7 @@ public class AlternateCarController : MonoBehaviour {
         return playerControl;
     }
 
-    
+
     public void fullBrake(float handBrake)
     {
         getCollider(FRONT_LEFT).brakeTorque = handBrake;
@@ -452,7 +483,7 @@ public class AlternateCarController : MonoBehaviour {
 
     public void OnApplicationQuit()
     {
-        if (sharedData.trainingsFahrroute.Count != 0 && !sharedData.TrainingMode)
+        if (sharedData.trainingsFahrroute.Count != 0 && !sharedData.TrainingMode && !myPlateAgent.isTrainingCar)
         {
             //Speichere die aufgezeichnete Trainingsroute in einer Datei
             int nextFreeFileNumber = dirFileCount;
