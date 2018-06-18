@@ -505,7 +505,7 @@ public class AlternateCarController : MonoBehaviour
 
     public void OnApplicationQuit()
     {
-        if (trainingsFahrrouteSaved.Count != 0 && !myPlateAgent.isTrainingCar)
+        if (trainingsFahrrouteSaved.Count != 0 && !sharedData.TrainingMode && !myPlateAgent.isTrainingCar)
         {
             //Speichere die aufgezeichnete Trainingsroute in einer Datei
             int nextFreeFileNumber = dirFileCount;
