@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 using WiimoteApi;
 
@@ -23,14 +24,17 @@ public class AlternateCarController : MonoBehaviour
     private float criticalSpeed = 5f;
     private int stepsBelow = 5;
     private int stepsAbove = 1;
-    private int frameCountThisTrainingRoute = 0;
-    private int frameDurationThisRoute = 0;
+    public int frameCountThisTrainingRoute = 0;
+    public int frameDurationThisRoute = 0;
 
     string dirPathTrainingRoute = "Assets/TrainingRoutes/"; //Ordner in dem die Trainingsrouten liegen
     int dirFileCount;
     private PlateAgent myPlateAgent;
     List<FileInfo> trainingFiles = new List<FileInfo>();
     private Dictionary<int, Vector3> trainingsFahrroute = new Dictionary<int, Vector3>();
+    private Dictionary<int, Vector3> trainingsFahrrouteSaved = new Dictionary<int, Vector3>();
+
+    private StringBuilder stringBuilder = new StringBuilder();
 
     private Rigidbody rb;
 
@@ -38,6 +42,7 @@ public class AlternateCarController : MonoBehaviour
     private GameObject wiiMoteRef;
     private wiiKalibrierung wiiDaten;
     public Wiimote wiiRemote;
+    private ResetCar resetCarScript;
     private SharedFields sharedData = SharedFields.Instance;
 
     //Training und Debug Möglichkeiten per Editor einschalten:
@@ -45,16 +50,13 @@ public class AlternateCarController : MonoBehaviour
     public bool activateDebugMode = false;
     public float maxSpeed = 30f;
 
-    private void Awake()
-    {
-
-    }
 
     // Use this for initialization
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         myPlateAgent = gameObject.GetComponent<PlateAgent>();
+        resetCarScript = GetComponent<ResetCar>();
 
         //Sollte nur von Player Auto übernommen werden
         if (!myPlateAgent.isTrainingCar)
@@ -155,12 +157,16 @@ public class AlternateCarController : MonoBehaviour
     }
 
     public void Update()
-    {
-        if (!sharedData.TrainingMode && !myPlateAgent.isTrainingCar)
+    {/*
+        if (!myPlateAgent.isTrainingCar)
         {
             //Debug.Log("****Füge neue Trainingsdaten Hinzu");
-            sharedData.trainingsFahrroute.Add(Time.frameCount, new Vector3(moveHorizontal, moveVertical, handBrake));
-        }
+            //trainingsFahrrouteSaved.Add(Time.frameCount, new Vector3(moveHorizontal, moveVertical, handBrake));
+            Debug.Log("Füge für Frame hinzu: " + frameCountThisTrainingRoute);
+            trainingsFahrrouteSaved.Add(frameCountThisTrainingRoute, new Vector3(moveHorizontal, moveVertical, handBrake));
+            //Debug.LogFormat("***FrameCountThisTrainingRoute: {0}, FrameCount: {1}", frameCountThisTrainingRoute, Time.frameCount);
+            //sharedData.trainingsFahrroute.Add(Time.frameCount, new Vector3(moveHorizontal, moveVertical, handBrake));
+        }*/
     }
 
     float moveHorizontal;   //die ausgewählte Steuerung setzt diese Werte
@@ -172,6 +178,9 @@ public class AlternateCarController : MonoBehaviour
         frameCountThisTrainingRoute++;
         getCollider(FRONT_LEFT).ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
 
+
+
+
         float angle;
         float torque;
 
@@ -179,7 +188,7 @@ public class AlternateCarController : MonoBehaviour
         if (sharedData.GetPlayerControl())
         {
             // im Trainingsmodus verhalten sich alle Autos gleich, im Debug Mode soll aber nur das Hauptauto ein Training simulieren
-            if (sharedData.TrainingMode || (sharedData.debugMode && !myPlateAgent.isTrainingCar))
+            if (sharedData.TrainingMode)
             {
                 if (!trainingsFahrroute.ContainsKey(frameCountThisTrainingRoute))
                 {
@@ -192,6 +201,7 @@ public class AlternateCarController : MonoBehaviour
                         myPlateAgent.TrainingRouteFinished = true;
                         frameCountThisTrainingRoute = 0;
                         LoadTrainingRoute();
+                        resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false);
                         moveHorizontal = 0;
                         moveVertical = 0;
                         handBrake = brakeTorque;
@@ -270,12 +280,24 @@ public class AlternateCarController : MonoBehaviour
             //Debug.Log("Test");
             angle = maxWheelAngle * moveVertical;
             torque = maxTorque * moveHorizontal;
+            stringBuilder.AppendFormat("{0}| {1} {2}", frameCountThisTrainingRoute, angle, torque);
         }
         else   //stellt die Reifen neutral wenn keine playerControll gegeben wird
         {
             angle = 0;
             torque = 0;
             handBrake = brakeTorque;
+        }
+
+        //Trainingsdaten hinzufügen
+        if (!myPlateAgent.isTrainingCar)
+        {
+            //Debug.Log("****Füge neue Trainingsdaten Hinzu");
+            //trainingsFahrrouteSaved.Add(Time.frameCount, new Vector3(moveHorizontal, moveVertical, handBrake));
+            Debug.Log("Füge für Frame hinzu: " + frameCountThisTrainingRoute);
+            trainingsFahrrouteSaved.Add(frameCountThisTrainingRoute, new Vector3(moveHorizontal, moveVertical, handBrake));
+            //Debug.LogFormat("***FrameCountThisTrainingRoute: {0}, FrameCount: {1}", frameCountThisTrainingRoute, Time.frameCount);
+            //sharedData.trainingsFahrroute.Add(Time.frameCount, new Vector3(moveHorizontal, moveVertical, handBrake));
         }
 
 
@@ -483,25 +505,25 @@ public class AlternateCarController : MonoBehaviour
 
     public void OnApplicationQuit()
     {
-        if (sharedData.trainingsFahrroute.Count != 0 && !sharedData.TrainingMode && !myPlateAgent.isTrainingCar)
+        if (trainingsFahrrouteSaved.Count != 0 && !myPlateAgent.isTrainingCar)
         {
             //Speichere die aufgezeichnete Trainingsroute in einer Datei
             int nextFreeFileNumber = dirFileCount;
             StreamWriter writer = new StreamWriter(dirPathTrainingRoute + nextFreeFileNumber, true);
-            foreach (KeyValuePair<int, Vector3> item in sharedData.trainingsFahrroute)
+            foreach (KeyValuePair<int, Vector3> item in trainingsFahrrouteSaved)
             {
                 //Debug.Log(item.Value.ToString("G9"));
                 String valueString = string.Format("({0}.{1}.{2})", item.Value.x, item.Value.y, item.Value.z);
                 String concat = string.Format("[{0}|{1}]", item.Key, valueString);
                 //KeyValuePair<int, String> n = new KeyValuePair<int, string>(item.Key, valueString);
                 //Debug.Log(concat);
-                if (item.Key < sharedData.trainingsFahrroute.Count)
+                if (item.Key < trainingsFahrrouteSaved.Count)
                 {
                     writer.Write(concat);
                     //Debug.Log(sharedData.trainingsFahrroute.Count);
                     writer.Write(";");
                 }
-                else if (item.Key == sharedData.trainingsFahrroute.Count)
+                else if (item.Key == trainingsFahrrouteSaved.Count)
                 {
                     writer.Write(concat);
                 }

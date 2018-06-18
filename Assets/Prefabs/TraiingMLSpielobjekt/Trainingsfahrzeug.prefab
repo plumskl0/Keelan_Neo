@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4825735509411742}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67,7 +67,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4249133403040720}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 4583735816730280}
   - component: {fileID: 33985319759823774}
   - component: {fileID: 23144174967019300}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: MinimapIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4297249573910628}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4192034742038482}
   - component: {fileID: 146837381565139664}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: REAR_RIGHT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200,7 +200,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4043718363646976}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216,7 +216,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4759520414324938}
   - component: {fileID: 146409982026157818}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: REAR_LEFT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246,7 +246,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4482398558079278}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: Auto1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 4067701689094892}
   - component: {fileID: 33911367215938628}
   - component: {fileID: 23776778844579658}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +278,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4585029030287016}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: CameraPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 4047406453307442}
   - component: {fileID: 33203653824633446}
   - component: {fileID: 23326560325653402}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -327,7 +327,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4157773646767622}
   - component: {fileID: 146232088827912256}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: FRONT_RIGHT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,7 +343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4384820231133418}
   - component: {fileID: 146335976748583180}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: FRONT_LEFT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -360,7 +360,7 @@ GameObject:
   - component: {fileID: 4304591906611694}
   - component: {fileID: 33540859159307180}
   - component: {fileID: 23634443437728494}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -393,7 +393,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4045980364449784}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: CameraTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -410,7 +410,7 @@ GameObject:
   - component: {fileID: 4857404678606988}
   - component: {fileID: 33596325721740160}
   - component: {fileID: 23788498468788186}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 4145919852746070}
   - component: {fileID: 33688901088138602}
   - component: {fileID: 23137086394191352}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -484,7 +484,7 @@ GameObject:
   - component: {fileID: 114965754111155768}
   - component: {fileID: 114619979203729956}
   - component: {fileID: 114592444863459076}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: Trainingsfahrzeug
   m_TagString: Trainingsfahrzeug
   m_Icon: {fileID: 0}
@@ -499,7 +499,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4115608718682240}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: BallResetPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -531,7 +531,7 @@ GameObject:
   - component: {fileID: 4137686958173894}
   - component: {fileID: 33813489013791592}
   - component: {fileID: 23862614550399032}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -546,7 +546,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4443149564271196}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: CameraSpots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -578,7 +578,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4856930291784524}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: CarModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -595,7 +595,7 @@ GameObject:
   - component: {fileID: 4755531864020832}
   - component: {fileID: 33009600877706858}
   - component: {fileID: 23808836543095448}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -612,7 +612,7 @@ GameObject:
   - component: {fileID: 4962067316658866}
   - component: {fileID: 33910092644302286}
   - component: {fileID: 23578569754701108}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -629,7 +629,7 @@ GameObject:
   - component: {fileID: 4943483202959492}
   - component: {fileID: 33017070904007514}
   - component: {fileID: 23088631813620622}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -723,7 +723,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1706930203187832}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.116, y: 2.15, z: -0.214}
+  m_LocalPosition: {x: 0.116, y: 1.67, z: -0.214}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4555254904187824}
@@ -2059,6 +2059,7 @@ MonoBehaviour:
   - {fileID: 4157773646767622}
   - {fileID: 4192034742038482}
   - {fileID: 4759520414324938}
+  frameCountThisTrainingRoute: 0
   activateTrainingMode: 0
   activateDebugMode: 0
   maxSpeed: 30
@@ -2089,6 +2090,7 @@ MonoBehaviour:
   ballname: 
   tellername: 
   isTrainingCar: 0
+  ballTransform: {fileID: 0}
   positiveRewardsText: {fileID: 0}
   positiveRewardsThisRoundText: {fileID: 0}
   negativeRewardsText: {fileID: 0}

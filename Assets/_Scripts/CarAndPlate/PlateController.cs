@@ -73,11 +73,12 @@ public class PlateController : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        Debug.Log(sharedData.assistantPlateXAchse + "   ist xWert der Platte bei Update");
+        //Debug.Log(sharedData.assistantPlateXAchse + "   ist xWert der Platte bei Update");
         if (sharedData.GetPlayerControl())
         {
             if (sharedData.plateAutopilot || sharedData.TrainingMode)
             {
+                //wird direkt in Plate Agent gemacht, das Hauptauto schreibt seine Achsenbelgungen in sharedData für einen späteren Mode Wechsel
                 //plateTransform.localRotation = Quaternion.Euler(sharedData.assistantPlateXAchse * sharedData.plateMaxAngle, 0f, sharedData.assistantPlateZAchse * sharedData.plateMaxAngle);
                 //Debug.Log(plateTransform.localRotation.eulerAngles.x);
                 

@@ -31,7 +31,7 @@ public class SharedFields {
     }
 
     //Debug Mode Verhalten: 
-    // keine Leben verlieren, automatischer Ball Reset, simuliert Bestrafungen des Trainingsmode
+    // keine Leben verlieren, automatischer Ball Reset, simuliert Bestrafungen des Trainingsmode, Teller und Autosteuerung gemäß Autopilot Werten
     public bool debugMode = false;
 
     private float timeNeededToLastLevel = 0;
@@ -46,9 +46,9 @@ public class SharedFields {
     public bool plateAutopilot = false; //true falls der Sprachassistent steuert
     private bool carAutopilot = false;
     private bool trainingMode = false; //für TensorFlowTraining muss das Auto sich selbstständig bewegen
-    public bool trainingRouteNeedsUpdate = false;
+    //public bool trainingRouteNeedsUpdate = false;
 
-    public Dictionary<int, Vector3> trainingsFahrroute = new Dictionary<int, Vector3>();
+    //public Dictionary<int, Vector3> trainingsFahrroute = new Dictionary<int, Vector3>();
 
     private bool playerControl = false;
 
@@ -61,7 +61,7 @@ public class SharedFields {
     //Maximaler Neigungswinkel des Tellers:
     public float plateMaxAngle = 85f;
 
-    //Belohnungen für PlateAgents:
+    //Belohnungen für PlateAgents, (Achtung: werden von Editor Einstellungen beim Player Auto überschrieben):
     public float incentiveLostLife = -5f;
     public float incentiveFinishedRoute = 5f;
     public float incentiveBallStillOnPlate = 0.01f;

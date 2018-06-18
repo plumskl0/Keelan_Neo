@@ -29,9 +29,11 @@ public class PlateAgent : Agent
     private ResetCar resetCarScript;
     private Rigidbody carRgBody;
     private Rigidbody ballRgBody;
-    private Transform ballTransform;
+    //private Transform ballTransform;
+    public Transform ballTransform;
     private Transform plateTransform;
     private Transform playerObjectsTransform;
+    private AlternateCarController carControllerScript;
     private SharedFields sharedData = SharedFields.Instance;
 
     public Text positiveRewardsText;
@@ -40,6 +42,15 @@ public class PlateAgent : Agent
     public Text negativeRewardsThisRoundText;
     public Text abstandBallzuTellermitte;
     public Text xVel, yVel, zVel;
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("Trainingsfahrzeug") || collision.transform.CompareTag("Trainingsball"))
+        {
+            //Debug.LogErrorFormat("Zusammenstoß von {0} mit {1} und Tag {2}", gameObject.transform.parent.name, collision.transform.parent.name, collision.transform.tag);
+        }
+        
+    }
 
     private void Awake()
     {
@@ -81,33 +92,30 @@ public class PlateAgent : Agent
         carTransform = GetComponent<Transform>();
         resetCarScript = GetComponent<ResetCar>();
         carRgBody = GetComponent<Rigidbody>();
-
+        carControllerScript = GetComponent<AlternateCarController>();
 
         
 
         //Suche für das Auto die dazugehörenden: PlayerObjects, Ball, Teller:
         playerObjectsTransform = gameObject.transform.parent;
-        //Debug.Log("*****Mein Name ist: " + playerObjectsTransform.name);
+        Debug.Log("*****Mein Name ist: " + playerObjectsTransform.name);
         GameObject ball = playerObjectsTransform.Find(ballname).gameObject;
-        //Debug.Log("*****Mein Name ist: "+ ball.name);
+        Debug.Log("*****Mein Name ist: "+ ball.name);
         ballRgBody = ball.GetComponent<Rigidbody>();
         ballTransform = ball.GetComponent<Transform>();
-
-        /*GameObject ball = playerObjectsTransform.Find("Golfball_G").gameObject;
-        ballRgBody = ball.GetComponent<Rigidbody>();
-        ballTransform = ball.GetComponent<Transform>();
-        plateTransform = transform.Find("CarModel").Find("Teller").GetComponent<Transform>();*/
 
         plateTransform = gameObject.transform.Find("CarModel").Find(tellername).GetComponent<Transform>();
-        //Debug.Log("*****Mein Name ist: " + plateTransform.name);
+        Debug.Log("*****Mein Name ist: " + plateTransform.name);
 
-
-        //Im Editor veränderbare Belohnungen in sharedData schreiben
-        sharedData.incentiveLostLife = incentiveLostLife;
-        sharedData.incentiveFinishedRoute = incentiveFinishedRoute;
-        sharedData.incentiveBallStillOnPlate = incentiveBallStillOnPlate;
-        sharedData.incentiveFactorDistanceBallToPlateCenter = incentiveFactorDistanceBallToPlateCenter;
-
+        if (!isTrainingCar)
+        {
+            //Im Editor veränderbare Belohnungen in sharedData schreiben
+            sharedData.incentiveLostLife = incentiveLostLife;
+            sharedData.incentiveFinishedRoute = incentiveFinishedRoute;
+            sharedData.incentiveBallStillOnPlate = incentiveBallStillOnPlate;
+            sharedData.incentiveFactorDistanceBallToPlateCenter = incentiveFactorDistanceBallToPlateCenter;
+            Debug.LogFormat("lostlife: {0}, finishedRoute: {1}, ballonPlate: {2}, center {3} ", sharedData.incentiveLostLife, sharedData.incentiveFinishedRoute, sharedData.incentiveBallStillOnPlate, sharedData.incentiveFactorDistanceBallToPlateCenter);
+        }
 }
 
     public override void AgentReset()
@@ -116,7 +124,7 @@ public class PlateAgent : Agent
         {
             //to do: Startposition für jedes Level einfügen
             Scene myScene = SceneManager.GetActiveScene();
-            Debug.Log("*********reset Car");
+            //Debug.Log("*********reset Car");
             switch (myScene.name)
             {
                 case "Level1":
@@ -128,6 +136,7 @@ public class PlateAgent : Agent
                     //plateTransform.rotation = Quaternion.Euler(75f, 0f, 0f); //todo: zurückstellen auf neutral | Schrägstellung der Plate ist für Übung ohne Autobewegung
                     break;
                 case "Level1Training":
+                    //resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false);
                     resetCarScript.CarReset();
                     break;
                 default:
@@ -135,10 +144,13 @@ public class PlateAgent : Agent
                     break;
             }
             //Zufallswerte für Tellerneigung:
-            float randomX = Random.Range(-1f, 1f);
-            float randomZ = Random.Range(-1f, 1f);
+            float randomX = Random.Range(-0.5f, 0.5f);
+            float randomZ = Random.Range(-0.5f, 0.5f);
             plateXAxis = randomX;
             plateZAxis = randomZ;
+            //plateTransform.localRotation = Quaternion.Euler(plateXAxis * sharedData.plateMaxAngle, 0f, plateZAxis * sharedData.plateMaxAngle);
+            plateTransform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+
             if (!isTrainingCar)
             {
                 sharedData.assistantPlateXAchse = randomX;
@@ -148,7 +160,7 @@ public class PlateAgent : Agent
             //sharedData.assistantPlateXAchse = 0;
             //sharedData.assistantPlateZAchse = 0;
             resetCarScript.ResetBall();
-            Debug.Log("Ball reseted");
+            //Debug.Log("Ball reseted");
 
         }
     }
@@ -191,11 +203,10 @@ public class PlateAgent : Agent
         */
 
 
-        //AddVectorObs(carRgBody.velocity);
-        xVel.text = carRgBody.velocity.x.ToString();
+        AddVectorObs(carRgBody.velocity);
+        /*xVel.text = carRgBody.velocity.x.ToString();
         yVel.text = carRgBody.velocity.y.ToString();
-        zVel.text = carRgBody.velocity.z.ToString();
-
+        zVel.text = carRgBody.velocity.z.ToString();*/
 
         //AddVectorObs(plateTransform.rotation.eulerAngles);
         //AddVectorObs(ballTransform.position);
@@ -247,7 +258,7 @@ public class PlateAgent : Agent
         bool takeAktion = sharedData.TrainingMode || sharedData.plateAutopilot; //reine Simulation der Belohnungen falls Autopilot den Teller nicht steuern soll
 
 
-        if (sharedData.trainingRouteNeedsUpdate)    //Route zu Ende geschafft -> Reset
+        if (trainingRouteFinished)    //Route zu Ende geschafft -> Reset
         {
             positiveRewards += sharedData.incentiveFinishedRoute;
             positiveRewardsThisRound += sharedData.incentiveFinishedRoute;
@@ -256,23 +267,30 @@ public class PlateAgent : Agent
             {
                 AddReward(sharedData.incentiveFinishedRoute);
                 Done();
-                sharedData.trainingRouteNeedsUpdate = false;
+                trainingRouteFinished = false;
+                //sharedData.trainingRouteNeedsUpdate = false;
             }
         }
 
-  
+
         //Rewards...:
         //...harte Strafe für herunterfallen des Balles
         //if(ballHeruntergefallen) //evtl. in separaten Check umwandeln -> paralle Fahrzeuge Training, würde einen Reset auslösen sobald irgendein Auto Mist baut
         //müsste im debug Modus ausführen damit das Spiel nicht schnell zu ende ist wenn die leben leer sind
-        Debug.Log("******LostLife =" + LostLife);
-        if (LostLife)    //Leben verloren -> Reset
+        //Debug.Log("******LostLife =" + LostLife);
+        //(ballTransform.position.y < 0)
+        if (LostLife || ((ballTransform.position.y < 0) && ballAbstandZuTellermitte > 3f))    //Leben verloren -> Reset
         {
+            //trainingRouteFinished = true;   //neue Route laden nach Lebensverlust ***geht so nicht -> siehe Zeile untendrunter -> macht CarControllerScript
+            //carControllerScript.frameCountThisTrainingRoute = carControllerScript.frameDurationThisRoute + 1;
+
+            Debug.LogFormat("Reset: Ich {0} habe díese Runde so viele Leben gewonnen: {1} \n und bin bei Framecount {2} gescheitert",playerObjectsTransform.name, positiveRewardsThisRound, carControllerScript.frameCountThisTrainingRoute);
             negativeRewards += sharedData.incentiveLostLife;
             positiveRewardsThisRound = 0;
             negativeRewardsThisRound = 0;
-            Debug.Log("habe Leben verloren");
+            //Debug.Log("habe Leben verloren");
 
+            //TODO: Verhalten ok für debug Mode + PlateAutopilot?
             if (sharedData.debugMode)   //simuliere Ball Reset im Debug Mode
             {
                 resetCarScript.ResetBall(); //TODO: könnte in Konflikt treten mit Strecken Ermittlung für Trainingsdaten -> Testspieler fährt anders wenn Ball immer wieder kommt
@@ -315,14 +333,6 @@ public class PlateAgent : Agent
                 }
             }
 
-
-
-
-
-
-
-
-            //SetReward(0.1f);
             positiveRewards += sharedData.incentiveBallStillOnPlate;
             positiveRewardsThisRound += sharedData.incentiveBallStillOnPlate;
 
@@ -341,7 +351,7 @@ public class PlateAgent : Agent
             {
                 //Belohnung, dass der Ball noch auf auf dem Teller ist, vermindert je weiter er von der Mitte entfernt ist
                 AddReward(sharedData.incentiveBallStillOnPlate);
-                AddReward(abstandbestrafung);
+                //AddReward(abstandbestrafung);
             }
 
 
