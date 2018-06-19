@@ -34,7 +34,7 @@ public class AlternateCarController : MonoBehaviour
     private Dictionary<int, Vector3> trainingsFahrroute = new Dictionary<int, Vector3>();
     private Dictionary<int, Vector3> trainingsFahrrouteSaved = new Dictionary<int, Vector3>();
 
-    private StringBuilder stringBuilder = new StringBuilder();
+    private StringBuilder angleTorqueStringBuilder = new StringBuilder();
 
     private Rigidbody rb;
 
@@ -86,6 +86,17 @@ public class AlternateCarController : MonoBehaviour
             }
         }
 
+        LoadTrainingFiles();
+
+        //Lade eine Strecke, falls der Trainingsmodus aktiv ist
+        if (sharedData.TrainingMode)
+        {
+            LoadTrainingRoute();
+        }
+    }
+
+    private void LoadTrainingFiles ()
+    {
         DirectoryInfo dir = new DirectoryInfo(dirPathTrainingRoute);
         dirFileCount = dir.GetFiles().Length - dir.GetFiles("*.meta").Length;
         Debug.Log("init anzahl files: " + dirFileCount);
@@ -98,17 +109,18 @@ public class AlternateCarController : MonoBehaviour
                 Debug.Log("Jetztiger File Count: " + trainingFiles.Count);
             }
         }
-
-        //Lade eine Strecke, falls der Trainingsmodus aktiv ist
-        if (sharedData.TrainingMode)
-        {
-            LoadTrainingRoute();
-        }
     }
 
     private void LoadTrainingRoute()
     {
         trainingsFahrroute.Clear();
+        if (trainingsFahrrouteSaved.Count!= 0)
+        {
+            WriteTrainingsRouteToFile();
+            //LoadTrainingFiles();
+        }
+        trainingsFahrrouteSaved.Clear();
+
         foreach (int i in trainingsFahrroute.Keys)
         {
             Debug.LogFormat("Vorhandener Key: {0}", i);
@@ -137,6 +149,9 @@ public class AlternateCarController : MonoBehaviour
                 string[] floatValues = keyAndValue[1].Substring(keyAndValue[1].IndexOf('(') + 1, keyAndValue[1].IndexOf(')') - 1 - keyAndValue[1].IndexOf('(')).Split('.');
                 //Debug.LogFormat("float Values: {0}", floatValues);
                 Vector3 finalValues = new Vector3(float.Parse(floatValues[0]), float.Parse(floatValues[1]), float.Parse(floatValues[2]));
+                Debug.Log("finalValues.x: " + finalValues.x);
+                Debug.Log("finalValues.y: " + finalValues.y);
+                Debug.Log("finalValues.z: " + finalValues.z);
                 //Debug.Log("floatStrings converted to floats: " + finalValues);
 
                 //string valueVector = 
@@ -278,9 +293,10 @@ public class AlternateCarController : MonoBehaviour
                 sharedData.trainingsFahrroute.Add(Time.frameCount, new Vector3(moveHorizontal, moveVertical, handBrake));
             }*/
             //Debug.Log("Test");
+            //***Bei den folgenden beiden Zeilen treten Rundungsfehler auf
             angle = maxWheelAngle * moveVertical;
             torque = maxTorque * moveHorizontal;
-            stringBuilder.AppendFormat("{0}| {1} {2}", frameCountThisTrainingRoute, angle, torque);
+            angleTorqueStringBuilder.AppendFormat("{0}| {1} {2} ;", frameCountThisTrainingRoute, angle, torque);
         }
         else   //stellt die Reifen neutral wenn keine playerControll gegeben wird
         {
@@ -289,12 +305,13 @@ public class AlternateCarController : MonoBehaviour
             handBrake = brakeTorque;
         }
 
-        //Trainingsdaten hinzufügen
+        //Strecke in Form von Keystrokes hinzufügen, falls kein Trainings Modus
+        //if (!sharedData.TrainingMode && !myPlateAgent.isTrainingCar)
         if (!myPlateAgent.isTrainingCar)
         {
             //Debug.Log("****Füge neue Trainingsdaten Hinzu");
             //trainingsFahrrouteSaved.Add(Time.frameCount, new Vector3(moveHorizontal, moveVertical, handBrake));
-            Debug.Log("Füge für Frame hinzu: " + frameCountThisTrainingRoute);
+            //Debug.Log("Füge für Frame hinzu: " + frameCountThisTrainingRoute);
             trainingsFahrrouteSaved.Add(frameCountThisTrainingRoute, new Vector3(moveHorizontal, moveVertical, handBrake));
             //Debug.LogFormat("***FrameCountThisTrainingRoute: {0}, FrameCount: {1}", frameCountThisTrainingRoute, Time.frameCount);
             //sharedData.trainingsFahrroute.Add(Time.frameCount, new Vector3(moveHorizontal, moveVertical, handBrake));
@@ -505,22 +522,35 @@ public class AlternateCarController : MonoBehaviour
 
     public void OnApplicationQuit()
     {
-        if (trainingsFahrrouteSaved.Count != 0 && !sharedData.TrainingMode && !myPlateAgent.isTrainingCar)
+        //if (trainingsFahrrouteSaved.Count != 0 && !sharedData.TrainingMode && !myPlateAgent.isTrainingCar)
+        if (trainingsFahrrouteSaved.Count != 0 && !myPlateAgent.isTrainingCar)
         {
-            //Speichere die aufgezeichnete Trainingsroute in einer Datei
-            int nextFreeFileNumber = dirFileCount;
-            StreamWriter writer = new StreamWriter(dirPathTrainingRoute + nextFreeFileNumber, true);
-            foreach (KeyValuePair<int, Vector3> item in trainingsFahrrouteSaved)
+            WriteTrainingsRouteToFile();
+        }
+
+    }
+
+    private void WriteTrainingsRouteToFile ()
+    {
+        //Speichere die aufgezeichnete Trainingsroute in einer Datei
+        int nextFreeFileNumber = dirFileCount;
+        StreamWriter writer = new StreamWriter(dirPathTrainingRoute + nextFreeFileNumber, true);
+        StreamWriter debugWriter = new StreamWriter(dirPathTrainingRoute + "debugLogs/" + nextFreeFileNumber, true);
+
+        foreach (KeyValuePair<int, Vector3> item in trainingsFahrrouteSaved)
+        {
+            //Debug.Log(item.Value.ToString("G9"));
+            String valueString = string.Format("({0}.{1}.{2})", item.Value.x, item.Value.y, item.Value.z);
+            String concat = string.Format("[{0}|{1}]", item.Key, valueString);
+            //KeyValuePair<int, String> n = new KeyValuePair<int, string>(item.Key, valueString);
+            //Debug.Log(concat);
+            debugWriter.WriteLine(concat);
+            if (!sharedData.TrainingMode)
             {
-                //Debug.Log(item.Value.ToString("G9"));
-                String valueString = string.Format("({0}.{1}.{2})", item.Value.x, item.Value.y, item.Value.z);
-                String concat = string.Format("[{0}|{1}]", item.Key, valueString);
-                //KeyValuePair<int, String> n = new KeyValuePair<int, string>(item.Key, valueString);
-                //Debug.Log(concat);
                 if (item.Key < trainingsFahrrouteSaved.Count)
                 {
-                    writer.Write(concat);
-                    //Debug.Log(sharedData.trainingsFahrroute.Count);
+                    writer.Write(concat);//Todo: schaue ob laden der Route noch richtung klappt -> jetzt mit Zeilenumbruhc
+                                         //Debug.Log(sharedData.trainingsFahrroute.Count);
                     writer.Write(";");
                 }
                 else if (item.Key == trainingsFahrrouteSaved.Count)
@@ -528,8 +558,18 @@ public class AlternateCarController : MonoBehaviour
                     writer.Write(concat);
                 }
             }
-            writer.Close();
         }
+        
+        writer.Close();
+        debugWriter.Close();
 
+        StreamWriter writer2 = new StreamWriter(dirPathTrainingRoute + "debugLogs/" + nextFreeFileNumber +"angleTorque", true);
+        string [] stringarray =  angleTorqueStringBuilder.ToString().Split(';');
+        foreach (string s in stringarray)
+        {
+            writer2.WriteLine(s);
+        }
+        
+        writer2.Close();
     }
 }
