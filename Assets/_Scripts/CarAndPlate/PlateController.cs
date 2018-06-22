@@ -57,12 +57,13 @@ public class PlateController : MonoBehaviour {
         //wiiRemote = wiiDaten.wiiRemote;
     }
 
-    private void Update()
+    //Debug Objekte um im Editor die Ball und Tellerposition anzuzeigen
+    /*private void Update()
     {
         ballPosSphere.transform.position = ballTransform.position;
         //Debug.Log("Ball Position:" + ballTransform.position);
         tellerPosSphere.transform.position = plateTransform.position;
-    }
+    }*/
 
 
     //GG Zittern:

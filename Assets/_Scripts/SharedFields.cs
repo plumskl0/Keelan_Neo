@@ -33,11 +33,14 @@ public class SharedFields {
     //Debug Mode Verhalten: 
     // keine Leben verlieren, automatischer Ball Reset, simuliert Bestrafungen des Trainingsmode, Teller und Autosteuerung gemäß Autopilot Werten
     public bool debugMode = false;
+    public bool nonMovingCar = false;
 
     private float timeNeededToLastLevel = 0;
     public float maxSpeed = 30f;  //der Sprachassistent manipuliert im Autopilot die maximale Geschwindigkeit -> das ist das Backup wenn er die Kontrolle wieder abgibt
     public float currentMaxSpeed = 30f;
     public float currentSpeed = 0;
+    public float maxWheelAngle;
+    public float maxTorque;
 
     //Controllerauswahl
     public const string MTControl = "MausUndTastaturKontrolle";
@@ -66,6 +69,7 @@ public class SharedFields {
     public float incentiveFinishedRoute = 5f;
     public float incentiveBallStillOnPlate = 0.01f;
     public float incentiveFactorDistanceBallToPlateCenter = 0.01f;
+    public int delayFactor = 50;
 
 
 
@@ -318,6 +322,7 @@ public class SharedFields {
 
     // Mausempfindlichkeit
     public float sensitivity = 5f;
+
 
     public bool GetPlayerControl()
     {

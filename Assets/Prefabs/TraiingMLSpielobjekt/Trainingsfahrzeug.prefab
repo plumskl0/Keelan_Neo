@@ -120,13 +120,13 @@ GameObject:
   - component: {fileID: 4583735816730280}
   - component: {fileID: 33985319759823774}
   - component: {fileID: 23144174967019300}
-  m_Layer: 13
+  m_Layer: 11
   m_Name: MinimapIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1173688855752834
 GameObject:
   m_ObjectHideFlags: 1
@@ -2060,6 +2060,7 @@ MonoBehaviour:
   - {fileID: 4192034742038482}
   - {fileID: 4759520414324938}
   frameCountThisTrainingRoute: 0
+  frameDurationThisRoute: 0
   activateTrainingMode: 0
   activateDebugMode: 0
   maxSpeed: 30
@@ -2086,10 +2087,12 @@ MonoBehaviour:
   incentiveFinishedRoute: 5
   incentiveBallStillOnPlate: 0.01
   incentiveFactorDistanceBallToPlateCenter: 0.01
+  delayFactor: 50
   autoname: 
   ballname: 
   tellername: 
   isTrainingCar: 0
+  delay: 0
   ballTransform: {fileID: 0}
   positiveRewardsText: {fileID: 0}
   positiveRewardsThisRoundText: {fileID: 0}

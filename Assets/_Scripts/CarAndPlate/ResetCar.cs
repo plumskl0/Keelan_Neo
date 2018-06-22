@@ -68,14 +68,15 @@ public class ResetCar : MonoBehaviour {
 
 
 
-
-    public void CarReset (float _x=0f, float _y=0f, float _z= 0f, bool _currentPostionReset = true)
+    
+    public void CarReset (float _x=0f, float _y=0f, float _z= 0f, bool _currentPostionReset = true, float _resetRotationY = 0f)
     {
         Vector3 carResetPosition = new Vector3(0f,0f,0f);
-        if (_currentPostionReset)
+        if (_currentPostionReset)   //gleiche Position und yRotation
         {
             carResetPosition = transform.position;
-            if(!sharedData.TrainingMode)    //Im Trainingsmode darf die Geschwindigkeit nicht vom Auto, da die Keystrokefolge sonst zu einer anderen Strecke führt
+            transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
+            if (!sharedData.TrainingMode)    //Im Trainingsmode darf die Geschwindigkeit nicht vom Auto, da die Keystrokefolge sonst zu einer anderen Strecke führt
             {
                 carRGBody.velocity = Vector3.zero;
             }
@@ -86,12 +87,13 @@ public class ResetCar : MonoBehaviour {
             carResetPosition.y = _y;
             carResetPosition.z = _z;
             carRGBody.velocity = Vector3.zero;
+            transform.rotation = Quaternion.Euler(0f, _resetRotationY, 0f);
         }
 
         carResetPosition.y = carResetPosition.y * transform.localScale.y;
 
         transform.position = carResetPosition;
-        transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
+        //transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
         
 
         
