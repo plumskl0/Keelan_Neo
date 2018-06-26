@@ -278,6 +278,8 @@ public class PlateAgent : Agent
 
     public void ObserveLikeUnityExample()
     {
+        AddVectorObs(carRgBody.velocity.normalized);
+
         //Wie Unity 3D Ball Beispiel:
         AddVectorObs(plateTransform.rotation.z);
         AddVectorObs(plateTransform.rotation.x);
@@ -322,6 +324,8 @@ public class PlateAgent : Agent
         Vector3 ballToTransformPositionVector = ballTransform.position - plateTransform.position;
         AddVectorObs(ballToTransformPositionVector.normalized);
         AddVectorObs(ballRgBody.velocity.normalized);
+
+        AddVectorObs(carRgBody.velocity.normalized);    //Richtungsvektor des Autos
     }
 
     List<float> obeservation = new List<float>();
@@ -353,7 +357,7 @@ public class PlateAgent : Agent
         */
 
 
-        AddVectorObs(carRgBody.velocity.normalized);
+        //AddVectorObs(carRgBody.velocity.normalized);
         /*xVel.text = carRgBody.velocity.x.ToString();
         yVel.text = carRgBody.velocity.y.ToString();
         zVel.text = carRgBody.velocity.z.ToString();*/
@@ -363,6 +367,7 @@ public class PlateAgent : Agent
 
         //Wie Unity 3D Ball Beispiel:
         ObserveLikeUnityExampleMod();
+        //ObserveLikeUnityExample();
 
 
         //AddVectorObs(verbindungsvektor);
@@ -469,8 +474,8 @@ public class PlateAgent : Agent
                 RotatePlateByMiniSteps(vectorAction[0], vectorAction[1]);
                 Debug.LogFormat("Mein Name ist: {6} Die alten Neigungsvars: {0} {1} \n Aktionen: {2} {3} \n Die neuen: {4} {5}", alteNeigungsvariablen[0], alteNeigungsvariablen[1], vectorAction[0], vectorAction[1], plateXAxis, plateZAxis, playerObjectsTransform.name);*/
 
-                RotatePlateLikeUnityExample(vectorAction[0], vectorAction[1]);
-
+                //RotatePlateLikeUnityExample(vectorAction[0], vectorAction[1]);
+                RotatePlateByMiniSteps(vectorAction[0], vectorAction[1]);
                 //RotatePlatePerDirectFloat(vectorAction[0], vectorAction[1]);
 
                 if (!isTrainingCar) //Das Hauptauto muss die Steuerungsdaten zentral vermerken, damit bei einem Moduswechsel übernommen werden kann
@@ -537,17 +542,22 @@ public class PlateAgent : Agent
         {
             plateZAxis += achsenaenderung;
         }
-        Debug.LogFormat("x-Achse: {0}  und y-Achse: {1}", plateXAxis, plateZAxis);
+        //Debug.LogFormat("x-Achse: {0}  und y-Achse: {1}", plateXAxis, plateZAxis);
         plateTransform.localRotation = Quaternion.Euler(plateXAxis * sharedData.plateMaxAngle, 0f, plateZAxis * sharedData.plateMaxAngle);
     }
 
     private void RotatePlateLikeUnityExample(float actionX, float actionZ)
     {
+        if(!isTrainingCar)  
+            Debug.LogFormat("zAction: {0}, tellerRotation: {1}",actionZ, plateTransform.rotation.z);
+
 
         float action_z = 2f * Mathf.Clamp(actionZ, -1f, 1f);
         if ((plateTransform.rotation.z < 0.25f && action_z > 0f) ||
         (plateTransform.rotation.z > -0.25f && action_z < 0f))
         {
+            if(!isTrainingCar)
+                Debug.Log("RotateZ");
             /*float zielwinkel = plateTransform.rotation.eulerAngles.z + action_z;
             Debug.Log(zielwinkel + " -----> ist zielwinkel");
             //zahl * winkelmax = zielwinkel -> zielwinkel/winkelmax = zahl

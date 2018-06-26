@@ -2052,8 +2052,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxWheelAngle: 30
-  maxTorque: 300
+  maxTorque: 400
   brakeTorque: 30000
+  maxTrainingRouteDiff: 0.01
   wheels:
   - {fileID: 4384820231133418}
   - {fileID: 4157773646767622}
@@ -2061,8 +2062,10 @@ MonoBehaviour:
   - {fileID: 4759520414324938}
   frameCountThisTrainingRoute: 0
   frameDurationThisRoute: 0
+  oldPositionSphere: {fileID: 0}
   activateTrainingMode: 0
   activateDebugMode: 0
+  nonMovingCar: 0
   maxSpeed: 30
   stepsToAxisMax: 0.01
 --- !u!114 &114619979203729956
