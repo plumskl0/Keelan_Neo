@@ -12,6 +12,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
     private WindowsVoice tts;
     private IPAAction actions;
     public Text debugText;
+    private SharedFields sharedData = SharedFields.Instance;
 
     //Unity Actions for Event Manager
     private UnityAction<EventMessageObject> CallNLU;
@@ -83,8 +84,19 @@ public class IntelligentPersonalAgent : MonoBehaviour {
             String intent = nluResponse.Result.Metadata.IntentName;
             Result nluResultObj = nluResponse.Result;
 
+
             String action = nluResponse.Result.Action;
             switch (action) {
+
+                /*case IPAAction.askQuestion:
+                    actions.AskQuestion(nluResultObj.GetStringParameter("speak"));
+                    break;
+
+
+                case IPAAction.speak:
+                    actions.Speak(nluResultObj.GetStringParameter("speak"));
+                    break;*/
+
                 case IPAAction.moveCar:
                     String groesseneinheit = nluResultObj.GetStringParameter("Groesseneinheit");
                     String direction = nluResultObj.GetStringParameter("MoveDirection");
@@ -101,6 +113,24 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                 case IPAAction.closeMap:
                     actions.CloseMap();
                     actions.SetMinimapFokusOnCar();
+                    break;
+
+                //Intents zur Unterstützung der Teststreckenerstellung
+                case IPAAction.setCheckpoint:
+                    actions.SetTrainingCheckpoint(sharedData.currentFrameCount);
+                    actions.Speak("Sicherungspunkt erstellt bei Frame:" + sharedData.currentFrameCount);
+                    break;
+
+                case IPAAction.endTrainingRouteCreation:
+                    sharedData.trainingRouteRecordingStopped = true;
+                    break;
+
+                case IPAAction.performanceAndDifficultyMeasured:
+                    bool performanceOK = nluResultObj.GetStringParameter("Performance").Equals("gut") ? true : false;
+                    if(sharedData.debugMode)
+                    {
+
+                    }
                     break;
 
                 case IPAAction.changeMapFixedStep:
@@ -154,8 +184,23 @@ public class IntelligentPersonalAgent : MonoBehaviour {
 
                 default:
                     Debug.Log(string.Format("Der Intent {0} wurde im IntentHandler nicht registiert.", intent));
-                    WindowsVoice.speak("Test Test", 0f);
+                    //WindowsVoice.speak("Diesen Intent kenne ich nicht", 0f);  //wird von Fallback Intent in Block unten gemacht
                     break;
+            }
+
+            //Ausgabe der Dialogflow Response -> Metadata.EndConversation Boolean bestimmt ob als Frage oder Aussage
+            //***Kann in Unity JSON Objekt bisher nicht abgerufen werden -> Parameter: endConversation simuliert ihn
+
+            if (nluResultObj.Fulfillment.Speech != "")
+            {
+                if (nluResultObj.GetStringParameter("endConversation").Equals("true"))
+                {
+                    actions.Speak(nluResultObj.Fulfillment.Speech);
+                }
+                else  //ansonsten öffne das Mikrofon wieder
+                {
+                    actions.AskQuestion(nluResultObj.Fulfillment.Speech);
+                }
             }
         }
 

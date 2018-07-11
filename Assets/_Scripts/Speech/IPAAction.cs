@@ -31,6 +31,21 @@ public class IPAAction : MonoBehaviour {
     public const string changeMapFixedStep = "map.ChangeFixedStep";
     public const string focusOnCar = "map.FocusOnCar";
     public const string moveCar = "car.Move";
+    public const string setCheckpoint = "training.CreateCheckpoint";
+    public const string endTrainingRouteCreation = "training.End";
+    public const string performanceAndDifficultyMeasured = "training.PerformanceAndDiffcultyMeasured";
+    /*public const string speak = "conversation.Speak";
+    public const string askQuestion = "conversation.AskQuestion";*/
+
+    //Steuerungsvariablen
+    private int checkpointFrameCount = 0;
+
+
+    //Für das Sammeln von Trainingsrouten -> bietet die Möglichkeit bisherige Strecke als gut zu markieren
+    public void SetTrainingCheckpoint(int currentFrameCount)
+    {
+        checkpointFrameCount = currentFrameCount;
+    }
 
 
     private void ChangeMapMode(String modeName) //-> geöffnet oder geschlossen
@@ -243,14 +258,17 @@ public class IPAAction : MonoBehaviour {
         _ausgabefeld.text = _textToDisplay;
     }
 
-    public void Speak (Text _ausgabefeld, String _textToDisplay)
+    public void Speak (String _textToDisplay, Text _ausgabefeld= null)
     {
-        DisplayText(_ausgabefeld, _textToDisplay);  //nur solange keine TTS implementiert
+        if(_ausgabefeld!=null)
+            DisplayText(_ausgabefeld, _textToDisplay);  //nur solange keine TTS implementiert
+        WindowsVoice.speak(_textToDisplay);
+
     }
 
-    public void AskQuestion (Text _ausgabefeld, String _textToDisplay)
+    public void AskQuestion (String _textToDisplay, Text _ausgabefeld=null)
     {
-        Speak(_ausgabefeld, _textToDisplay);
+        Speak(_textToDisplay, _ausgabefeld);
         EventManager.TriggerEvent(EventManager.keywordDetectedEvent, new EventMessageObject(EventManager.keywordDetectedEvent, "MultiTurnConversation"));
     }
 

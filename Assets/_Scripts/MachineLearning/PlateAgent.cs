@@ -154,11 +154,10 @@ public class PlateAgent : Agent
             switch (myScene.name)
             {
                 case "Level1":
-                    resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false); //Level1
+                    resetCarScript.CarReset(sharedData.level1ResetPosition[0], sharedData.level1ResetPosition[1], sharedData.level1ResetPosition[2], false, sharedData.level1ResetPosition[3]); //Level1
                     break;
                 case "Level1Debug":
-                    resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false);
-                    carTransform.localRotation = Quaternion.Euler(0f, 58.077f, 0f);
+                    resetCarScript.CarReset(sharedData.level1ResetPosition[0], sharedData.level1ResetPosition[1], sharedData.level1ResetPosition[2], false, sharedData.level1ResetPosition[3]);
                     //plateTransform.rotation = Quaternion.Euler(75f, 0f, 0f); //todo: zurückstellen auf neutral | Schrägstellung der Plate ist für Übung ohne Autobewegung
                     break;
                 case "Level1Training":
@@ -183,7 +182,7 @@ public class PlateAgent : Agent
                         else
                         {
                             Debug.Log("Erster Reset aller Agenten oder Nicht behandelter Done Zustand des Agenten.");
-                            //resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false, 58.077f);
+                            //resetCarScript.CarReset(sharedData.level1ResetPosition[0], sharedData.level1ResetPosition[1], sharedData.level1ResetPosition[2], false, sharedData.level1ResetPosition[3]);
                             resetCarScript.CarReset();
                         }
                     }
@@ -191,7 +190,7 @@ public class PlateAgent : Agent
                     {
                         if (trainingRouteFinished)
                         {
-                            resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false, 58.077f);
+                            resetCarScript.CarReset(sharedData.level1ResetPosition[0], sharedData.level1ResetPosition[1], sharedData.level1ResetPosition[2], false, sharedData.level1ResetPosition[3]);
                             trainingRouteFinished = false;
                         }
 
@@ -207,7 +206,7 @@ public class PlateAgent : Agent
                         else
                         {
                             Debug.Log("Erster Reset aller Agenten oder Nicht behandelter Done Zustand des Agenten.");
-                            //resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false, 58.077f);
+                            //resetCarScript.CarReset(sharedData.level1ResetPosition[0], sharedData.level1ResetPosition[1], sharedData.level1ResetPosition[2], false, sharedData.level1ResetPosition[3]);
                             resetCarScript.CarReset();
                         }
                     }
@@ -517,30 +516,77 @@ public class PlateAgent : Agent
     }
 
     //Unterschiedliche Strategien, um die Agent Action in Tellerneigung umzusetzen:
+    private void RotatePlateByMiniStepsProbabilityMod(float x, float z)
+    {
+        float actionX = Mathf.Clamp(x, -1, 1);
+        float actionZ = Mathf.Clamp(z, -1, 1);
+        float achsenaenderung = 0.03f;
+
+        //Zufallsfaktor bei Entscheidung ermöglicht auch bei finden einer guten Lösung noch breiter zu suchen:
+        float prob = 1 - Random.Range(0, 1);  //Kehre Aktionen von 0 bis Aktionswert (zb 0.3) um
+
+        if (actionX < plateXAxis)
+        {
+            if (Mathf.Abs(actionX) > prob)
+                plateXAxis -= achsenaenderung;
+            else
+                plateXAxis += achsenaenderung;
+        }
+
+        else if (actionX > plateXAxis)
+        {
+            if (Mathf.Abs(actionX) > prob)
+                plateXAxis += achsenaenderung;
+            else
+                plateXAxis -= achsenaenderung;
+        }
+
+        if (actionZ < plateZAxis)
+        {
+            if (Mathf.Abs(actionX) > prob)
+                plateZAxis -= achsenaenderung;
+            else
+                plateXAxis += achsenaenderung;
+        }
+
+        else if (actionZ > plateZAxis)
+        {
+            if (Mathf.Abs(actionX) > prob)
+                plateZAxis += achsenaenderung;
+            else
+                plateXAxis -= achsenaenderung;
+        }
+        //Debug.LogFormat("x-Achse: {0}  und y-Achse: {1}", plateXAxis, plateZAxis);
+        plateTransform.localRotation = Quaternion.Euler(plateXAxis * sharedData.plateMaxAngle, 0f, plateZAxis * sharedData.plateMaxAngle);
+    }
+
+    //Unterschiedliche Strategien, um die Agent Action in Tellerneigung umzusetzen:
     private void RotatePlateByMiniSteps(float x, float z)
     {
         float actionX = Mathf.Clamp(x, -1, 1);
         float actionZ = Mathf.Clamp(z, -1, 1);
         float achsenaenderung = 0.03f;
 
+
         if (actionX < plateXAxis)
         {
-            plateXAxis -= achsenaenderung;
+                plateXAxis -= achsenaenderung;
         }
 
         else if (actionX > plateXAxis)
         {
-            plateXAxis += achsenaenderung;
+                plateXAxis += achsenaenderung;
+
         }
 
         if (actionZ < plateZAxis)
         {
-            plateZAxis -= achsenaenderung;
+                plateZAxis -= achsenaenderung;
         }
 
         else if (actionZ > plateZAxis)
         {
-            plateZAxis += achsenaenderung;
+                plateZAxis += achsenaenderung;
         }
         //Debug.LogFormat("x-Achse: {0}  und y-Achse: {1}", plateXAxis, plateZAxis);
         plateTransform.localRotation = Quaternion.Euler(plateXAxis * sharedData.plateMaxAngle, 0f, plateZAxis * sharedData.plateMaxAngle);

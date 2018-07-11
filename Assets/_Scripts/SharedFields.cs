@@ -30,9 +30,20 @@ public class SharedFields {
         CoinCount = 0;
     }
 
+    //Start/Reset Positionen der Level:
+    public float [] level1ResetPosition = new float[] {95.39f, 0.38f, 30.4274f, 58.077f};
+
+
     //Debug Mode Verhalten: 
     // keine Leben verlieren, automatischer Ball Reset, simuliert Bestrafungen des Trainingsmode, Teller und Autosteuerung gemäß Autopilot Werten
     public bool debugMode = false;
+    public int currentFrameCount = 0;   //frameCount des Hauptautos auf der gerade gefahrenen Trainingsstrecke -> im Debug Mode für Checkpoints genutzt
+
+    //Vars für Erfassung und Bewertung von Trainingsrouten
+    public bool trainingRouteRecordingStopped = false;
+    public string trainingRouteDifficulty = "";
+
+
     public bool nonMovingCar = false;
 
     private float timeNeededToLastLevel = 0;
