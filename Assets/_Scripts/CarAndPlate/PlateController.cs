@@ -57,12 +57,13 @@ public class PlateController : MonoBehaviour {
         //wiiRemote = wiiDaten.wiiRemote;
     }
 
-    private void Update()
+    //Debug Objekte um im Editor die Ball und Tellerposition anzuzeigen
+    /*private void Update()
     {
         ballPosSphere.transform.position = ballTransform.position;
         //Debug.Log("Ball Position:" + ballTransform.position);
         tellerPosSphere.transform.position = plateTransform.position;
-    }
+    }*/
 
 
     //GG Zittern:
@@ -73,13 +74,14 @@ public class PlateController : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        Debug.Log(sharedData.assistantPlateXAchse + "   ist xWert der Platte bei Update");
+        //Debug.Log(sharedData.assistantPlateXAchse + "   ist xWert der Platte bei Update");
         if (sharedData.GetPlayerControl())
         {
             if (sharedData.plateAutopilot || sharedData.TrainingMode)
             {
-                plateTransform.localRotation = Quaternion.Euler(sharedData.assistantPlateXAchse * sharedData.plateMaxAngle, 0f, sharedData.assistantPlateZAchse * sharedData.plateMaxAngle);
-                Debug.Log(plateTransform.localRotation.eulerAngles.x);
+                //wird direkt in Plate Agent gemacht, das Hauptauto schreibt seine Achsenbelgungen in sharedData für einen späteren Mode Wechsel
+                //plateTransform.localRotation = Quaternion.Euler(sharedData.assistantPlateXAchse * sharedData.plateMaxAngle, 0f, sharedData.assistantPlateZAchse * sharedData.plateMaxAngle);
+                //Debug.Log(plateTransform.localRotation.eulerAngles.x);
                 
             }
             else    //falls kein Autopilot eingeschaltet ist, greift die im Menu gewählte Steuerung

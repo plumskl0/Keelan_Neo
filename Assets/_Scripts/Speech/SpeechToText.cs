@@ -13,6 +13,7 @@ public class SpeechToText : MonoBehaviour, ISpeechToTextInterface {
 //    private DictationRecognizer dictationRecognizer;
     private String _userCommand;
     private ASR asr;
+    private Text debugText;
 
     public string UserCommand
     {
@@ -29,6 +30,7 @@ public class SpeechToText : MonoBehaviour, ISpeechToTextInterface {
 
     // Use this for initialization
     void Awake () {
+        debugText = GameObject.Find("DebugText").GetComponent<Text>();
         asr = GetComponent<ASR>();
         dictationRecognizer = new DictationRecognizer();
         dictationRecognizer.InitialSilenceTimeoutSeconds = 20f;
@@ -51,6 +53,7 @@ public class SpeechToText : MonoBehaviour, ISpeechToTextInterface {
          dictationRecognizer.DictationHypothesis += (text) =>
          {
              Debug.LogFormat("Dictation hypothesis: {0}", text);
+             debugText.text = text;
          };
     }
 

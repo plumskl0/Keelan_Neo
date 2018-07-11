@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4825735509411742}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 65296072208693442}
   - component: {fileID: 33493130984969296}
   - component: {fileID: 23262901595701646}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: South (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4291943109847112}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67,7 +67,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4249133403040720}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 65810636201107362}
   - component: {fileID: 33523757139774136}
   - component: {fileID: 23008922489770304}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: West (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 65837191199889964}
   - component: {fileID: 33616811141580390}
   - component: {fileID: 23315089980623250}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,13 +120,13 @@ GameObject:
   - component: {fileID: 4583735816730280}
   - component: {fileID: 33985319759823774}
   - component: {fileID: 23144174967019300}
-  m_Layer: 15
+  m_Layer: 11
   m_Name: MinimapIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1173688855752834
 GameObject:
   m_ObjectHideFlags: 1
@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 65594219219929672}
   - component: {fileID: 33123622810544710}
   - component: {fileID: 23855576719991800}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: East (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,8 +154,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4174059820099962}
   - component: {fileID: 65164530477583166}
-  m_Layer: 8
-  m_Name: Teller
+  m_Layer: 15
+  m_Name: Trainingsteller
   m_TagString: Teller
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -169,7 +169,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4297249573910628}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4192034742038482}
   - component: {fileID: 146837381565139664}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: REAR_RIGHT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200,7 +200,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4043718363646976}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216,7 +216,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4759520414324938}
   - component: {fileID: 146409982026157818}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: REAR_LEFT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,7 +231,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4243537451543138}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Part2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246,7 +246,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4482398558079278}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: Auto1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 4067701689094892}
   - component: {fileID: 33911367215938628}
   - component: {fileID: 23776778844579658}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +278,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4585029030287016}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: CameraPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,7 +294,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4909568196968598}
   - component: {fileID: 114664401144388300}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: PlateCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 4047406453307442}
   - component: {fileID: 33203653824633446}
   - component: {fileID: 23326560325653402}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -327,7 +327,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4157773646767622}
   - component: {fileID: 146232088827912256}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: FRONT_RIGHT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,7 +343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4384820231133418}
   - component: {fileID: 146335976748583180}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: FRONT_LEFT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -360,7 +360,7 @@ GameObject:
   - component: {fileID: 4304591906611694}
   - component: {fileID: 33540859159307180}
   - component: {fileID: 23634443437728494}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -378,7 +378,7 @@ GameObject:
   - component: {fileID: 33794257528795128}
   - component: {fileID: 65567402986736438}
   - component: {fileID: 23234667769383908}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -393,7 +393,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4045980364449784}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: CameraTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -410,7 +410,7 @@ GameObject:
   - component: {fileID: 4857404678606988}
   - component: {fileID: 33596325721740160}
   - component: {fileID: 23788498468788186}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -428,7 +428,7 @@ GameObject:
   - component: {fileID: 65023989872391984}
   - component: {fileID: 33279067847466934}
   - component: {fileID: 23209534851593470}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: North (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 4145919852746070}
   - component: {fileID: 33688901088138602}
   - component: {fileID: 23137086394191352}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,7 +463,7 @@ GameObject:
   - component: {fileID: 33495963255982038}
   - component: {fileID: 65296422208150784}
   - component: {fileID: 23630331533842372}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -482,10 +482,9 @@ GameObject:
   - component: {fileID: 65157344254585506}
   - component: {fileID: 114123207879372528}
   - component: {fileID: 114965754111155768}
-  - component: {fileID: 114879612021364924}
-  - component: {fileID: 114496065193600416}
-  - component: {fileID: 114107001261441834}
-  m_Layer: 15
+  - component: {fileID: 114619979203729956}
+  - component: {fileID: 114592444863459076}
+  m_Layer: 13
   m_Name: Trainingsfahrzeug
   m_TagString: Trainingsfahrzeug
   m_Icon: {fileID: 0}
@@ -500,7 +499,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4115608718682240}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: BallResetPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -515,7 +514,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4772793862793286}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: Teller1_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -532,7 +531,7 @@ GameObject:
   - component: {fileID: 4137686958173894}
   - component: {fileID: 33813489013791592}
   - component: {fileID: 23862614550399032}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -547,7 +546,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4443149564271196}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: CameraSpots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -564,7 +563,7 @@ GameObject:
   - component: {fileID: 4109416338343866}
   - component: {fileID: 33506102736124896}
   - component: {fileID: 23826370025707504}
-  m_Layer: 8
+  m_Layer: 15
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -579,7 +578,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4856930291784524}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: CarModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -596,7 +595,7 @@ GameObject:
   - component: {fileID: 4755531864020832}
   - component: {fileID: 33009600877706858}
   - component: {fileID: 23808836543095448}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -613,7 +612,7 @@ GameObject:
   - component: {fileID: 4962067316658866}
   - component: {fileID: 33910092644302286}
   - component: {fileID: 23578569754701108}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default_MeshPart0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -630,7 +629,7 @@ GameObject:
   - component: {fileID: 4943483202959492}
   - component: {fileID: 33017070904007514}
   - component: {fileID: 23088631813620622}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -724,7 +723,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1706930203187832}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.116, y: 2.15, z: -0.214}
+  m_LocalPosition: {x: 0.116, y: 1.67, z: -0.214}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4555254904187824}
@@ -989,7 +988,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1704515001887602}
   m_LocalRotation: {x: 0, y: 0.48539725, z: 0, w: 0.87429374}
-  m_LocalPosition: {x: -0, y: -0.84, z: 0}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4443149564271196}
@@ -2029,25 +2028,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114107001261441834
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1704515001887602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f1dbc552bba42e47802b79fce4ebc65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxAngle: 30
-  maxTorque: 400
-  brakeTorque: 30000
-  wheels:
-  - {fileID: 4384820231133418}
-  - {fileID: 4157773646767622}
-  - {fileID: 4192034742038482}
-  - {fileID: 4759520414324938}
 --- !u!114 &114123207879372528
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2060,7 +2040,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   power: 10
---- !u!114 &114496065193600416
+--- !u!114 &114592444863459076
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -2068,7 +2048,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 1704515001887602}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c0b1c169753b543b4725b3f9331280, type: 3}
+  m_Script: {fileID: 11500000, guid: a12e064263c561d4b8f82d1098863b6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxWheelAngle: 30
+  maxTorque: 400
+  brakeTorque: 30000
+  maxTrainingRouteDiff: 0.01
+  wheels:
+  - {fileID: 4384820231133418}
+  - {fileID: 4157773646767622}
+  - {fileID: 4192034742038482}
+  - {fileID: 4759520414324938}
+  frameCountThisTrainingRoute: 0
+  frameDurationThisRoute: 0
+  oldPositionSphere: {fileID: 0}
+  activateTrainingMode: 0
+  activateDebugMode: 0
+  nonMovingCar: 0
+  maxSpeed: 30
+  stepsToAxisMax: 0.01
+--- !u!114 &114619979203729956
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1704515001887602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dc8a1b0c3b617a4997bdb3a2518921d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   brain: {fileID: 0}
@@ -2082,6 +2090,21 @@ MonoBehaviour:
   incentiveFinishedRoute: 5
   incentiveBallStillOnPlate: 0.01
   incentiveFactorDistanceBallToPlateCenter: 0.01
+  delayFactor: 50
+  autoname: 
+  ballname: 
+  tellername: 
+  isTrainingCar: 0
+  delay: 0
+  ballTransform: {fileID: 0}
+  positiveRewardsText: {fileID: 0}
+  positiveRewardsThisRoundText: {fileID: 0}
+  negativeRewardsText: {fileID: 0}
+  negativeRewardsThisRoundText: {fileID: 0}
+  abstandBallzuTellermitte: {fileID: 0}
+  xVel: {fileID: 0}
+  yVel: {fileID: 0}
+  zVel: {fileID: 0}
 --- !u!114 &114664401144388300
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2093,21 +2116,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 945df722ad4a45f4bb24897ab4a91143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114879612021364924
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1704515001887602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a6ae704be95a6d42b3eee3e28233a7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endbildschirm: {fileID: 0}
-  coinCount: 0
-  coinCountText: {fileID: 0}
-  timeNeededText: {fileID: 0}
 --- !u!114 &114965754111155768
 MonoBehaviour:
   m_ObjectHideFlags: 1

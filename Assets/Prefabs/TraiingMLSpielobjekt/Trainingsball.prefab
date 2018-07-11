@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4612422329567154}
   - component: {fileID: 33910111193513932}
   - component: {fileID: 23774582829549680}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: default_MeshPart1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4947211371910786}
   - component: {fileID: 33385461684821888}
   - component: {fileID: 23360209497587892}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: default_MeshPart2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4204702937814290}
   - component: {fileID: 33462237813020712}
   - component: {fileID: 23353295399481372}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: default_MeshPart0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4462817169186418}
   - component: {fileID: 54413435880385106}
   - component: {fileID: 135679490340259330}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: Trainingsball
   m_TagString: Trainingsball
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4659875054922544}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1622799554757374}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.118, y: 0.698, z: -0.214}
+  m_LocalPosition: {x: -0.118, y: 0.96, z: -0.214}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4659875054922544}

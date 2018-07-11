@@ -43,7 +43,7 @@ public class ResetCar : MonoBehaviour {
 
     void Update()
     {
-        if (sharedData.CarResetNeeded && !sharedData.debugMode)
+        if (sharedData.CarResetNeeded && !sharedData.debugMode &&!sharedData.TrainingMode)
         {
             setResetText();
 
@@ -68,38 +68,47 @@ public class ResetCar : MonoBehaviour {
 
 
 
-
-    public void CarReset (float _x=0f, float _y=0f, float _z= 0f, bool _currentPostionReset = true)
+    
+    public void CarReset (float _x=0f, float _y=0f, float _z= 0f, bool _currentPostionReset = true, float _resetRotationY = 0f)
     {
         Vector3 carResetPosition = new Vector3(0f,0f,0f);
-        if (_currentPostionReset)
+        if (_currentPostionReset)   //gleiche Position und yRotation
         {
             carResetPosition = transform.position;
+            transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
+            if (!sharedData.TrainingMode)    //Im Trainingsmode darf die Geschwindigkeit nicht vom Auto, da die Keystrokefolge sonst zu einer anderen Strecke führt
+            {
+                carRGBody.velocity = Vector3.zero;
+            }
         }
         else
         {
             carResetPosition.x = _x;
             carResetPosition.y = _y;
             carResetPosition.z = _z;
+            carRGBody.velocity = Vector3.zero;
+            transform.rotation = Quaternion.Euler(0f, _resetRotationY, 0f);
         }
 
         carResetPosition.y = carResetPosition.y * transform.localScale.y;
 
         transform.position = carResetPosition;
-        transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
-        carRGBody.velocity = Vector3.zero;
+        //transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
+        
 
-        if (transform.CompareTag("Player")) //belasse die zentralen Informationen, falls Trainingsfahrzeuge die Funktion nutzen
+        
+        if (!sharedData.TrainingMode && transform.CompareTag("Player")) //belasse die zentralen Informationen, falls Trainingsfahrzeuge die Funktion nutzen
         {
             sharedData.SetPlayerControl(true);
-
             if (sharedData.BallResetNeeded)
                 ResetBall();
+            reset = false;
 
             clearResetText();
-            reset = false;
             sharedData.CarResetNeeded = false;
         }
+
+
     }
 
 
@@ -114,7 +123,9 @@ public class ResetCar : MonoBehaviour {
         ballRGBody.transform.position = pos;
 
         // Falls der Ball noch rollt die Geschwindigkeit entfernen
-        ballRGBody.velocity = Vector3.zero;
+        //ballRGBody.velocity = Vector3.zero;
+        ballRGBody.velocity = carRGBody.velocity;   //führt dazu, dass ein stehendes Auto einen stehenden Ball bekommt, aber auch ein fahrendes Auto einen erfolgreichen Reset macht
+
         if (transform.CompareTag("Player"))
         {
             sharedData.BallResetNeeded = false;

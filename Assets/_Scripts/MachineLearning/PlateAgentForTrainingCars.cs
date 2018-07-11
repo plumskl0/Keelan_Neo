@@ -7,12 +7,6 @@ using UnityEngine.UI;
 public class PlateAgentForTrainingCars : Agent
 {
 
-    //Trainingsanreize
-    public float incentiveLostLife = -5f;
-    public float incentiveFinishedRoute = 5f;
-    public float incentiveBallStillOnPlate = 0.01f;
-    public float incentiveFactorDistanceBallToPlateCenter = 0.01f;
-
     //Trainingsautos haben eigene Variablen für die Steuerung
     private float plateXAxis;
     private float plateZAxis;
@@ -26,6 +20,8 @@ public class PlateAgentForTrainingCars : Agent
     private Rigidbody ballRgBody;
     private Transform ballTransform;
     private Transform plateTransform;
+    Transform playerObjectsTransform;
+    private PlateAgent playerAgentScript;
     private SharedFields sharedData = SharedFields.Instance;
 
     private void Awake()
@@ -47,9 +43,10 @@ public class PlateAgentForTrainingCars : Agent
         carTransform = GetComponent<Transform>();
         resetCarScript = GetComponent<ResetCar>();
         carRgBody = GetComponent<Rigidbody>();
+        playerAgentScript = GameObject.Find("Car Prototype v8").GetComponent<PlateAgent>();
 
 
-        Transform playerObjectsTransform = gameObject.transform.parent;
+        playerObjectsTransform = gameObject.transform.parent;
         //Debug.Log("*****Mein Name ist: " + playerObjectsTransform.name);
         GameObject ball =  playerObjectsTransform.Find("Trainingsball").gameObject;
         //Debug.Log("*****Mein Name ist: "+ ball.name);
@@ -62,7 +59,7 @@ public class PlateAgentForTrainingCars : Agent
         ballTransform = ball.GetComponent<Transform>();
         plateTransform = transform.Find("CarModel").Find("Teller").GetComponent<Transform>();*/
 
-        plateTransform = gameObject.transform.Find("CarModel").Find("Teller").GetComponent<Transform>();
+        plateTransform = gameObject.transform.Find("CarModel").Find("Trainingsteller").GetComponent<Transform>();
         //Debug.Log("*****Mein Name ist: " + plateTransform.name);
 
 
@@ -94,8 +91,8 @@ public class PlateAgentForTrainingCars : Agent
                     break;
             }
             //Zufallswerte für Tellerneigung:
-            float randomX = Random.Range(-0.5f, 0.5f);
-            float randomZ = Random.Range(-0.5f, 0.5f);
+            float randomX = Random.Range(-1f, 1f);
+            float randomZ = Random.Range(-1f, 1f);
             plateXAxis = randomX;
             plateZAxis= randomZ;
 
@@ -190,12 +187,12 @@ public class PlateAgentForTrainingCars : Agent
 
         if (TrainingRouteFinished)    //Route zu Ende geschafft -> Reset
         {
-            positiveRewards += incentiveFinishedRoute;
-            positiveRewardsThisRound += incentiveFinishedRoute;
+            positiveRewards += sharedData.incentiveFinishedRoute;
+            positiveRewardsThisRound += sharedData.incentiveFinishedRoute;
 
             if (takeAktion)
             {
-                AddReward(incentiveFinishedRoute);
+                AddReward(sharedData.incentiveFinishedRoute);
                 Done();
                 TrainingRouteFinished = false;
             }
@@ -210,7 +207,7 @@ public class PlateAgentForTrainingCars : Agent
         Debug.Log("******LostLife =" + sharedData.LostLife);
         if (LostLife)    //Leben verloren -> Reset
         {
-            negativeRewards += incentiveLostLife;
+            negativeRewards += sharedData.incentiveLostLife;
             positiveRewardsThisRound = 0;
             negativeRewardsThisRound = 0;
             Debug.Log("habe Leben verloren");
@@ -225,7 +222,7 @@ public class PlateAgentForTrainingCars : Agent
             if (takeAktion)
             {
                 Done();
-                AddReward(incentiveLostLife);
+                AddReward(sharedData.incentiveLostLife);
                 LostLife = false;
             }
 
@@ -234,8 +231,9 @@ public class PlateAgentForTrainingCars : Agent
         {
             if (takeAktion)
             {
+                float[] alteNeigungsvariablen = new float[] { plateXAxis, plateZAxis };
                 RotatePlateByMiniSteps(vectorAction[0], vectorAction[1]);
-                plateTransform.localRotation = Quaternion.Euler(plateXAxis * sharedData.plateMaxAngle, 0f, plateZAxis * sharedData.plateMaxAngle);
+                Debug.LogFormat("Mein Name ist: {6} Die alten Neigungsvars: {0} {1} \n Aktionen: {2} {3} \n Die neuen: {4} {5}", alteNeigungsvariablen[0], alteNeigungsvariablen[1], vectorAction[0], vectorAction[1], plateXAxis, plateZAxis, playerObjectsTransform.name);
                 //RotatePlateLikeUnityExample(vectorAction[0], vectorAction[1]);
             }
 
@@ -249,8 +247,8 @@ public class PlateAgentForTrainingCars : Agent
 
 
             //SetReward(0.1f);
-            positiveRewards += incentiveBallStillOnPlate;
-            positiveRewardsThisRound += incentiveBallStillOnPlate;
+            positiveRewards += sharedData.incentiveBallStillOnPlate;
+            positiveRewardsThisRound += sharedData.incentiveBallStillOnPlate;
 
             //Abstand zwischen Ball und Tellermittelpunkt berechnen
             Vector3 tellermitte = plateTransform.position;
@@ -258,8 +256,8 @@ public class PlateAgentForTrainingCars : Agent
             Vector3 verbindungsvektor = ballposition - tellermitte; //kommmt noch raus -> debug
             float ballAbstandZuTellermitte = DistanceBetweenTwoPoints(tellermitte, ballposition);
             //Debug.Log("Abstand Ball zu Tellermite: " + ballAbstandZuTellermitte);
-            //todo: füge Bestrafung hinzu je weiter der Ball von der Mitte weg ist
-            float abstandbestrafung = -incentiveFactorDistanceBallToPlateCenter * Mathf.Clamp(1f * ballAbstandZuTellermitte, 0, 1);
+            
+            float abstandbestrafung = -sharedData.incentiveFactorDistanceBallToPlateCenter * Mathf.Clamp(1f * ballAbstandZuTellermitte, 0, 1);
             //Debug.Log("**Abstandsbestrafung: " + abstandbestrafung);
             negativeRewards += abstandbestrafung;
             negativeRewardsThisRound += abstandbestrafung;
@@ -267,7 +265,7 @@ public class PlateAgentForTrainingCars : Agent
             if (takeAktion)
             {
                 //Belohnung, dass der Ball noch auf auf dem Teller ist, vermindert je weiter er von der Mitte entfernt ist
-                AddReward(incentiveBallStillOnPlate);
+                AddReward(sharedData.incentiveBallStillOnPlate);
                 AddReward(abstandbestrafung);
             }
 
@@ -277,10 +275,10 @@ public class PlateAgentForTrainingCars : Agent
     }
 
     //Unterschiedliche Strategien, um die Agent Action in Tellerneigung umzusetzen:
-    private void RotatePlateByMiniSteps(float actionX, float actionZ)
+    private void RotatePlateByMiniSteps(float x, float z)
     {
-        float x = Mathf.Clamp(actionX, -1, 1);
-        float z = Mathf.Clamp(actionZ, -1, 1);
+        float actionX = Mathf.Clamp(x, -1, 1);
+        float actionZ = Mathf.Clamp(z, -1, 1);
         float achsenaenderung = 0.03f;
 
         if (actionX < plateXAxis)
@@ -303,6 +301,7 @@ public class PlateAgentForTrainingCars : Agent
             plateZAxis += achsenaenderung;
         }
         Debug.LogFormat("x-Achse: {0}  und y-Achse: {1}", plateXAxis, plateZAxis);
+        plateTransform.localRotation = Quaternion.Euler(plateXAxis * sharedData.plateMaxAngle, 0f, plateZAxis * sharedData.plateMaxAngle);
     }
 
     private void RotatePlateLikeUnityExample(float actionX, float actionZ)
@@ -312,21 +311,21 @@ public class PlateAgentForTrainingCars : Agent
         if ((plateTransform.rotation.z < 0.25f && action_z > 0f) ||
         (plateTransform.rotation.z > -0.25f && action_z < 0f))
         {
-            float zielwinkel = plateTransform.rotation.eulerAngles.z + action_z;
+            /*float zielwinkel = plateTransform.rotation.eulerAngles.z + action_z;
             Debug.Log(zielwinkel + " -----> ist zielwinkel");
             //zahl * winkelmax = zielwinkel -> zielwinkel/winkelmax = zahl
             Debug.Log("ist neuer zWert: " + zielwinkel / sharedData.plateMaxAngle);
-            plateZAxis = zielwinkel / sharedData.plateMaxAngle;
-            //plateTransform.Rotate(new Vector3(0, 0, 1), action_z);
+            plateZAxis = zielwinkel / sharedData.plateMaxAngle;*/
+            plateTransform.Rotate(new Vector3(0, 0, 1), action_z);
         }
         float action_x = 2f * Mathf.Clamp(actionX, -1f, 1f);
         if ((plateTransform.rotation.x < 0.25f && action_x > 0f) ||
         (plateTransform.rotation.x > -0.25f && action_x < 0f))
         {
-            float zielwinkel = plateTransform.rotation.eulerAngles.x + action_x;
+            /*float zielwinkel = plateTransform.rotation.eulerAngles.x + action_x;
             //zahl * winkelmax = zielwinkel -> zielwinkel/winkelmax = zahl
-            plateXAxis = zielwinkel / sharedData.plateMaxAngle;
-            //plateTransform.Rotate(new Vector3(1, 0, 0), action_x);
+            plateXAxis = zielwinkel / sharedData.plateMaxAngle;*/
+            plateTransform.Rotate(new Vector3(1, 0, 0), action_x);
         }
 
     }
