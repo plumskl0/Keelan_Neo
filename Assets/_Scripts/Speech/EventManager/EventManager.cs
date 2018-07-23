@@ -12,7 +12,7 @@ public class EventManager : MonoBehaviour {
     public const string asrRequerstDetectedEvent = "Speech Command Regocnized";
     public const string ttsTimeout = "noInputinTimeLimit";
     public const string ttsError = "networkMicrophoneUnknownError";
-
+    public const string ttsUnhandledError = "unhandledTTSError";
     public const string nluAnswerDetectedEvent = "NLU answer recognized";
 
 

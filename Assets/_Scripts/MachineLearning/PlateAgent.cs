@@ -37,7 +37,7 @@ public class PlateAgent : Agent
     //private Transform ballTransform;
     public Transform ballTransform;
     private Transform plateTransform;
-    private Transform playerObjectsTransform;
+    public Transform playerObjectsTransform;
     private AlternateCarController carControllerScript;
     private SharedFields sharedData = SharedFields.Instance;
 
@@ -101,13 +101,7 @@ public class PlateAgent : Agent
             sharedData.delayFactor = delayFactor;
             Debug.LogFormat("lostlife: {0}, finishedRoute: {1}, ballonPlate: {2}, center {3} , delayFactor: {4} ", sharedData.incentiveLostLife, sharedData.incentiveFinishedRoute, sharedData.incentiveBallStillOnPlate, sharedData.incentiveFactorDistanceBallToPlateCenter, sharedData.delayFactor);
         }
-    }
 
-
-
-    // Use this for initialization
-    void Start()
-    {
         carTransform = GetComponent<Transform>();
         resetCarScript = GetComponent<ResetCar>();
         carRgBody = GetComponent<Rigidbody>();
@@ -118,15 +112,23 @@ public class PlateAgent : Agent
         //Suche für das Auto die dazugehörenden: PlayerObjects, Ball, Teller:
         playerObjectsTransform = gameObject.transform.parent;
         Debug.Log("*****Mein Name ist: " + playerObjectsTransform.name);
-        
+
 
         GameObject ball = playerObjectsTransform.Find(ballname).gameObject;
-        Debug.Log("*****Mein Name ist: " + ball.name);
+        //Debug.Log("*****Mein Name ist: " + ball.name);
         ballRgBody = ball.GetComponent<Rigidbody>();
         ballTransform = ball.GetComponent<Transform>();
 
         plateTransform = gameObject.transform.Find("CarModel").Find(tellername).GetComponent<Transform>();
-        Debug.Log("*****Mein Name ist: " + plateTransform.name);
+        //Debug.Log("*****Mein Name ist: " + plateTransform.name);
+    }
+
+
+
+    // Use this for initialization
+    void Start()
+    {
+
 
 
         if (isTrainingCar)

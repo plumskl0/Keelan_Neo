@@ -16,8 +16,9 @@ public class WakeWordEngine : MonoBehaviour, IWakeWordEngineInterface {
 	void Awake () {
         asr = GetComponent<ASR>();
         AddWakeWords(new String[] { "computer", "Auto" });
-        keywordRecognizer = new KeywordRecognizer(WakeWords.ToArray());
+        keywordRecognizer = new KeywordRecognizer(WakeWords.ToArray(),ConfidenceLevel.Low);
         keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
+
         PhraseRecognitionSystem.OnError += (errorCode) =>
         {
             Debug.LogError(string.Format("***************Es ist ein Fehler in der WakeWord Engine aufgetreten: {0}", errorCode.ToString()));
@@ -54,6 +55,7 @@ public class WakeWordEngine : MonoBehaviour, IWakeWordEngineInterface {
     public void StartDetection()
     {
         PhraseRecognitionSystem.Restart();
+        //keywordRecognizer.Start();
         Debug.Log("Starte Keyword Detection");
         /*
         if (!keywordRecognizer.IsRunning)   //nur erster Methodenaufruf darf über Start() kommen
@@ -69,7 +71,10 @@ public class WakeWordEngine : MonoBehaviour, IWakeWordEngineInterface {
     public void StopDetection()
     {
         Debug.Log("Stoppe Keyword Detection");
-        PhraseRecognitionSystem.Shutdown();
+        //keywordRecognizer.Stop();
+        PhraseRecognitionSystem.Shutdown(); //***********Dispose statt shutdown -> verliere Microphon Eingabe nach bestimmter Zeit
+
+
         /*if (keywordRecognizer.IsRunning)
         {
             Debug.Log("Stoppe Keyword Detection");
@@ -87,4 +92,10 @@ public class WakeWordEngine : MonoBehaviour, IWakeWordEngineInterface {
     {
         return PhraseRecognitionSystem.Status;
     }
+
+    private void FixedUpdate()
+    {
+        //Debug.LogError("WWE isListening: " + keywordRecognizer.IsRunning);
+    }
+
 }

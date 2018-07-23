@@ -42,6 +42,7 @@ public class SharedFields {
     //Vars für Erfassung und Bewertung von Trainingsrouten
     public bool trainingRouteRecordingStopped = false;
     public string trainingRouteDifficulty = "";
+    public int checkpointFrameCount = 0;
 
 
     public bool nonMovingCar = false;
@@ -52,6 +53,7 @@ public class SharedFields {
     public float currentSpeed = 0;
     public float maxWheelAngle;
     public float maxTorque;
+    public float brakeTorque;
 
     //Controllerauswahl
     public const string MTControl = "MausUndTastaturKontrolle";
@@ -69,6 +71,8 @@ public class SharedFields {
     //Vom Sprachassistenten simulierte Movement Achsenbelegung
     private float assistantXAchse = 0;
     private float assistantZAchse = 0;
+    private float assistantBrake = 0;
+
     //...simulierte Tellerbewegungen/neigungen
     public float assistantPlateXAchse = 0;
     public float assistantPlateZAchse = 0.5f;
@@ -82,6 +86,13 @@ public class SharedFields {
     public float incentiveFactorDistanceBallToPlateCenter = 0.01f;
     public int delayFactor = 50;
 
+
+    //Hilfsmethode um das Spiel mit Verzögerung zu schließen
+    public static IEnumerator DelayedQuit(float secondsToWait)
+    {
+        yield return new WaitForSeconds(secondsToWait);
+        Application.Quit();
+    }
 
 
     // Hat der Ball den Boden berührt -> ein Leben verlieren
@@ -327,6 +338,19 @@ public class SharedFields {
             {
                 carAutopilot = value;
             }
+        }
+    }
+
+    public float AssistantBrake
+    {
+        get
+        {
+            return assistantBrake;
+        }
+
+        set
+        {
+            assistantBrake = value;
         }
     }
 

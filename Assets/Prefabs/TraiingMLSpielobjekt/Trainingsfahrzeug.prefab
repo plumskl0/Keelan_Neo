@@ -2097,6 +2097,7 @@ MonoBehaviour:
   isTrainingCar: 0
   delay: 0
   ballTransform: {fileID: 0}
+  playerObjectsTransform: {fileID: 0}
   positiveRewardsText: {fileID: 0}
   positiveRewardsThisRoundText: {fileID: 0}
   negativeRewardsText: {fileID: 0}

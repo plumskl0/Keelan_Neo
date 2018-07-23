@@ -30,21 +30,23 @@ public class IPAAction : MonoBehaviour {
     public const string setContext = "SetContext";
     public const string changeMapFixedStep = "map.ChangeFixedStep";
     public const string focusOnCar = "map.FocusOnCar";
-    public const string moveCar = "car.Move";
+    public const string moveCar = "moveCar.Move";
+    public const string stopCar = "moveCar.Stop";
     public const string setCheckpoint = "training.CreateCheckpoint";
+    public const string discardCheckpoint = "training.DiscardCheckpoint";
     public const string endTrainingRouteCreation = "training.End";
     public const string performanceAndDifficultyMeasured = "training.PerformanceAndDiffcultyMeasured";
+    public const string restartTraining = "training.Restart";
     /*public const string speak = "conversation.Speak";
     public const string askQuestion = "conversation.AskQuestion";*/
 
-    //Steuerungsvariablen
-    private int checkpointFrameCount = 0;
+
 
 
     //Für das Sammeln von Trainingsrouten -> bietet die Möglichkeit bisherige Strecke als gut zu markieren
     public void SetTrainingCheckpoint(int currentFrameCount)
     {
-        checkpointFrameCount = currentFrameCount;
+        sharedData.checkpointFrameCount = currentFrameCount;
     }
 
 
@@ -206,6 +208,7 @@ public class IPAAction : MonoBehaviour {
             yield return null;
         }
 
+
         //Geschwindigkeit nach Beschleunigung halten:
         if (_direction.Equals(Direction.forwards) || _direction.Equals(Direction.back))
         {
@@ -219,6 +222,14 @@ public class IPAAction : MonoBehaviour {
         }
 
 
+    }
+
+    public void StopCarMovement ()
+    {
+        //StopCoroutine(CarAccelerationForTimeperiod,);   todo: wenn die Beschleunigungsroutine noch nicht fertig ist, wird sie den gesetzten Brake Wert überschreiben
+        sharedData.AssistantXAchse = 0;
+        sharedData.AssistantYAchse = 0;
+        sharedData.AssistantBrake = sharedData.brakeTorque;
     }
 
 

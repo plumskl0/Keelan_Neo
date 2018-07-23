@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class IntelligentPersonalAgent : MonoBehaviour {
@@ -84,6 +85,19 @@ public class IntelligentPersonalAgent : MonoBehaviour {
             String intent = nluResponse.Result.Metadata.IntentName;
             Result nluResultObj = nluResponse.Result;
 
+            //Ausgabe der Dialogflow Response -> Metadata.EndConversation Boolean bestimmt ob als Frage oder Aussage
+            //***Kann in Unity JSON Objekt bisher nicht abgerufen werden -> Parameter: endConversation simuliert ihn
+            if (nluResultObj.Fulfillment.Speech != "")
+            {
+                if (nluResultObj.GetStringParameter("endConversation").Equals("true"))
+                {
+                    actions.Speak(nluResultObj.Fulfillment.Speech);
+                }
+                else  //ansonsten öffne das Mikrofon wieder
+                {
+                    actions.AskQuestion(nluResultObj.Fulfillment.Speech);
+                }
+            }
 
             String action = nluResponse.Result.Action;
             switch (action) {
@@ -103,6 +117,9 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                     actions.MoveCar(groesseneinheit, direction);
                     break;
 
+                case IPAAction.stopCar:
+                    actions.StopCarMovement();
+                    break;
 
                 //Open Map Intent
                 case IPAAction.openMap:
@@ -116,23 +133,50 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                     break;
 
                 //Intents zur Unterstützung der Teststreckenerstellung
+                case IPAAction.restartTraining:
+                    SceneManager.LoadScene("Level1Training");   // Todo:Index auf Namen der Szene ändern 
+                    break;
+
                 case IPAAction.setCheckpoint:
                     actions.SetTrainingCheckpoint(sharedData.currentFrameCount);
                     actions.Speak("Sicherungspunkt erstellt bei Frame:" + sharedData.currentFrameCount);
                     break;
 
+                case IPAAction.discardCheckpoint:
+                    actions.SetTrainingCheckpoint(sharedData.currentFrameCount);
+                    break;
+
                 case IPAAction.endTrainingRouteCreation:
-                    sharedData.trainingRouteRecordingStopped = true;
+                    sharedData.trainingRouteRecordingStopped = true;    //Beendet hinzufügen neuer Framestrokes in AlternateCarController
+
+
+                    //Entferne PlayerControl und Ball
+                    sharedData.SetPlayerControl(false);
+                    GameObject.FindGameObjectWithTag("Ball").SetActive(false);
                     break;
 
                 case IPAAction.performanceAndDifficultyMeasured:
                     bool performanceOK = nluResultObj.GetStringParameter("Performance").Equals("gut") ? true : false;
-                    if(sharedData.debugMode)
+                    if(sharedData.debugMode && performanceOK)
                     {
+                        //Debug.LogError(WindowsVoice.statusMessage);
+                        sharedData.trainingRouteDifficulty = nluResultObj.GetStringParameter("Difficulty");   //sobald gesetzt schreibt AlternateCarController die Route entsprechend ca Codezeile 500
 
+                        //Beende verzögert
+                        StartCoroutine(SharedFields.DelayedQuit(10f));
+                    }
+                    else
+                    {
+                        Debug.LogError(nluResultObj.GetStringParameter("Performance"));
+                        actions.Speak("Verwerfe Strecke aufgrund schlechter Performance. Beende Programm");
+                        IEnumerator co = SharedFields.DelayedQuit(10f);
+                        StartCoroutine(co);
+
+                        //Application.Quit();
                     }
                     break;
 
+                //Map Manipulation Intents:
                 case IPAAction.changeMapFixedStep:
                     groesseneinheit = nluResponse.Result.GetStringParameter("Groesseneinheit");
                     direction = nluResponse.Result.GetStringParameter("Direction");
@@ -188,20 +232,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                     break;
             }
 
-            //Ausgabe der Dialogflow Response -> Metadata.EndConversation Boolean bestimmt ob als Frage oder Aussage
-            //***Kann in Unity JSON Objekt bisher nicht abgerufen werden -> Parameter: endConversation simuliert ihn
 
-            if (nluResultObj.Fulfillment.Speech != "")
-            {
-                if (nluResultObj.GetStringParameter("endConversation").Equals("true"))
-                {
-                    actions.Speak(nluResultObj.Fulfillment.Speech);
-                }
-                else  //ansonsten öffne das Mikrofon wieder
-                {
-                    actions.AskQuestion(nluResultObj.Fulfillment.Speech);
-                }
-            }
         }
 
     }

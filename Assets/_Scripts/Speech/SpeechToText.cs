@@ -38,22 +38,35 @@ public class SpeechToText : MonoBehaviour, ISpeechToTextInterface {
         dictationRecognizer.DictationError += DictationRecognizer_DictationError;
         dictationRecognizer.DictationComplete += (completionCause) =>
         {
-            if(completionCause.Equals(DictationCompletionCause.TimeoutExceeded) || completionCause.Equals(DictationCompletionCause.PauseLimitExceeded))
+            if(completionCause.Equals(DictationCompletionCause.Complete))
+            {
+                Debug.LogError("STT erfolgreich fertig... brauche ich hier noch ein Event das zurückwechselt? Soll bereits bei DictationResult passieren.");
+                EventManager.TriggerEvent(EventManager.ttsUnhandledError, new EventMessageObject(EventManager.ttsUnhandledError, completionCause.ToString()));  //todo: falls benötigt noch neues Event erstellen
+            }
+
+            else if(completionCause.Equals(DictationCompletionCause.TimeoutExceeded) || completionCause.Equals(DictationCompletionCause.PauseLimitExceeded))
             {
                 Debug.LogErrorFormat("Dictation completed unsuccessfully: {0}.", completionCause);
                 EventManager.TriggerEvent(EventManager.ttsTimeout, new EventMessageObject(EventManager.ttsTimeout, completionCause.ToString()));
             }
-            if(completionCause.Equals(DictationCompletionCause.AudioQualityFailure) || completionCause.Equals(DictationCompletionCause.MicrophoneUnavailable) || completionCause.Equals(DictationCompletionCause.NetworkFailure) || completionCause.Equals(DictationCompletionCause.UnknownError))
+            else if(completionCause.Equals(DictationCompletionCause.AudioQualityFailure) || completionCause.Equals(DictationCompletionCause.MicrophoneUnavailable) || completionCause.Equals(DictationCompletionCause.NetworkFailure) || completionCause.Equals(DictationCompletionCause.UnknownError))
             {
                 Debug.LogErrorFormat("Dictation completed unsuccessfully: {0}.", completionCause);
                 EventManager.TriggerEvent(EventManager.ttsError, new EventMessageObject(EventManager.ttsError, completionCause.ToString()));
             }
+            else
+            {
+                Debug.LogErrorFormat("Dictation fertig mit unbehandeltem Zustand: {0}", completionCause);
+                EventManager.TriggerEvent(EventManager.ttsUnhandledError, new EventMessageObject(EventManager.ttsUnhandledError, completionCause.ToString()));
+            }
+
             
         };
          dictationRecognizer.DictationHypothesis += (text) =>
          {
              Debug.LogFormat("Dictation hypothesis: {0}", text);
-             debugText.text = text;
+             if(text!="")
+                debugText.text = text;
          };
     }
 
@@ -64,7 +77,7 @@ public class SpeechToText : MonoBehaviour, ISpeechToTextInterface {
 
     private void DictationRecognizer_DictationError(string error, int hresult)
     {
-        Debug.Log("***ERROR: " + error);
+        Debug.LogError("***ERROR: " + error);
     }
 
     private void DictationRecognizer_DictationResult(string text, ConfidenceLevel confidence)

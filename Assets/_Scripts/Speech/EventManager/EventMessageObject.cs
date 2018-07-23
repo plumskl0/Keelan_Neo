@@ -9,6 +9,8 @@ public class EventMessageObject {
     private AIResponse nluAnswer;
     private object messageBody;
 
+    List<string> signalOnlyEvents = new List<string> { EventManager.keywordDetectedEvent, EventManager.asrRequerstDetectedEvent, EventManager.ttsTimeout, EventManager.ttsError, EventManager.ttsUnhandledError };   //erhalten als Message Body lediglich den Typ als String
+
 
     public string Type
     {
@@ -28,11 +30,7 @@ public class EventMessageObject {
     {
         get
         {
-            if (type == EventManager.keywordDetectedEvent)
-            {
-                return stringRequest;
-            }
-            else if (type == EventManager.asrRequerstDetectedEvent)
+            if (signalOnlyEvents.Contains(type))
             {
                 return stringRequest;
             }
@@ -48,8 +46,9 @@ public class EventMessageObject {
 
         set
         {
+
             //TODO: Check if Structure is valid - considering the type chosen
-            if (type == EventManager.keywordDetectedEvent)
+            if (signalOnlyEvents.Contains(type))
             {
                 if (value.GetType().Equals(typeof(string)))
                 {
@@ -57,20 +56,10 @@ public class EventMessageObject {
                 }
                 else
                 {
-                    Debug.LogError("***Fehler: Type der Message war keywordDetectedRequest, aber MessageBody kein string.");
+                    Debug.LogErrorFormat("***Fehler: Type der Message war {0}, aber MessageBody kein string.",type);
                 }
             }
 
-            else if (type == EventManager.asrRequerstDetectedEvent)
-            {
-                if (value.GetType().Equals(typeof(string))) {
-                    stringRequest = (string)value;
-                }
-                else
-                {
-                    Debug.LogError("***Fehler: Type der Message war asrRequest, aber MessageBody kein string.");
-                }
-            }
             else if (type == EventManager.nluAnswerDetectedEvent)
             {
                 if ((value.GetType().Equals(typeof(AIResponse)))) { 
