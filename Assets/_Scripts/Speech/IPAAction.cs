@@ -32,6 +32,9 @@ public class IPAAction : MonoBehaviour {
     public const string focusOnCar = "map.FocusOnCar";
     public const string moveCar = "moveCar.Move";
     public const string stopCar = "moveCar.Stop";
+    public const string getCarControlBack = "moveCar.GetCarControlBack";
+    public const string takePlateControl = "moveCar.TakePlateControl";
+    public const string getPlateControlBack = "moveCar.GetPlateControlBack";
     public const string setCheckpoint = "training.CreateCheckpoint";
     public const string discardCheckpoint = "training.DiscardCheckpoint";
     public const string endTrainingRouteCreation = "training.End";
@@ -179,6 +182,7 @@ public class IPAAction : MonoBehaviour {
     {
         DateTime startTime = DateTime.Now;
         sharedData.CarAutopilot = true;    //stelle auf Steuerung per Sprache
+        sharedData.brakeTorque = 0f;
 
 
         if(_direction.Equals(Direction.forwards) || _direction.Equals(Direction.back))
@@ -226,10 +230,16 @@ public class IPAAction : MonoBehaviour {
 
     public void StopCarMovement ()
     {
-        //StopCoroutine(CarAccelerationForTimeperiod,);   todo: wenn die Beschleunigungsroutine noch nicht fertig ist, wird sie den gesetzten Brake Wert überschreiben
+        StopCoroutine("CarAccelerationForTimeperiod");   //todo: wenn die Beschleunigungsroutine noch nicht fertig ist, wird sie den gesetzten Brake Wert überschreiben
         sharedData.AssistantXAchse = 0;
         sharedData.AssistantYAchse = 0;
         sharedData.AssistantBrake = sharedData.brakeTorque;
+    }
+
+    public void GetCarControlBack()
+    {
+        sharedData.CarAutopilot = false;    //stelle auf manuelle Steuerung
+        sharedData.currentMaxSpeed = sharedData.maxSpeed;  //beende Manipulation der Maximalgeschwindigkeit 
     }
 
 
@@ -261,6 +271,15 @@ public class IPAAction : MonoBehaviour {
                 Debug.LogError("Die von der NLU gelieferte Richtung ist nicht registriert.");
                 break;
         }
+    }
+
+    public void TakePlateControl ()
+    {
+        sharedData.plateAutopilot = true;
+    }
+    public void GetPlateControlBack()
+    {
+        sharedData.plateAutopilot = false;
     }
 
 

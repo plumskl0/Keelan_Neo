@@ -110,7 +110,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                 case IPAAction.speak:
                     actions.Speak(nluResultObj.GetStringParameter("speak"));
                     break;*/
-
+                //Intents zur Fahrzeugsteuerung
                 case IPAAction.moveCar:
                     String groesseneinheit = nluResultObj.GetStringParameter("Groesseneinheit");
                     String direction = nluResultObj.GetStringParameter("MoveDirection");
@@ -119,6 +119,18 @@ public class IntelligentPersonalAgent : MonoBehaviour {
 
                 case IPAAction.stopCar:
                     actions.StopCarMovement();
+                    break;
+
+                case IPAAction.getCarControlBack:
+                    actions.GetCarControlBack();
+                    break;
+
+                case IPAAction.takePlateControl:
+                    actions.TakePlateControl();
+                    break;
+
+                case IPAAction.getPlateControlBack:
+                    actions.GetPlateControlBack();
                     break;
 
                 //Open Map Intent

@@ -49,7 +49,7 @@ public class SharedFields {
 
     private float timeNeededToLastLevel = 0;
     public float maxSpeed = 30f;  //der Sprachassistent manipuliert im Autopilot die maximale Geschwindigkeit -> das ist das Backup wenn er die Kontrolle wieder abgibt
-    public float currentMaxSpeed = 30f;
+    public float currentMaxSpeed = 30f;  //die zurzeit gesetzte Maximalgeschwindigkeit
     public float currentSpeed = 0;
     public float maxWheelAngle;
     public float maxTorque;
