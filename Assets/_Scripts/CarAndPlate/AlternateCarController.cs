@@ -800,9 +800,13 @@ public class AlternateCarController : MonoBehaviour
         if (trainingsFahrrouteSaved.Count != 0 && !sharedData.TrainingMode && !myPlateAgent.isTrainingCar)
         //if (trainingsFahrrouteSaved.Count != 0 && !myPlateAgent.isTrainingCar)
         {
-            if(sharedData.trainingRouteRecordingStopped && sharedData.trainingRouteDifficulty!="")   //speichere nur Strecken die per Sprachbefehl beendet wurden mit festgelegter Schwierigkeit
+            if (sharedData.trainingRouteRecordingStopped && sharedData.trainingRouteDifficulty != "")   //speichere nur Strecken die per Sprachbefehl beendet wurden mit festgelegter Schwierigkeit
+            {
                 WriteTrainingsRouteToFile(sharedData.trainingRouteDifficulty);
-            WriteTrainingsRouteToFile("default");
+            }
+            else
+                Debug.LogError("Route nicht gespeichert, da Strecke nicht ordnungsgemäß beendet wurde");
+            WriteTrainingsRouteToFile("default/");
         }
 
     }
@@ -810,8 +814,11 @@ public class AlternateCarController : MonoBehaviour
     private void WriteTrainingsRouteToFile(string difficulty)
     {
         //Speichere die aufgezeichnete Trainingsroute in einer Datei
-        String dirPathTrainingRouteNew = dirPathTrainingRoute + difficulty + "/";
-        LoadTrainingFiles(dirPathTrainingRouteNew);    //difficulty verweist auf neuen Ordner -> andere Dateienanzahl
+        String dirPathTrainingRouteNew = dirPathTrainingRoute + difficulty;
+        DirectoryInfo dir = new DirectoryInfo(dirPathTrainingRouteNew);
+        dirFileCount = dir.GetFiles().Length - dir.GetFiles("*.meta").Length - dir.GetFiles("*Position").Length;
+
+        //LoadTrainingFiles(dirPathTrainingRouteNew);    //difficulty verweist auf neuen Ordner -> andere Dateienanzahl
 
         int nextFreeFileNumber = dirFileCount;
         if (!sharedData.TrainingMode)

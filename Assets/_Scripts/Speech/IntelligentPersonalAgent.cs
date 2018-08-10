@@ -160,7 +160,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                     if(sharedData.debugMode && performanceOK)
                     {
                         //Debug.LogError(WindowsVoice.statusMessage);
-                        sharedData.trainingRouteDifficulty = nluResultObj.GetStringParameter("Difficulty");   //sobald gesetzt schreibt AlternateCarController die Route entsprechend ca Codezeile 500
+                        sharedData.trainingRouteDifficulty = nluResultObj.GetStringParameter("Difficulty") + "/";   //sobald gesetzt schreibt AlternateCarController die Route entsprechend ca Codezeile 500
 
                         //Beende verzögert
                         StartCoroutine(SharedFields.DelayedQuit(10f));

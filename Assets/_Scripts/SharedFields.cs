@@ -59,7 +59,7 @@ public class SharedFields {
     public const string MTControl = "MausUndTastaturKontrolle";
     public const string WiiControl = "WiimoteKontrolle";
     private string selectedControl = MTControl;
-    public bool plateAutopilot = false; //true falls der Sprachassistent steuert
+    public bool plateAutopilot = true; //true falls der Sprachassistent steuert
     private bool carAutopilot = false;
     private bool trainingMode = false; //für TensorFlowTraining muss das Auto sich selbstständig bewegen
     //public bool trainingRouteNeedsUpdate = false;

@@ -379,35 +379,40 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
 
                 else
                 {
-                    if (ASRModeSwitchQueue.Peek().Method.Name.Equals(SwitchToSTT.Method.Name))   //wenn zur STT gewechselt werden soll muss die WWE erst inaktiv sein
+                    if (ASRModeSwitchQueue.Peek().Method.Name.Equals(SwitchToSTT.Method.Name))
                     {
-                        Debug.LogError("Nehme das vordere der Warteschlage weg. **STT Befehl**");
-                        ASRModeSwitchQueue.Dequeue()();
-                        /*
-                        if (WakeWordState.Equals(SpeechSystemStatus.Stopped))
+                        //Debug.LogError("Nehme das vordere der Warteschlage weg. **STT Befehl**");
+                        //ASRModeSwitchQueue.Dequeue()();
+                        AsrSwitchDelegate topFunction = ASRModeSwitchQueue.Dequeue();
+
+                        if (DictationState.Equals(SpeechSystemStatus.Stopped))     //wenn zur STT gewechselt werden soll darf diese momentan nicht aktiv sein
                         {
                             Debug.LogError("Nehme das vordere der Warteschlage weg. **STT Befehl**");
-                            ASRModeSwitchQueue.Dequeue()();
+                            topFunction();
+                            //ASRModeSwitchQueue.Dequeue()();
                         }
                         else
                         {
-                            Debug.LogErrorFormat("WakeWordState steht auf: {0}. Ich kann daher nicht zu STT wechseln.", WakeWordState);
-                        }*/
+                            Debug.LogErrorFormat("DictationState steht auf: {0}. Ich kann daher nicht zu STT wechseln.", DictationState);
+                        }
                     }
 
                     else if (ASRModeSwitchQueue.Peek().Method.Name.Equals(SwitchToWWE.Method.Name))  //für WWE muss STT beendet sein
                     {
-                        Debug.LogError("Nehme das vordere der Warteschlage weg. **WWE Befehl**");
-                        ASRModeSwitchQueue.Dequeue()();
-                        /*if (DictationState.Equals(SpeechSystemStatus.Stopped))
+                        //Debug.LogError("Nehme das vordere der Warteschlage weg. **WWE Befehl**");
+                        //ASRModeSwitchQueue.Dequeue()();
+
+                        AsrSwitchDelegate topFunction = ASRModeSwitchQueue.Dequeue();
+                        if (WakeWordState.Equals(SpeechSystemStatus.Stopped))
                         {
                             Debug.LogError("Nehme das vordere der Warteschlage weg. **WWE Befehl**");
-                            ASRModeSwitchQueue.Dequeue()();
+                            topFunction();
+                            //ASRModeSwitchQueue.Dequeue()();
                         }
                         else
                         {
-                            Debug.LogErrorFormat("DictationState steht auf: {0}. Ich kann daher nicht zu WWE wechseln.", DictationState);
-                        }*/
+                            Debug.LogErrorFormat("WakeWordState steht auf: {0}. Ich kann daher nicht zu WWE wechseln.", WakeWordState);
+                        }
                     }
                     else
                     {

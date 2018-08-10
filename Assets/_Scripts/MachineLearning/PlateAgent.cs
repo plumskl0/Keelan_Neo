@@ -128,9 +128,6 @@ public class PlateAgent : Agent
     // Use this for initialization
     void Start()
     {
-
-
-
         if (isTrainingCar)
         {
             char[] chars = playerObjectsTransform.name.ToCharArray();
