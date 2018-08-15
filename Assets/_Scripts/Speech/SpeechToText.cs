@@ -40,7 +40,7 @@ public class SpeechToText : MonoBehaviour, ISpeechToTextInterface {
         {
             if(completionCause.Equals(DictationCompletionCause.Complete))
             {
-                Debug.LogError("STT erfolgreich fertig... brauche ich hier noch ein Event das zurückwechselt? Soll bereits bei DictationResult passieren.");
+                Debug.LogErrorFormat("STT erfolgreich fertig wg: {0}... brauche ich hier noch ein Event das zurückwechselt? Soll bereits bei DictationResult passieren.",completionCause.ToString());
                 EventManager.TriggerEvent(EventManager.ttsUnhandledError, new EventMessageObject(EventManager.ttsUnhandledError, completionCause.ToString()));  //todo: falls benötigt noch neues Event erstellen
             }
 

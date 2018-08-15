@@ -8,6 +8,10 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class IntelligentPersonalAgent : MonoBehaviour {
+    //Szenenobjekte
+    public GameObject minimapLocationIcon;
+
+    //Scriptvwerweise
     private IAutomaticSpeechInterface asr;
     private INaturalLanguageUnderstandingInterface nlu;
     private WindowsVoice tts;
@@ -142,6 +146,10 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                 case IPAAction.closeMap:
                     actions.CloseMap();
                     actions.SetMinimapFokusOnCar();
+                    break;
+
+                case IPAAction.saveNavigationPoint:
+                    actions.SaveNavigationPoint(minimapLocationIcon);
                     break;
 
                 //Intents zur Unterstützung der Teststreckenerstellung
@@ -295,7 +303,6 @@ public class IntelligentPersonalAgent : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
 
     public void SendTextToNLU(EventMessageObject asrRequestMessageObject)

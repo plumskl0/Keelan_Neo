@@ -14,6 +14,7 @@ public class IPAAction : MonoBehaviour {
     private RectTransform mapOverlayRect;
     private RectTransform mapRect;
     private Minimap mapScript;
+    private GameObject playerCarObject;
 
     //Steuerungsobjekte
     private SharedFields sharedData;
@@ -26,6 +27,7 @@ public class IPAAction : MonoBehaviour {
     //Konstanten für gültige Aktionen des Agents
     public const string openMap = "map.Open";
     public const string closeMap = "map.Close";
+    public const string saveNavigationPoint = "map.SaveNavigationPoint";
     public const string wantToSetContext = "WantToSetContext";
     public const string setContext = "SetContext";
     public const string changeMapFixedStep = "map.ChangeFixedStep";
@@ -307,6 +309,20 @@ public class IPAAction : MonoBehaviour {
 
     }
 
+    public void SaveNavigationPoint(GameObject IconOnMap)
+    {
+        //Instanziiere das Icon und setze es an die aktuelle Position des Spielers
+        GameObject iconInstance = Instantiate(IconOnMap);
+        Vector3 playerPos = playerCarObject.transform.position;
+        iconInstance.transform.position = new Vector3(playerPos.x, 20f, playerPos.z);   //speichere Nav Punkte oberhalb der map Objekte damit diese nicht verdeckt werden
+        //Text iconText =  iconInstance.GetComponent<Image>().GetComponent<Text>();
+        Text iconText = iconInstance.transform.Find("Image").Find("Text").GetComponent<Text>();
+        sharedData.savedPlacesOnMap.Add(iconInstance);
+        Debug.LogError(sharedData.savedPlacesOnMap.Count.ToString());
+        iconText.text = sharedData.savedPlacesOnMap.Count.ToString();
+
+    }
+
 
     // Use this for initialization
     void Start () {
@@ -318,6 +334,7 @@ public class IPAAction : MonoBehaviour {
         mapOverlayRect = GameObject.Find("Map").GetComponent<RectTransform>();  //das Overlay, welches die Map enthält
         mapRect = GameObject.Find("Minimap").GetComponent<RectTransform>();
         mapScript = minimapKamera.GetComponent<Minimap>();
+        playerCarObject = GameObject.Find("Car Prototype v8");
 
         //benötigte Steuerungsobjekte (Lenkung)
         sharedData = SharedFields.Instance;
@@ -325,8 +342,15 @@ public class IPAAction : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-		
-	}
+        Vector3 playerRotation = playerCarObject.transform.rotation.eulerAngles;
+
+        foreach (GameObject g in sharedData.savedPlacesOnMap)
+        {
+            Vector3 placeRotation = g.transform.rotation.eulerAngles;
+            placeRotation.y = playerRotation.y;
+            g.transform.eulerAngles = placeRotation;
+        }
+    }
 }
 
 public struct Direction

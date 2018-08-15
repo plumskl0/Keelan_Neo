@@ -30,6 +30,9 @@ public class SharedFields {
         CoinCount = 0;
     }
 
+    //Listenspeicher
+    public List<GameObject> savedPlacesOnMap = new List<GameObject>();
+
     //Start/Reset Positionen der Level:
     public float [] level1ResetPosition = new float[] {95.39f, 0.38f, 30.4274f, 58.077f};
 

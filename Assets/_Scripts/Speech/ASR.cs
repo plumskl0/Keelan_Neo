@@ -81,18 +81,26 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
 
     public void AddSTTRequestToQueue(EventMessageObject args)
     {
+        Debug.LogFormat("Wechsel zu STT angefordert. Message: {0}", args.MessageBody.ToString());
         ASRModeSwitchQueue.Enqueue(SwitchToSTT);
+    }
+
+
+    public void AddWWERequestToQueue(EventMessageObject args)
+    {
+        Debug.LogFormat("Wechsel zu WWE angefordert. Message: {0}", args.MessageBody.ToString());
+        ASRModeSwitchQueue.Enqueue(SwitchToWWE);
     }
 
     private void SSTErrorHandling(EventMessageObject args)  //Prüfe bei Fehlern der SST den ASR Zustand und starte ggf. WakeWordEngine
     {
-        //Prüfe #Kommandos in Schlange -> keine -> gehe zu WWE; sonst: Ausgabe aller Befehle + Handle je nachdem was drin steht
-        if (ASRModeSwitchQueue.Count == 0 && WakeWordState!= SpeechSystemStatus.Running)   //Zurückwechseln zur WWE notwendig, da sonst keine ASR Technik mehr aktiv ist
+        //Prüfe #Kommandos in Schlange -> keine + kein aktiver Wechsel-> gehe zu WWE; sonst: Ausgabe aller Befehle + Handle je nachdem was drin steht
+        if (ASRModeSwitchQueue.Count == 0 && WakeWordState!= SpeechSystemStatus.Running &&!isSwitchingASRMode)   //Zurückwechseln zur WWE notwendig, da sonst keine ASR Technik mehr aktiv ist
         {
             Debug.LogErrorFormat("Die Schlange war leer als der Fehler auftrag {0}. Füge deshalb Wechsel zu WWE hinzu ", args.MessageBody);
             ASRModeSwitchQueue.Enqueue(SwitchToWWE);
         }
-        else
+        else if (ASRModeSwitchQueue.Count > 0)
         {
             Debug.LogError("Benötige weitere Fehlerbehandlung da STT Fehler auftrat als die Schalange wie folgt gefüllt war:");
             int i = 0;
@@ -102,13 +110,13 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
                 i++;
             }
         }
+        else
+        {
+            Debug.LogErrorFormat("Schlange war leer bei ASR Fehleranzeige. Aber keine Wechsel hinzugefügt da entweder STT oder Wechsel aktiv.");
+        }
 
     }
 
-    public void AddWWERequestToQueue(EventMessageObject args)
-    {
-        ASRModeSwitchQueue.Enqueue(SwitchToWWE);
-    }
 
     // Use this for initialization
     void Start()
@@ -373,8 +381,18 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
             {
                 if (ASRModeSwitchQueue.Count == 1)   //Bei nur einem in der Liste und keinem der gerade arbeiten kann direkt gewechselt werden
                 {
-                    Debug.LogError("Haben nur einen Befehl in der Warteschlage und führen diesen aus.");
-                    ASRModeSwitchQueue.Dequeue()();
+                    //Ignoeriere Wechsel, wenn dieser Modus bereits aktiv ist
+                    if((ASRModeSwitchQueue.Peek().Method.Name.Equals(SwitchToSTT.Method.Name) && DictationState.Equals(SpeechSystemStatus.Stopped)) || (ASRModeSwitchQueue.Peek().Method.Name.Equals(SwitchToWWE.Method.Name) && WakeWordState.Equals(SpeechSystemStatus.Stopped)))
+                    {
+                        Debug.LogError("Haben nur einen Befehl in der Warteschlage und führen diesen aus.");
+                        ASRModeSwitchQueue.Dequeue()();
+                    }
+                    else
+                    {
+                        Debug.LogError("Modus in den gewechselt werden soll ist bereits aktiv. -> Pop ohne Ausführung");
+                        ASRModeSwitchQueue.Dequeue();
+                    }
+                    
                 }
 
                 else
@@ -393,7 +411,7 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
                         }
                         else
                         {
-                            Debug.LogErrorFormat("DictationState steht auf: {0}. Ich kann daher nicht zu STT wechseln.", DictationState);
+                            Debug.LogErrorFormat("DictationState steht auf: {0}. Ich kann daher nicht zu STT wechseln. --POP--", DictationState);
                         }
                     }
 
@@ -411,7 +429,7 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
                         }
                         else
                         {
-                            Debug.LogErrorFormat("WakeWordState steht auf: {0}. Ich kann daher nicht zu WWE wechseln.", WakeWordState);
+                            Debug.LogErrorFormat("WakeWordState steht auf: {0}. Ich kann daher nicht zu WWE wechseln.--POP--", WakeWordState);
                         }
                     }
                     else

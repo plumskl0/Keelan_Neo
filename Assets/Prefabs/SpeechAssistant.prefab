@@ -52,6 +52,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7085922f9c2a70240b703a013ebf8a92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minimapLocationIcon: {fileID: 1145932232124484, guid: 577bd189b6fbe634e8925482a7200397,
+    type: 2}
   debugText: {fileID: 0}
 --- !u!114 &114800483656794226
 MonoBehaviour:
