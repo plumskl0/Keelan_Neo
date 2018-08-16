@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class IPAAction : MonoBehaviour {
     //public Canvas MiniMap;
 
-    //Map Objekte
+    //Szenen Objekte
     private GameObject mapBorder;
     private Camera minimapKamera;
     private RectTransform mapBorderRectTransform;
@@ -15,9 +15,12 @@ public class IPAAction : MonoBehaviour {
     private RectTransform mapRect;
     private Minimap mapScript;
     private GameObject playerCarObject;
+    private Transform navigationArrow;
 
     //Steuerungsobjekte
     private SharedFields sharedData;
+    Vector3 navigationGoal = Vector3.zero;
+    bool activateNavigation = false;
 
 
     //Feineinstellungsvariablen:
@@ -28,6 +31,7 @@ public class IPAAction : MonoBehaviour {
     public const string openMap = "map.Open";
     public const string closeMap = "map.Close";
     public const string saveNavigationPoint = "map.SaveNavigationPoint";
+    public const string startNavigation = "navigation.Start";
     public const string wantToSetContext = "WantToSetContext";
     public const string setContext = "SetContext";
     public const string changeMapFixedStep = "map.ChangeFixedStep";
@@ -306,7 +310,9 @@ public class IPAAction : MonoBehaviour {
 
     public void StartNavigation (Vector3 _zielort)
     {
-
+        Vector3 targetPosition = new Vector3(_zielort.x, navigationArrow.transform.position.y, _zielort.z);
+        navigationGoal = targetPosition;
+        activateNavigation = true;
     }
 
     public void SaveNavigationPoint(GameObject IconOnMap)
@@ -335,6 +341,7 @@ public class IPAAction : MonoBehaviour {
         mapRect = GameObject.Find("Minimap").GetComponent<RectTransform>();
         mapScript = minimapKamera.GetComponent<Minimap>();
         playerCarObject = GameObject.Find("Car Prototype v8");
+        navigationArrow = playerCarObject.transform.Find("navArrow2");//.Find("NavigationArrow");
 
         //benötigte Steuerungsobjekte (Lenkung)
         sharedData = SharedFields.Instance;
@@ -342,13 +349,19 @@ public class IPAAction : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        Vector3 playerRotation = playerCarObject.transform.rotation.eulerAngles;
 
+        //y Rotation der gespeicherten Navigationspunkte mit Spieler rotieren, damit die Zahlen nicht auf dem Kopf stehen
+        Vector3 playerRotation = playerCarObject.transform.rotation.eulerAngles;
         foreach (GameObject g in sharedData.savedPlacesOnMap)
         {
             Vector3 placeRotation = g.transform.rotation.eulerAngles;
             placeRotation.y = playerRotation.y;
             g.transform.eulerAngles = placeRotation;
+        }
+
+        if(activateNavigation)
+        {
+            navigationArrow.LookAt(navigationGoal);
         }
     }
 }

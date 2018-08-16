@@ -114,6 +114,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                 case IPAAction.speak:
                     actions.Speak(nluResultObj.GetStringParameter("speak"));
                     break;*/
+
                 //Intents zur Fahrzeugsteuerung
                 case IPAAction.moveCar:
                     String groesseneinheit = nluResultObj.GetStringParameter("Groesseneinheit");
@@ -137,10 +138,9 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                     actions.GetPlateControlBack();
                     break;
 
-                //Open Map Intent
+                //Map Manipulation Intents:
                 case IPAAction.openMap:
                     actions.OpenMap();
-
                     break;
 
                 case IPAAction.closeMap:
@@ -150,6 +150,27 @@ public class IntelligentPersonalAgent : MonoBehaviour {
 
                 case IPAAction.saveNavigationPoint:
                     actions.SaveNavigationPoint(minimapLocationIcon);
+                    break;
+
+                case IPAAction.changeMapFixedStep:
+                    groesseneinheit = nluResponse.Result.GetStringParameter("Groesseneinheit");
+                    direction = nluResponse.Result.GetStringParameter("Direction");
+                    if (direction.Length == 0)
+                    {
+                        direction = nluResponse.Result.GetStringParameter("MoveDirection");
+                    }
+
+                    actions.ChangMapFixedStep(groesseneinheit, direction);
+                    break;
+                case IPAAction.focusOnCar:
+                    actions.SetMinimapFokusOnCar();
+                    break;
+
+                //Navigation Intents:
+                case IPAAction.startNavigation:
+                    int zielNummer = Int32.Parse(nluResultObj.GetStringParameter("navigationNumber"));
+                    Vector3 target = sharedData.savedPlacesOnMap[zielNummer - 1].transform.position;
+                    actions.StartNavigation(target);
                     break;
 
                 //Intents zur Unterstützung der Teststreckenerstellung
@@ -195,24 +216,6 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                         //Application.Quit();
                     }
                     break;
-
-                //Map Manipulation Intents:
-                case IPAAction.changeMapFixedStep:
-                    groesseneinheit = nluResponse.Result.GetStringParameter("Groesseneinheit");
-                    direction = nluResponse.Result.GetStringParameter("Direction");
-                    if (direction.Length==0)
-                    {
-                        direction = nluResponse.Result.GetStringParameter("MoveDirection");
-                    }
-
-                    actions.ChangMapFixedStep(groesseneinheit, direction);
-                    break;
-                case IPAAction.focusOnCar:
-                    actions.SetMinimapFokusOnCar();
-                    break;
-
-
-
                 case IPAAction.wantToSetContext:
                     int firstFreeContext = context.Length;
                     AIOutputContext[] newContext = new AIOutputContext[firstFreeContext + 1];
@@ -296,14 +299,6 @@ public class IntelligentPersonalAgent : MonoBehaviour {
 
     }
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	}
 
     public void SendTextToNLU(EventMessageObject asrRequestMessageObject)
     {
