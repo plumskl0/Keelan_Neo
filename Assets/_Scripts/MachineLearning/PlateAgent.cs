@@ -215,6 +215,8 @@ public class PlateAgent : Agent
                     break;
             }
 
+
+            //Neige den Teller unabhängig vom gewählten Level: NonMoving -> Zufallswerte, sonst -> beibehalten
             if(sharedData.nonMovingCar) //Zufallsneigung des Tellers falls das Auto sich nicht bewegt
             {
                 //Zufallswerte für Tellerneigung:
@@ -254,14 +256,14 @@ public class PlateAgent : Agent
             else
             {
                 // Teller neigen: 
-                plateXAxis = 0f;     //übertrage die Werte für nahtlosen Übergang bei Steuerwechsel
+                /*plateXAxis = 0f;     //übertrage die Werte für nahtlosen Übergang bei Steuerwechsel
                 plateZAxis = 0f;
                 if (!isTrainingCar)
                 {
                     sharedData.assistantPlateXAchse = plateXAxis;
                     sharedData.assistantPlateZAchse = plateZAxis;
                 }
-                plateTransform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                plateTransform.localRotation = Quaternion.Euler(0f, 0f, 0f);*/
             }
 
 
@@ -291,14 +293,20 @@ public class PlateAgent : Agent
         float result;
         if (unscaledVar < minValue && Mathf.Abs(unscaledVar - minValue) < 0.01)
         {
-            Debug.LogFormat("Rundungsfehler?, Var {0} ist etwas kleiner als der min Wert: {1}", unscaledVar, minValue);
+            Debug.LogFormat("Rundungsfehler?, Input {0} ist etwas kleiner als der min Wert: {1}", unscaledVar, minValue);
             result = 0;
         }
         else if (unscaledVar > maxValue && Mathf.Abs(unscaledVar - maxValue) < 0.01)
         {
-            Debug.LogFormat("Rundungsfehler?, Var {0} ist etwas größer als der max Wert: {1}", unscaledVar, maxValue);
+            Debug.LogFormat("Rundungsfehler?, Input {0} ist etwas größer als der max Wert: {1}", unscaledVar, maxValue);
             result = 1;
         }
+        else if ((unscaledVar > maxValue && Mathf.Abs(unscaledVar - maxValue) > 0.01) || (unscaledVar < minValue && Mathf.Abs(unscaledVar - minValue) > 0.01))
+        {
+            Debug.LogErrorFormat("ACHTUNG: Rundungsfehler?, Input {0} ist DEUTLICH außerhalb Interhalb [min,max]: [{1},{2}]", unscaledVar,minValue, maxValue);
+            result = (unscaledVar - minValue) / (maxValue - minValue);
+        }
+
         else
         {
             result = (unscaledVar - minValue) / (maxValue - minValue);
@@ -324,7 +332,7 @@ public class PlateAgent : Agent
         AddVectorObs(ballRgBody.velocity.normalized);
         AddVectorObs(carRgBody.velocity.normalized);    //Richtungsvektor des Autos
         AddVectorObs(MinMaxScaleZeroToOne(carControllerScript.angle, -sharedData.maxWheelAngle, sharedData.maxWheelAngle));
-        AddVectorObs(carTransform.forward);
+        AddVectorObs(carTransform.forward.normalized);
     }
 
     List<float> obeservation = new List<float>();

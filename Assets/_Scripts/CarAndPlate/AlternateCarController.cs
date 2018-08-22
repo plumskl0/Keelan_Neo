@@ -144,7 +144,7 @@ public class AlternateCarController : MonoBehaviour
     private void LoadTrainingFiles(String filePath)
     {
         trainingFiles.Clear();
-        Debug.LogError("ich bin: " + myPlateAgent.playerObjectsTransform.name);
+        //Debug.LogError("ich bin: " + myPlateAgent.playerObjectsTransform.name);
         DirectoryInfo dir = new DirectoryInfo(filePath);
         dirFileCount = dir.GetFiles().Length - dir.GetFiles("*.meta").Length - dir.GetFiles("*Position").Length;
         if (dirFileCount == 0)  //Ändere wiederholt Schwirigkeitsgrad bis der Ordner FIles enthält

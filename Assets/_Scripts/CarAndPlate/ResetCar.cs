@@ -133,6 +133,7 @@ public class ResetCar : MonoBehaviour {
             pos = ballResetPosition.position;
             pos.Set(pos.x, pos.y + radius, pos.z);
         }
+
         ballRGBody.transform.position = pos;
 
         // Falls der Ball noch rollt die Geschwindigkeit entfernen
