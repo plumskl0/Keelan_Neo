@@ -9,6 +9,7 @@ public class ResetCar : MonoBehaviour {
 
     private Rigidbody ballRGBody;
     private Rigidbody carRGBody;
+    private Transform plateTransform;
 
     public Transform ballResetPosition;
 
@@ -28,10 +29,12 @@ public class ResetCar : MonoBehaviour {
         if(gameObject.CompareTag("Player"))
         {
             ballRGBody = gameObject.transform.parent.Find("Golfball_G").GetComponent<Rigidbody>();
+            plateTransform = transform.Find("CarModel").Find("Teller");
         }
         else if(gameObject.CompareTag("Trainingsfahrzeug"))
         {
             ballRGBody = gameObject.transform.parent.Find("Trainingsball").GetComponent<Rigidbody>();
+            plateTransform = transform.Find("CarModel").Find("Trainingsteller");
         }
         
         else
@@ -116,10 +119,20 @@ public class ResetCar : MonoBehaviour {
     public void ResetBall()
     {
         float radius = ballRGBody.GetComponent<SphereCollider>().radius;
+        Vector3 pos;
+        //im Training wird der Ball auf das Fahrende Auto gelegt -> muss tiefer reseted werden und lokal vor dem Teller
+        //  -> Teller lernt mit der Zeit bei hoher Geschwindigkeit den Teller fast 90° nach vorne zu neigen -> ein Reset oberhalb des Tellers im World Space führt zwangsläufig zu Ballverlust
+        if (sharedData.TrainingMode)
+        {
+            pos = plateTransform.position + plateTransform.up.normalized;
+        }
 
-        // Ball unter beachtung des Radius auf dem Fahrzeug positionieren
-        Vector3 pos = ballResetPosition.position;
-        pos.Set(pos.x, pos.y + radius, pos.z);
+        else
+        {
+            // Ball unter beachtung des Radius auf dem Fahrzeug positionieren
+            pos = ballResetPosition.position;
+            pos.Set(pos.x, pos.y + radius, pos.z);
+        }
         ballRGBody.transform.position = pos;
 
         // Falls der Ball noch rollt die Geschwindigkeit entfernen
@@ -130,6 +143,8 @@ public class ResetCar : MonoBehaviour {
         {
             sharedData.BallResetNeeded = false;
         }
+
+
     }
 
     private bool isCarResetButtonPressed()

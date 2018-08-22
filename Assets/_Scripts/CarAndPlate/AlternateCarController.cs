@@ -29,6 +29,10 @@ public class AlternateCarController : MonoBehaviour
     public int frameCountThisTrainingRoute = 0;
     public int frameDurationThisRoute = 0;
 
+    public float angle;
+    public float torque;
+
+
     string dirPathTrainingRoute = "Assets/TrainingRoutes/"; //Ordner in dem die Trainingsrouten liegen
     string currentDifficulty = "schwer/"; //Schwierigkeitsgradauswahl im Trainingsmodus hier festgelegt, bei Trainingsstreckenerfassung vom Spieler per Sprache
     DateTime endTime = DateTime.Now;    //Bei Training Record wird Programm verzögert beendet 
@@ -145,7 +149,7 @@ public class AlternateCarController : MonoBehaviour
         dirFileCount = dir.GetFiles().Length - dir.GetFiles("*.meta").Length - dir.GetFiles("*Position").Length;
         if (dirFileCount == 0)  //Ändere wiederholt Schwirigkeitsgrad bis der Ordner FIles enthält
         {
-            Debug.LogErrorFormat("Für aktuellen Schwierigkeitsgrad {0} gab es keine Trainingsrouten. Lade neuen Schwierigkeitsgrad", currentDifficulty);
+            Debug.LogFormat("Für aktuellen Schwierigkeitsgrad {0} gab es keine Trainingsrouten. Lade neuen Schwierigkeitsgrad", currentDifficulty);
             RandomDifficulty();
             LoadTrainingFiles(dirPathTrainingRoute + currentDifficulty);
         }
@@ -279,13 +283,12 @@ public class AlternateCarController : MonoBehaviour
         }
         sharedData.currentFrameCount = frameCountThisTrainingRoute;
 
-        getCollider(FRONT_LEFT).ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
+        //****Was genau macht diese Funktion -> berechnet zwischenschritte zw. FixedUpdate Calls ....
+        if(!sharedData.TrainingMode)   //Im Trainingsmodus wird die Steuerung über Positionsverschiebungen (ohne Collider) simuliert
+            getCollider(FRONT_LEFT).ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
 
 
 
-
-        float angle;
-        float torque;
 
 
         if (sharedData.GetPlayerControl())
@@ -359,7 +362,8 @@ public class AlternateCarController : MonoBehaviour
                     //probe -> setze pro frame velocity direkt
                     try
                     {
-                        transform.eulerAngles = trainingsFahrrouteRotation[frameCountThisTrainingRoute];
+                        //++++++Rotation Mod und velocity ausgeschaltet eingeschaltet
+                        transform.eulerAngles = trainingsFahrrouteRotation[frameCountThisTrainingRoute];     
                         rb.velocity = trainingsFahrrouteVelocity[frameCountThisTrainingRoute];
                         //
 
@@ -384,7 +388,8 @@ public class AlternateCarController : MonoBehaviour
                     }
 
                     //Setze Auto auf Position der Trainingsroute -> gleicht die kleinen Abweichungen aus
-                    gameObject.transform.position = trainingsFahrroutePosition[frameCountThisTrainingRoute];
+                    //*++++++ Position Sim ausgeschaltet eingeschaltet
+                    gameObject.transform.position = trainingsFahrroutePosition[frameCountThisTrainingRoute];   
 
                     //über leichte Abweichgungen der Routen soll die Fahrroute sich nicht ändern -> auf Route zurücksetzen falls Grenzwert überschritten
                     if (Mathf.Abs((trainingsFahrroutePosition[frameCountThisTrainingRoute].normalized - gameObject.transform.position.normalized).magnitude) > maxTrainingRouteDiff)
@@ -470,6 +475,7 @@ public class AlternateCarController : MonoBehaviour
             ///if(!myPlateAgent.isTrainingCar)
                 //Debug.LogError("Angle: " + angle);
             torque = sharedData.maxTorque * moveVertical;
+            //Debug.LogError(Time.deltaTime.ToString());
 
 
             if (!myPlateAgent.isTrainingCar)
@@ -641,6 +647,8 @@ public class AlternateCarController : MonoBehaviour
             {
                 // Debug.Log("move")
                 sumMoveVertical -= stepsToAxisMax;
+                if (sumMoveVertical < -1)
+                    sumMoveVertical = -1;
             }
             else
             {
@@ -662,6 +670,8 @@ public class AlternateCarController : MonoBehaviour
             {
                 // Debug.Log("move")
                 sumMoveVertical += stepsToAxisMax;
+                if (sumMoveVertical > 1)
+                    sumMoveVertical = 1;
             }
             else
             {
@@ -684,6 +694,8 @@ public class AlternateCarController : MonoBehaviour
             {
                 // Debug.Log("move")
                 sumMoveHorizontal -= stepsToAxisMax;
+                if (sumMoveHorizontal < -1)
+                    sumMoveHorizontal = -1;
             }
             else
             {
@@ -706,6 +718,8 @@ public class AlternateCarController : MonoBehaviour
             {
                 // Debug.Log("move")
                 sumMoveHorizontal += stepsToAxisMax;
+                if (sumMoveHorizontal > 1)
+                    sumMoveHorizontal = 1;
             }
             else
             {
@@ -738,7 +752,12 @@ public class AlternateCarController : MonoBehaviour
             reset = 1;
         }
 
-        return new Vector4(sumMoveHorizontal, sumMoveVertical, brake, reset);
+        if(sumMoveHorizontal <-1 || sumMoveHorizontal > 1 || sumMoveVertical < -1 || sumMoveVertical > 1)
+        {
+            Debug.LogErrorFormat("Achsenbelegungen außerhalb Intervall [-1,1]: Hor: {0}, Vert: {1}", sumMoveHorizontal, sumMoveVertical);
+        }
+
+            return new Vector4(sumMoveHorizontal, sumMoveVertical, brake, reset);
     }
 
     //*****todo: Alt und ungenutzt?!
@@ -785,8 +804,8 @@ public class AlternateCarController : MonoBehaviour
 
             // Assume that the only child of the wheelcollider is the wheel shape.
             Transform shapeTransform = wheel.transform.GetChild(0);
-            shapeTransform.position = p;
-            shapeTransform.rotation = q;
+            //shapeTransform.position = p;             +++++Räderbewegung ausgeschaltet
+            //shapeTransform.rotation = q;
         }
     }
 

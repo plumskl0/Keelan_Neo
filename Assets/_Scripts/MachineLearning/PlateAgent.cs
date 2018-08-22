@@ -322,8 +322,9 @@ public class PlateAgent : Agent
         Vector3 ballToTransformPositionVector = ballTransform.position - plateTransform.position;
         AddVectorObs(ballToTransformPositionVector.normalized);
         AddVectorObs(ballRgBody.velocity.normalized);
-
         AddVectorObs(carRgBody.velocity.normalized);    //Richtungsvektor des Autos
+        AddVectorObs(MinMaxScaleZeroToOne(carControllerScript.angle, -sharedData.maxWheelAngle, sharedData.maxWheelAngle));
+        AddVectorObs(carTransform.forward);
     }
 
     List<float> obeservation = new List<float>();

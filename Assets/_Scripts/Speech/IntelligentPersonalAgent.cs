@@ -27,15 +27,18 @@ public class IntelligentPersonalAgent : MonoBehaviour {
 
     private void Awake()
     {
-        asr = gameObject.AddComponent<ASR>();
-        nlu = gameObject.AddComponent<NLU>();
-        actions = gameObject.AddComponent<IPAAction>();
-        tts = gameObject.AddComponent<WindowsVoice>();
+        if (!sharedData.TrainingMode)  //aktiviere Sprachassistent nicht beim ML Training -> Keywords können Simulation stören
+        {
+            asr = gameObject.AddComponent<ASR>();
+            nlu = gameObject.AddComponent<NLU>();
+            actions = gameObject.AddComponent<IPAAction>();
+            tts = gameObject.AddComponent<WindowsVoice>();
 
 
-        CallNLU = new UnityAction<EventMessageObject>(SendTextToNLU);
-        Print = new UnityAction<EventMessageObject>(PrintMessageBody);
-        IntentHandler = new UnityAction<EventMessageObject>(HandleIntent);
+            CallNLU = new UnityAction<EventMessageObject>(SendTextToNLU);
+            Print = new UnityAction<EventMessageObject>(PrintMessageBody);
+            IntentHandler = new UnityAction<EventMessageObject>(HandleIntent);
+        }
     }
 
     private void OnEnable()
