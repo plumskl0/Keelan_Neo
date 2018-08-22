@@ -143,6 +143,11 @@ public class PlateAgent : Agent
         }
     }
 
+    /*private void Update()
+    {
+        if(!isTrainingCar)
+    }*/
+
     public override void AgentReset()
     {
         if (sharedData.TrainingMode)
@@ -481,7 +486,7 @@ public class PlateAgent : Agent
                 RotatePlateByMiniSteps(vectorAction[0], vectorAction[1]);
                 Debug.LogFormat("Mein Name ist: {6} Die alten Neigungsvars: {0} {1} \n Aktionen: {2} {3} \n Die neuen: {4} {5}", alteNeigungsvariablen[0], alteNeigungsvariablen[1], vectorAction[0], vectorAction[1], plateXAxis, plateZAxis, playerObjectsTransform.name);*/
 
-                //RotatePlateLikeUnityExample(vectorAction[0], vectorAction[1]);
+                //RotatePlateLikeUnityExample(vectorAction[0], vectorAction[1]);  //++++++Stand zuletzt auf ..ByMiniSteps
                 RotatePlateByMiniSteps(vectorAction[0], vectorAction[1]);
                 //RotatePlatePerDirectFloat(vectorAction[0], vectorAction[1]);
 
@@ -573,31 +578,31 @@ public class PlateAgent : Agent
     {
         float actionX = Mathf.Clamp(x, -1, 1);
         float actionZ = Mathf.Clamp(z, -1, 1);
-        float achsenaenderung = 0.03f;
+        float achsenaenderung = 0.09f;
 
 
         if (actionX < plateXAxis)
         {
-                plateXAxis -= achsenaenderung;
+                plateXAxis -= achsenaenderung * Mathf.Abs(actionX);
         }
 
         else if (actionX > plateXAxis)
         {
-                plateXAxis += achsenaenderung;
+                plateXAxis += achsenaenderung * Mathf.Abs(actionX);
 
         }
 
         if (actionZ < plateZAxis)
         {
-                plateZAxis -= achsenaenderung;
+                plateZAxis -= achsenaenderung * Mathf.Abs(actionZ);
         }
 
         else if (actionZ > plateZAxis)
         {
-                plateZAxis += achsenaenderung;
+                plateZAxis += achsenaenderung * Mathf.Abs(actionZ);
         }
         //Debug.LogFormat("x-Achse: {0}  und y-Achse: {1}", plateXAxis, plateZAxis);
-        plateTransform.localRotation = Quaternion.Euler(plateXAxis * sharedData.plateMaxAngle, 0f, plateZAxis * sharedData.plateMaxAngle);
+        plateTransform.localRotation = Quaternion.Euler(Mathf.Clamp(plateXAxis,-1,1) * sharedData.plateMaxAngle, 0f, Mathf.Clamp(plateZAxis,-1,1) * sharedData.plateMaxAngle);
     }
 
     private void RotatePlateLikeUnityExample(float actionX, float actionZ)

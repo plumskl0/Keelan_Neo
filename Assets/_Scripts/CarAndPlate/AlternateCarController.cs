@@ -594,16 +594,16 @@ public class AlternateCarController : MonoBehaviour
 
     private void RandomDifficulty()
     {
-        int i = UnityEngine.Random.Range(1, 4); //Zufallsint zwischen 1, 2 oder 3
-        if (i == 1)
+        float i = UnityEngine.Random.Range(0.0f, 1.0f); //Zufallsint zwischen 0 und 1, einfache Strecken sollen öfter kommen da Training so schneller geht
+        if (i <= 0.5f)
         {
             currentDifficulty = "einfach/";
         }
-        else if (i ==2)
+        else if (i >0.5f && i <=0.8f)
         {
             currentDifficulty = "mittel/";
         }
-        else if (i ==3)
+        else if (i >0.8f)
         {
             currentDifficulty = "schwer/";
         }

@@ -19,14 +19,16 @@ public class ResetCar : MonoBehaviour {
 
     private AlternateCarController carControl;
     private PlateController pc;
+    private PlateAgent myPlateAgent;
     private SharedFields sharedData = SharedFields.Instance;
 
     private void Start()
     {
         carControl = GetComponent<AlternateCarController>();
         carRGBody = GetComponent<Rigidbody>();
+        myPlateAgent = gameObject.GetComponent<PlateAgent>();
         //ballRGBody = GameObject.Find("Golfball_G").GetComponent<Rigidbody>();
-        if(gameObject.CompareTag("Player"))
+        if (gameObject.CompareTag("Player"))
         {
             ballRGBody = gameObject.transform.parent.Find("Golfball_G").GetComponent<Rigidbody>();
             plateTransform = transform.Find("CarModel").Find("Teller");
@@ -122,16 +124,22 @@ public class ResetCar : MonoBehaviour {
         Vector3 pos;
         //im Training wird der Ball auf das Fahrende Auto gelegt -> muss tiefer reseted werden und lokal vor dem Teller
         //  -> Teller lernt mit der Zeit bei hoher Geschwindigkeit den Teller fast 90° nach vorne zu neigen -> ein Reset oberhalb des Tellers im World Space führt zwangsläufig zu Ballverlust
-        if (sharedData.TrainingMode)
+        if (sharedData.TrainingMode || sharedData.debugMode)
         {
-            pos = plateTransform.position + plateTransform.up.normalized;
+            pos = plateTransform.position + 0.5f* plateTransform.up.normalized;
         }
 
-        else
+        else  //Spielmodus
         {
             // Ball unter beachtung des Radius auf dem Fahrzeug positionieren
             pos = ballResetPosition.position;
             pos.Set(pos.x, pos.y + radius, pos.z);
+            if(!myPlateAgent.isTrainingCar)        //Spielmodus muss Lostlife manuell auf false setzen da reset nicht automatisch erfolgt -> erst danach übernimmt die PLatecontrol wieder die Kontrolle
+            {
+                myPlateAgent.LostLife = false;
+                sharedData.LostLife = false;
+                plateTransform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+            }
         }
 
         ballRGBody.transform.position = pos;
