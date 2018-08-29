@@ -16,8 +16,10 @@ public class NLU : MonoBehaviour, INaturalLanguageUnderstandingInterface {
 
     public void UnderstandRequest (string query)
     {
-        AIResponse dialogflowAnswer = dialogflowConnection.SendVoiceText(query);
-        Debug.Log("Trigger NLUAnswerDetected Event");
-        EventManager.TriggerEvent(EventManager.nluAnswerDetectedEvent, new EventMessageObject(EventManager.nluAnswerDetectedEvent, dialogflowAnswer));
+        Debug.LogError("Async Dialogflow Call startet...");
+        StartCoroutine(dialogflowConnection.AsyncDialogflowCall(query));
+        //AIResponse dialogflowAnswer = dialogflowConnection.SendVoiceText(query);
+        //Debug.Log("Trigger NLUAnswerDetected Event");
+        //EventManager.TriggerEvent(EventManager.nluAnswerDetectedEvent, new EventMessageObject(EventManager.nluAnswerDetectedEvent, dialogflowAnswer));
     }
 }

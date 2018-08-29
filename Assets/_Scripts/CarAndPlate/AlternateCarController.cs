@@ -839,7 +839,7 @@ public class AlternateCarController : MonoBehaviour
 
         //LoadTrainingFiles(dirPathTrainingRouteNew);    //difficulty verweist auf neuen Ordner -> andere Dateienanzahl
 
-        int nextFreeFileNumber = dirFileCount;
+        string nextFreeFileNumber = dirFileCount.ToString() + sharedData.playerName;
         if (!sharedData.TrainingMode)
         {
             WriteRouteDictToFile(dirPathTrainingRouteNew + nextFreeFileNumber, trainingsFahrrouteSaved);

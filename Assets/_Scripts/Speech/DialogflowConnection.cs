@@ -9,12 +9,14 @@ using System.Collections;
 using System.Collections.Generic;
 //using Newtonsoft.Json;
 using System.Net;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class DialogflowConnection : MonoBehaviour
 {
     private ApiAiUnity apiAiUnity;
     private AudioSource aud;
+
     //public AudioClip listeningSound;
 
     /*private readonly fastJSON.JSONParameters jsons = new JSONParameters
@@ -25,7 +27,7 @@ public class DialogflowConnection : MonoBehaviour
 
    private readonly NewJSon::Newtonsoft.Json.JsonSerializerSettings jsonSettings = new NewJSon::Newtonsoft.Json.JsonSerializerSettings
     {
-        //StringEscapeHandling = StringEscapeHandling.EscapeNonAscii;
+        //StringEscapeHandling = NewJSon::Newtonsoft.StringEscapeHandling.EscapeNonAscii,
         NullValueHandling = NewJSon::Newtonsoft.Json.NullValueHandling.Ignore
         //StringEscapeHandling = Newtonsoft.Json.StringEscapeHandling
     };
@@ -34,6 +36,7 @@ public class DialogflowConnection : MonoBehaviour
 
     // Use this for initialization
     IEnumerator Start()
+
     {
         // check access to the Microphone
         yield return Application.RequestUserAuthorization(UserAuthorization.Microphone);
@@ -71,7 +74,34 @@ public class DialogflowConnection : MonoBehaviour
     }
 
 
+    public IEnumerator AsyncDialogflowCall (string textRequest)
+    {
+        Task<AIResponse> nluCAll = Task.Run<AIResponse>(() => apiAiUnity.TextRequest(textRequest));
+        //Warte bis Anfrage beendet wurde
+        while(!nluCAll.IsCompleted)
+        {
+            yield return null;
+        }
+        AIResponse response = nluCAll.Result;
 
+        if (response != null)
+        {
+            //Debug.Log("Resolved query: " + response.Result.ResolvedQuery);
+            //Debug.Log(response.Result.Metadata.IntentName);
+            //var outText = fastJSON.JSON.ToJSON(response);
+            var outText = NewJSon::Newtonsoft.Json.JsonConvert.SerializeObject(response, jsonSettings);
+            Debug.Log("Result: " + outText);
+
+        }
+        else
+        {
+            Debug.LogError("Response is null");
+        }
+
+        Debug.Log("Trigger NLUAnswerDetected Event");
+        EventManager.TriggerEvent(EventManager.nluAnswerDetectedEvent, new EventMessageObject(EventManager.nluAnswerDetectedEvent, response));
+
+    } 
 
     public AIResponse SendVoiceText(string input)
     {
@@ -79,6 +109,7 @@ public class DialogflowConnection : MonoBehaviour
         //var text = answerTextField.text;
         var text = input;
         //Debug.Log(text);
+
 
         AIResponse response = apiAiUnity.TextRequest(text);
 

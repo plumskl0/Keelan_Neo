@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -40,6 +41,48 @@ public class IntelligentPersonalAgent : MonoBehaviour {
             IntentHandler = new UnityAction<EventMessageObject>(HandleIntent);
         }
     }
+    private void Start()
+    {
+        if (!sharedData.TrainingMode)
+        {
+            Debug.Log("Untersuche Namen des Spielers");
+            StartCoroutine(DelayedPlayerNameCollection(2.0f));
+        }
+    }
+    IEnumerator DelayedPlayerNameCollection(float waitTime)
+    {
+        Debug.Log("Warte...");
+        yield return new WaitForSeconds(waitTime);
+        if (File.Exists(sharedData.userInfoPath))
+        {
+            Debug.LogError("Datei war schon da");
+            StreamReader streamReader = new StreamReader(sharedData.userInfoPath);
+            string[] userInfoArray = streamReader.ReadToEnd().Split(';');
+            bool foundNameEntrie = false;
+
+            foreach (string s in userInfoArray)
+            {
+                string[] keyValue = s.Split(':');
+                if (keyValue[0].Equals("name"))
+                {
+                    foundNameEntrie = true;
+                    sharedData.playerName = keyValue[1];
+                    EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, "Lade Name aus Speicher " + sharedData.playerName)); //Informiere NLU darüber, dass der Name des Spielers bekannt ist
+                }
+            }
+            streamReader.Close();
+            if(!foundNameEntrie)   //Falls Dabei existiert ohne hinterlegten Namen -> behandle wie neuen Spieler
+            {
+                Debug.LogError("PlayerName nicht vorhanden, obwohl Datei exisitert. Wird erstellt wenn ich den Namen habe.");
+                EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, "Neuen Spieler anmelden"));
+            }
+        }
+        else
+        {
+            Debug.LogError("UserInfo nicht vorhanden. Wird erstellt wenn ich den Namen habe.");
+            EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, "Neuen Spieler anmelden"));
+        }
+    }
 
     private void OnEnable()
     {
@@ -74,8 +117,8 @@ public class IntelligentPersonalAgent : MonoBehaviour {
             //Debug.Log("WWE Status " + asr.WakeWordState);
             //Debug.Log("STT Status " + asr.DictationState);
             EventManager.TriggerEvent(EventManager.keywordDetectedEvent, new EventMessageObject(EventManager.keywordDetectedEvent, "Slots fehlen"));
-            actions.DisplayText(debugText, nluResponse.Result.Fulfillment.Speech);
-            WindowsVoice.speak(string.Format("Es fehlen noch Slots. {0}", nluResponse.Result.Fulfillment.Speech), delay: 0f);
+            //actions.DisplayText(debugText, nluResponse.Result.Fulfillment.Speech);
+            WindowsVoice.speak(string.Format("{0}", nluResponse.Result.Fulfillment.Speech), delay: 0f);
         }
 
         //ansonsten rufe die Handler auf
@@ -96,7 +139,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
             //***Kann in Unity JSON Objekt bisher nicht abgerufen werden -> Parameter: endConversation simuliert ihn
             if (nluResultObj.Fulfillment.Speech != "")
             {
-                if (nluResultObj.GetStringParameter("endConversation").Equals("true"))
+                if (nluResultObj.GetStringParameter("endConversation").Equals("true"))  //***evtl. muss hier eine Abfrage rein die beim default fallback auch das mikrofon schließt
                 {
                     actions.Speak(nluResultObj.Fulfillment.Speech);
                 }
@@ -197,6 +240,11 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                     //Entferne PlayerControl und Ball
                     sharedData.SetPlayerControl(false);
                     GameObject.FindGameObjectWithTag("Ball").SetActive(false);
+                    if (String.IsNullOrEmpty(sharedData.playerName))
+                    {
+                        Debug.LogError("Fehler bei Namenserfassung. Öffne Texteingabe.");
+                        GameObject.Find("NameQuestionCanvas").GetComponent<Canvas>().enabled = true;
+                    }
                     break;
 
                 case IPAAction.performanceAndDifficultyMeasured:
@@ -252,6 +300,38 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                     }
                     break;
 
+                //PlayerInfo
+                case IPAAction.setPlayerName:
+                    //var outText = NewJSon::Newtonsoft.Json.JsonConvert.SerializeObject(nluResultObj.GetJsonParameter("UserName"), jsonSettings);
+                    //Debug.LogError(outText);
+
+                    string name ="";
+                    //Sonderbehandlung falls Dialogflow Entitie givenName benutzt -> bekomme neues Dict statt String
+                    Dictionary<string, object> parameterDict = nluResultObj.Parameters;
+                    Type t = parameterDict["UserName"].GetType();
+                    bool isDict = t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Dictionary<,>);
+                    Dictionary<string, object> givenNameEntitie;
+                    if (isDict)
+                    {
+                        givenNameEntitie = (Dictionary<string, object>) parameterDict["UserName"];
+                        name = (string) givenNameEntitie["given-name"];
+                    }
+                    else
+                    {
+                        name = nluResultObj.GetStringParameter("UserName");
+                    }
+
+                    //Debug.LogErrorFormat("is dict? {0}", isDict);
+
+                    //Debug.LogError( parameterDict["UserName"].GetType());
+                    
+                    Debug.LogError("Haben folgenden Namen erkannt: " + name);
+                    if (String.IsNullOrEmpty(name))
+                        Debug.LogError("******Name konnte nicht gesetzt werden. Baue erneute Nachfrage ein?");
+                    actions.SetPlayerName(name);
+                    Debug.LogError("Der neue Name ist: " + sharedData.playerName);
+                    break;
+
                 default:
                     Debug.Log(string.Format("Der Intent {0} wurde im IntentHandler nicht registiert.", intent));
                     //WindowsVoice.speak("Diesen Intent kenne ich nicht", 0f);  //wird von Fallback Intent in Block unten gemacht
@@ -259,10 +339,11 @@ public class IntelligentPersonalAgent : MonoBehaviour {
             }
 
 
-        }
+
+
+}
 
     }
-
 
 
     //Gibt ein Präfix gefolgt vom Inhalt der EventMessage im debugTextfeld aus

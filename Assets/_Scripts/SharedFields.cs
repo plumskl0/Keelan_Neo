@@ -57,6 +57,8 @@ public class SharedFields {
     public float maxWheelAngle;
     public float maxTorque;
     public float brakeTorque;
+    public string playerName = "notSet";
+    public string userInfoPath = "Assets/user.info";
 
     //Controllerauswahl
     public const string MTControl = "MausUndTastaturKontrolle";

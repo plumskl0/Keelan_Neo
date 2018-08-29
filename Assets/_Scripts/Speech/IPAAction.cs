@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,6 +48,7 @@ public class IPAAction : MonoBehaviour {
     public const string endTrainingRouteCreation = "training.End";
     public const string performanceAndDifficultyMeasured = "training.PerformanceAndDiffcultyMeasured";
     public const string restartTraining = "training.Restart";
+    public const string setPlayerName = "playerInfo.SetName";
     /*public const string speak = "conversation.Speak";
     public const string askQuestion = "conversation.AskQuestion";*/
 
@@ -239,7 +242,8 @@ public class IPAAction : MonoBehaviour {
         StopCoroutine("CarAccelerationForTimeperiod");   //todo: wenn die Beschleunigungsroutine noch nicht fertig ist, wird sie den gesetzten Brake Wert überschreiben
         sharedData.AssistantXAchse = 0;
         sharedData.AssistantYAchse = 0;
-        sharedData.AssistantBrake = sharedData.brakeTorque;
+        Debug.LogError("Setze Bremskraft auf Maximum");
+        sharedData.AssistantBrake = sharedData.maxTorque;
     }
 
     public void GetCarControlBack()
@@ -255,6 +259,7 @@ public class IPAAction : MonoBehaviour {
         float mittel = 0.4f;
         float viel = 1f;
         float selectedChange = MapGroesseneinheitToFloatValue(wenig, mittel, viel, _groesseneinheit);
+        sharedData.AssistantBrake = 0f;
 
         //Bewegungsänderung:
         // float beschleunigungszeit = 7f;
@@ -326,6 +331,56 @@ public class IPAAction : MonoBehaviour {
         sharedData.savedPlacesOnMap.Add(iconInstance);
         Debug.LogError(sharedData.savedPlacesOnMap.Count.ToString());
         iconText.text = sharedData.savedPlacesOnMap.Count.ToString();
+
+    }
+
+    //User Info
+    public void SetPlayerName (string playerName)
+    {
+        bool fileWasThere = File.Exists(sharedData.userInfoPath);
+        FileStream fileStream = new FileStream(sharedData.userInfoPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
+        StreamReader streamReader = new StreamReader(fileStream);
+        StreamWriter streamWriter = new StreamWriter(fileStream);
+        sharedData.playerName = playerName;
+
+        //Prüfe ob das File existiert und erstelle es anderenfalls
+        if (!fileWasThere)
+        {
+            //File.Create(sharedData.userInfoPath);
+            Debug.LogError("Schreibe jetzt in Datei");
+            streamWriter.WriteLine("name:" + playerName + ";");
+
+        }
+        else
+        {
+            StringBuilder newText = new StringBuilder();
+
+            string[] userInfoArray = streamReader.ReadToEnd().Split(';');
+            bool foundNameEntrie = false;
+
+            foreach (string s in userInfoArray)
+            {
+                string[] keyValue = s.Split(':');
+                if (keyValue[0].Equals("name"))
+                {
+                    foundNameEntrie = true;
+                    newText.AppendLine("name:" + playerName + ";");
+                }
+                else //Füge nicht zu verändernde Zeilen dem Builder hinzu
+                {
+                    newText.AppendLine(s + ";");
+                }
+            }
+            if(!foundNameEntrie)  //Falls die Datei existiert aber noch kein Name hinterlegt ist: schreibe namen ans Ende der Datei
+                newText.AppendLine("name:" + playerName + ";");
+
+            streamWriter.Write(newText);
+        }
+        streamWriter.Flush();
+        Debug.LogError("Habe in Datei geschrieben: " + "name:" + playerName + ";");
+        //streamReader.Close();
+        //streamWriter.Close();
+        fileStream.Close();
 
     }
 

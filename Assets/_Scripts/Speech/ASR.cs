@@ -280,6 +280,7 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
         //DateTime wechselzeit = waitXSeconds(1);
         for (; ; )
         {
+            Debug.Log("Coroutine aktiv");
             //Debug.LogError(string.Format("*****ERROR: WWE Status: {0} ____ TTS Status:{1}", WWE.GetState(), STT.GetState()));
             //Debug.LogError("WWE is listening: " + WWE.)
             //if (DictationState.Equals(SpeechSystemStatus.Running))
@@ -358,7 +359,7 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
             }
             else
             {
-                Debug.LogError("......_______________ERROR!!!__________");
+                Debug.LogErrorFormat("......_______________ERROR!!!__________...DictationState steht auf: {0}", DictationState);
             }
         }
         /*if(PhraseRecognitionSystem.Status.Equals(SpeechSystemStatus.Stopped) && STT.dictationRecognizer.Status.Equals(SpeechSystemStatus.Stopped))
