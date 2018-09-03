@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using WiimoteApi;
 
@@ -60,7 +61,7 @@ public class zielbereichErreicht : MonoBehaviour {
             Debug.Log("Lade Level2");
             sharedData.TimeNeededToLastLevel = pul.time;
             Debug.Log("Setze time auf: " + pul.time);
-            Application.LoadLevel("Level2");
+            SceneManager.LoadScene("Level2");
         }
 
         if (other.CompareTag("zielLevel2"))
@@ -68,7 +69,7 @@ public class zielbereichErreicht : MonoBehaviour {
             sharedData.TimeNeededToLastLevel = pul.time;
             Debug.Log("Setze time auf: " + pul.time);
             Debug.Log("Lade Level3");
-            Application.LoadLevel("Level3");
+            SceneManager.LoadScene("Level3");
 
         }
 
@@ -87,7 +88,7 @@ public class zielbereichErreicht : MonoBehaviour {
 
     public void RestartGame(String levelInDasGesprungenWird)
     {
-        Application.LoadLevel(levelInDasGesprungenWird);
+        SceneManager.LoadScene(levelInDasGesprungenWird);
         sharedData.CarResetNeeded = false;
         if (levelInDasGesprungenWird == "Level1")
         {

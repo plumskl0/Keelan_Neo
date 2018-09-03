@@ -67,7 +67,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                 {
                     foundNameEntrie = true;
                     sharedData.playerName = keyValue[1];
-                    EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, "Lade Name aus Speicher " + sharedData.playerName)); //Informiere NLU darüber, dass der Name des Spielers bekannt ist
+                    EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, "Lade Namen aus Speicher " + sharedData.playerName)); //Informiere NLU darüber, dass der Name des Spielers bekannt ist
                 }
             }
             streamReader.Close();

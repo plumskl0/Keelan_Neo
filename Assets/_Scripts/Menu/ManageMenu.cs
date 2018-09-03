@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using WiimoteApi;
 
@@ -264,7 +265,7 @@ public class ManageMenu : MonoBehaviour {
         else
         {
             Debug.Log(" " + sharedData.TUpKey + sharedData.TDownKey + sharedData.TLeftKey + sharedData.TRightKey);
-            Application.LoadLevel(name);
+            SceneManager.LoadScene(name);
         }
     }
 

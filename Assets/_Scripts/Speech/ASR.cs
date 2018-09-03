@@ -280,7 +280,7 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
         //DateTime wechselzeit = waitXSeconds(1);
         for (; ; )
         {
-            Debug.Log("Coroutine aktiv");
+            //Debug.Log("Coroutine aktiv");
             //Debug.LogError(string.Format("*****ERROR: WWE Status: {0} ____ TTS Status:{1}", WWE.GetState(), STT.GetState()));
             //Debug.LogError("WWE is listening: " + WWE.)
             //if (DictationState.Equals(SpeechSystemStatus.Running))
