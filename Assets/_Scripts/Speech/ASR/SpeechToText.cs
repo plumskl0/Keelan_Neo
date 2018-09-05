@@ -103,7 +103,7 @@ public class SpeechToText : MonoBehaviour, ISpeechToTextInterface {
         Debug.Log("Starte Dictation Mode");
         //Debug.Log(dictationRecognizer.ToString());
         dictationRecognizer.Start();
-        Debug.Log("Dictation started");
+        //Debug.Log("Dictation started");
     }
 
     public void StopDetection()

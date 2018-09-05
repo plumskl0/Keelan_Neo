@@ -64,10 +64,12 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
     {
         SpeechAssistant = gameObject;
         STT = SpeechAssistant.AddComponent<SpeechToText>();
-        //STT = GetComponent<SpeechToText>();
+        //STT = SpeechAssistant.AddComponent<STTGoogleCloudSpeech>();
+
+
         WWE = SpeechAssistant.AddComponent<WakeWordEngine>();
-        SpeechAssistant.AddComponent<GoogleVoiceSpeech>();
-        //WWE = GetComponent<WakeWordEngine>();
+        //SpeechAssistant.AddComponent<GoogleVoiceSpeech>();
+
         Debug.Log("Stt hinzugefügt");
         MicrophoneBorder = GameObject.Find("MicrophoneBorder");
 

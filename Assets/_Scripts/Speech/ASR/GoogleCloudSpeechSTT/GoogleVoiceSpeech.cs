@@ -36,7 +36,7 @@ using UnityEngine.UI;
 
 public class GoogleVoiceSpeech : MonoBehaviour {
 
-		public GUIText TextBox;
+
     public Text text;
 
 		struct ClipData
