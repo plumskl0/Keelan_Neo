@@ -46,7 +46,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
         if (!sharedData.TrainingMode)
         {
             Debug.Log("Untersuche Namen des Spielers");
-            StartCoroutine(DelayedPlayerNameCollection(2.0f));
+            StartCoroutine(DelayedPlayerNameCollection(1.0f));
         }
     }
     IEnumerator DelayedPlayerNameCollection(float waitTime)
