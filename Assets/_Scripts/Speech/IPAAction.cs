@@ -360,20 +360,30 @@ public class IPAAction : MonoBehaviour {
 
             foreach (string s in userInfoArray)
             {
+                Debug.Log("Lese namenszeile: " + s);
                 string[] keyValue = s.Split(':');
                 if (keyValue[0].Equals("name"))
                 {
                     foundNameEntrie = true;
                     newText.AppendLine("name:" + playerName + ";");
+                    Debug.LogError("Habe Namenseintrag gefunden. Schreibe mit neuem Namen");
                 }
                 else //Füge nicht zu verändernde Zeilen dem Builder hinzu
                 {
-                    newText.AppendLine(s + ";");
+                    if (s.Contains(":"))
+                    {
+                        newText.AppendLine(s + ";");
+                        Debug.LogErrorFormat("Eintrag gefunden der kein Name war _> übernehme unverändert");//: {0}, key: {1} value: {2}", s, keyValue[0], keyValue[1]);
+                    }
                 }
             }
-            if(!foundNameEntrie)  //Falls die Datei existiert aber noch kein Name hinterlegt ist: schreibe namen ans Ende der Datei
+            if (!foundNameEntrie)  //Falls die Datei existiert aber noch kein Name hinterlegt ist: schreibe namen ans Ende der Datei
+            {
                 newText.AppendLine("name:" + playerName + ";");
+                Debug.LogError("**Es stand kein Name in der Datei. Füge jetzt hinzu");
+            }
 
+            fileStream.SetLength(0); //verwerfe bisherige Fileinhalte -> wurden in StringBuilder eingelesen und werden nun erneut geschrieben
             streamWriter.Write(newText);
         }
         streamWriter.Flush();
