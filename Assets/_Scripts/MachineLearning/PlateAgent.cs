@@ -298,12 +298,12 @@ public class PlateAgent : Agent
         float result;
         if (unscaledVar < minValue && Mathf.Abs(unscaledVar - minValue) < 0.01)
         {
-            Debug.LogFormat("Rundungsfehler?, Input {0} ist etwas kleiner als der min Wert: {1}", unscaledVar, minValue);
+            //Debug.LogFormat("Rundungsfehler?, Input {0} ist etwas kleiner als der min Wert: {1}", unscaledVar, minValue);
             result = 0;
         }
         else if (unscaledVar > maxValue && Mathf.Abs(unscaledVar - maxValue) < 0.01)
         {
-            Debug.LogFormat("Rundungsfehler?, Input {0} ist etwas größer als der max Wert: {1}", unscaledVar, maxValue);
+            //Debug.LogFormat("Rundungsfehler?, Input {0} ist etwas größer als der max Wert: {1}", unscaledVar, maxValue);
             result = 1;
         }
         else if ((unscaledVar > maxValue && Mathf.Abs(unscaledVar - maxValue) > 0.01) || (unscaledVar < minValue && Mathf.Abs(unscaledVar - minValue) > 0.01))

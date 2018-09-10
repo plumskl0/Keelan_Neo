@@ -60,7 +60,6 @@ public class SpeechToText : MonoBehaviour, ISpeechToTextInterface {
                 EventManager.TriggerEvent(EventManager.ttsUnhandledError, new EventMessageObject(EventManager.ttsUnhandledError, completionCause.ToString()));
             }
 
-            
         };
          dictationRecognizer.DictationHypothesis += (text) =>
          {
@@ -81,7 +80,7 @@ public class SpeechToText : MonoBehaviour, ISpeechToTextInterface {
 
     private void DictationRecognizer_DictationError(string error, int hresult)
     {
-        Debug.LogError("***ERROR: " + error);
+        Debug.LogError("***ERROR in STT: " + error);
     }
 
     private void DictationRecognizer_DictationResult(string text, ConfidenceLevel confidence)

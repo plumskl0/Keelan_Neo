@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Minimap : MonoBehaviour {
     public Transform player;
-    private bool followMode = true;
+    private bool followMode = true; //Bestimmt ob die Minimap sich entsprechend der Autoposition verschiebt
 
     public bool FollowMode
     {

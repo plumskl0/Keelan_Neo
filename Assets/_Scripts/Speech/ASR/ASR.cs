@@ -184,6 +184,37 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
         isSwitchingASRMode = false;
     }*/
 
+    //Restart WakeWord for casses keyword does not work anymore
+    public void RefreshWakeWordDetection() 
+    {
+        
+        if (!isSwitchingASRMode)
+        {
+            isSwitchingASRMode = true;
+            //SwitchToWakeWord in case Dictation is activ
+            if (DictationState == SpeechSystemStatus.Running)
+            {
+                Debug.LogError("MANUELLER Wechsel von STT zu WWE.");
+                SwitchToWakeWordDetection();
+            }
+            else if(WakeWordState == SpeechSystemStatus.Running)
+            {
+                WWE.StopDetection();
+                WantToChangeToWakeWordDetection = true;
+            }
+            else
+            {
+                Debug.LogError("Fehler bei manuellem Refresh der WWE. Nicht behandelter Fall.");
+            }
+            isSwitchingASRMode = false;
+        }
+        else
+        {
+            Debug.LogError("Ignoriere manuellen Refresh der WWE, da gerade ein Wechsel stattfindet");
+        }
+
+    }
+
     //Test: Funktionen ohne Argumente -> werden tatsächlich nicht genutzt
     public void SwitchToWakeWordDetection()
     {
@@ -452,5 +483,9 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
             //Debug.Log("Kein Wechsel beantragt.");
         }
 
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.H))
+        {
+            RefreshWakeWordDetection();
+        }
     }
 }

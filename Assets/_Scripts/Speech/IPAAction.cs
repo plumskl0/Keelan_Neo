@@ -33,7 +33,7 @@ public class IPAAction : MonoBehaviour {
     public const string openMap = "map.Open";
     public const string closeMap = "map.Close";
     public const string saveNavigationPoint = "map.SaveNavigationPoint";
-    public const string startNavigation = "navigation.Start";
+    public const string startNavigation = "map.StartNavigation";
     public const string wantToSetContext = "WantToSetContext";
     public const string setContext = "SetContext";
     public const string changeMapFixedStep = "map.ChangeFixedStep";
@@ -49,6 +49,7 @@ public class IPAAction : MonoBehaviour {
     public const string performanceAndDifficultyMeasured = "training.PerformanceAndDiffcultyMeasured";
     public const string restartTraining = "training.Restart";
     public const string setPlayerName = "playerInfo.SetName";
+    public const string repeatAnswer = "Main.RepeatAnswer";
     /*public const string speak = "conversation.Speak";
     public const string askQuestion = "conversation.AskQuestion";*/
 
@@ -366,14 +367,14 @@ public class IPAAction : MonoBehaviour {
                 {
                     foundNameEntrie = true;
                     newText.AppendLine("name:" + playerName + ";");
-                    Debug.LogError("Habe Namenseintrag gefunden. Schreibe mit neuem Namen");
+                    Debug.Log("Habe Namenseintrag gefunden. Schreibe mit neuem Namen");
                 }
                 else //Füge nicht zu verändernde Zeilen dem Builder hinzu
                 {
                     if (s.Contains(":"))
                     {
                         newText.AppendLine(s + ";");
-                        Debug.LogErrorFormat("Eintrag gefunden der kein Name war _> übernehme unverändert");//: {0}, key: {1} value: {2}", s, keyValue[0], keyValue[1]);
+                        Debug.Log("Eintrag gefunden der kein Name war _> übernehme unverändert");//: {0}, key: {1} value: {2}", s, keyValue[0], keyValue[1]);
                     }
                 }
             }
@@ -387,7 +388,7 @@ public class IPAAction : MonoBehaviour {
             streamWriter.Write(newText);
         }
         streamWriter.Flush();
-        Debug.LogError("Habe in Datei geschrieben: " + "name:" + playerName + ";");
+        //Debug.LogError("Habe in Datei geschrieben: " + "name:" + playerName + ";");
         //streamReader.Close();
         //streamWriter.Close();
         fileStream.Close();

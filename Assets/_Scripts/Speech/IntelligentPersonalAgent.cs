@@ -25,6 +25,9 @@ public class IntelligentPersonalAgent : MonoBehaviour {
     private UnityAction<EventMessageObject> Print;
     private UnityAction<EventMessageObject> IntentHandler;
 
+    //Informationen des IPA
+    private string lastIPAspeech;
+
 
     private void Awake()
     {
@@ -93,10 +96,14 @@ public class IntelligentPersonalAgent : MonoBehaviour {
 
     }
 
+    int slotMissingRounds = 0; //zähle mehrfache Nachfrage nach fehlenden Slots
+
     public void HandleIntent (EventMessageObject nluAnswer)
     {
         AIResponse nluResponse = (AIResponse) nluAnswer.MessageBody;
         Debug.Log("##### Habe folgenden Intent erkannt und möchte ihn jetzt verarbeiten: " + nluResponse.Result.Metadata.IntentName);
+
+        lastIPAspeech = nluResponse.Result.Fulfillment.Speech;
 
         //Dialog Delegation prüfen
         Debug.Log("Überprüfe ob noch Slots fehlen: ");
@@ -113,17 +120,25 @@ public class IntelligentPersonalAgent : MonoBehaviour {
         }
         if (slotsMissing)
         {
+            slotMissingRounds++;
             Debug.Log("Es fehlen noch Slotbelegungen. Ich gebe die Kontrolle an TTS");
             //Debug.Log("WWE Status " + asr.WakeWordState);
             //Debug.Log("STT Status " + asr.DictationState);
             EventManager.TriggerEvent(EventManager.keywordDetectedEvent, new EventMessageObject(EventManager.keywordDetectedEvent, "Slots fehlen"));
             //actions.DisplayText(debugText, nluResponse.Result.Fulfillment.Speech);
-            WindowsVoice.speak(string.Format("{0}", nluResponse.Result.Fulfillment.Speech), delay: 0f);
+            string cancelInfo = "";
+
+            if(slotMissingRounds>1)
+            {
+                cancelInfo = "Du kannst ungewollte Anfragen jederzeit beenden, indem du abbrechen sagst.";
+            }
+            WindowsVoice.speak(string.Format("{0} {1}", cancelInfo, nluResponse.Result.Fulfillment.Speech), delay: 0f);
         }
 
         //ansonsten rufe die Handler auf
         else
         {
+            slotMissingRounds = 0;
             Debug.Log("Alle Slots gefüllt:");
             Dictionary<String, System.Object> dic = nluResponse.Result.Parameters;
             foreach (String key in dic.Keys)
@@ -330,6 +345,11 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                         Debug.LogError("******Name konnte nicht gesetzt werden. Baue erneute Nachfrage ein?");
                     actions.SetPlayerName(name);
                     Debug.LogError("Der neue Name ist: " + sharedData.playerName);
+                    break;
+
+                //Allgemeine Befehle:
+                case IPAAction.repeatAnswer:
+                    actions.Speak(lastIPAspeech);
                     break;
 
                 default:
