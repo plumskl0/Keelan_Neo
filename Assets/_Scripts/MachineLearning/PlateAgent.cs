@@ -451,8 +451,8 @@ public class PlateAgent : Agent
             LostLife = true;    //falls die zweite Bedinung auftritt soll das auch als Lebensverlust zählen
             //trainingRouteFinished = true;   //neue Route laden nach Lebensverlust ***geht so nicht -> siehe Zeile untendrunter -> macht CarControllerScript
             //carControllerScript.frameCountThisTrainingRoute = carControllerScript.frameDurationThisRoute + 1;
-
-            Debug.LogFormat("Reset: Ich {0} habe díese Runde so viele Leben gewonnen: {1} \n und bin bei Framecount {2} gescheitert", playerObjectsTransform.name, positiveRewardsThisRound, carControllerScript.frameCountThisTrainingRoute);
+            if (sharedData.TrainingMode)
+                Debug.LogFormat("Reset: Ich {0} habe díese Runde so viele Leben gewonnen: {1} \n und bin bei Framecount {2} gescheitert", playerObjectsTransform.name, positiveRewardsThisRound, carControllerScript.frameCountThisTrainingRoute);
             negativeRewards += sharedData.incentiveLostLife;
             positiveRewardsThisRound = 0;
             negativeRewardsThisRound = 0;

@@ -33,13 +33,16 @@ public class IPAAction : MonoBehaviour {
     public const string openMap = "map.Open";
     public const string closeMap = "map.Close";
     public const string saveNavigationPoint = "map.SaveNavigationPoint";
+    public const string deleteNavigationPoint = "map.DeleteNavigationPoint";
     public const string startNavigation = "map.StartNavigation";
+    public const string endNavigation = "map.EndNavigation";
     public const string wantToSetContext = "WantToSetContext";
     public const string setContext = "SetContext";
     public const string changeMapFixedStep = "map.ChangeFixedStep";
     public const string focusOnCar = "map.FocusOnCar";
     public const string moveCar = "moveCar.Move";
     public const string stopCar = "moveCar.Stop";
+    public const string takeCarControl = "moveCar.TakeCarControl";
     public const string getCarControlBack = "moveCar.GetCarControlBack";
     public const string takePlateControl = "moveCar.TakePlateControl";
     public const string getPlateControlBack = "moveCar.GetPlateControlBack";
@@ -49,7 +52,10 @@ public class IPAAction : MonoBehaviour {
     public const string performanceAndDifficultyMeasured = "training.PerformanceAndDiffcultyMeasured";
     public const string restartTraining = "training.Restart";
     public const string setPlayerName = "playerInfo.SetName";
+    public const string rename = "initRename";
     public const string repeatAnswer = "Main.RepeatAnswer";
+    public const string repeatLastAction = "Main.RepeatLastAction";
+    public const string undo = "Main.Undo";
     /*public const string speak = "conversation.Speak";
     public const string askQuestion = "conversation.AskQuestion";*/
 
@@ -60,6 +66,21 @@ public class IPAAction : MonoBehaviour {
     public void SetTrainingCheckpoint(int currentFrameCount)
     {
         sharedData.checkpointFrameCount = currentFrameCount;
+    }
+
+    public void EndTraining()
+    {
+        sharedData.trainingRouteRecordingStopped = true;    //Beendet hinzufügen neuer Framestrokes in AlternateCarController
+
+
+        //Entferne PlayerControl und Ball
+        sharedData.SetPlayerControl(false);
+        GameObject.FindGameObjectWithTag("Ball").SetActive(false);
+        if (String.IsNullOrEmpty(sharedData.playerName))
+        {
+            Debug.LogError("Fehler bei Namenserfassung. Öffne Texteingabe.");
+            GameObject.Find("NameQuestionCanvas").GetComponent<Canvas>().enabled = true;
+        }
     }
 
 
@@ -247,6 +268,11 @@ public class IPAAction : MonoBehaviour {
         sharedData.AssistantBrake = sharedData.maxTorque;
     }
 
+    public void TakeCarControl ()
+    {
+        sharedData.CarAutopilot = true;
+    }
+
     public void GetCarControlBack()
     {
         sharedData.CarAutopilot = false;    //stelle auf manuelle Steuerung
@@ -321,6 +347,12 @@ public class IPAAction : MonoBehaviour {
         activateNavigation = true;
     }
 
+    public void EndNavigation ()
+    {
+        activateNavigation = false;
+        navigationArrow.forward = playerCarObject.transform.forward;
+    }
+
     public void SaveNavigationPoint(GameObject IconOnMap)
     {
         //Instanziiere das Icon und setze es an die aktuelle Position des Spielers
@@ -332,6 +364,39 @@ public class IPAAction : MonoBehaviour {
         sharedData.savedPlacesOnMap.Add(iconInstance);
         Debug.LogError(sharedData.savedPlacesOnMap.Count.ToString());
         iconText.text = sharedData.savedPlacesOnMap.Count.ToString();
+
+    }
+
+    public void DeleteNavigationPoint(int navigationNumber)
+    {
+        if(sharedData.savedPlacesOnMap.Count > navigationNumber)
+        {
+            GameObject iconInstance = sharedData.savedPlacesOnMap[navigationNumber - 1];
+            //sharedData.savedPlacesOnMap.RemoveAt(navigationNumber - 1);
+            sharedData.savedPlacesOnMap.Remove(iconInstance);
+            Destroy(iconInstance);
+
+            //Refresh der Nummerierung aller restlichen Orte
+            int i = 1;
+            foreach (GameObject otherIcon in sharedData.savedPlacesOnMap)
+            {
+                Text iconText = otherIcon.transform.Find("Image").Find("Text").GetComponent<Text>();
+                Debug.LogFormat("Nummer des Ortes war {0} bei Index {1}...", iconText.text, i);
+                iconText.text = i.ToString();
+                Debug.LogFormat("...ist nun: {0}", iconText.text);
+                i++;
+            }
+
+            //Löse Intent aus der NLU informiert, falls nun alle Orte entfernt wurden
+            if(sharedData.savedPlacesOnMap.Count == 0)
+            {
+                EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, "Alle gespeicherten Orte sind nun entfernt"));
+            }
+        }
+        else
+        {
+            WindowsVoice.speak(string.Format("Ich konnte keinen Ort mit Nummer {0} finden.", navigationNumber), 3);
+        }
 
     }
 
