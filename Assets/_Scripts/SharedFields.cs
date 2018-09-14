@@ -42,7 +42,7 @@ public class SharedFields {
     public bool debugMode = false;
     public int currentFrameCount = 0;   //frameCount des Hauptautos auf der gerade gefahrenen Trainingsstrecke -> im Debug Mode für Checkpoints genutzt
 
-    //Vars für Erfassung und Bewertung von Trainingsrouten
+    //Variablen für Erfassung und Bewertung von Trainingsrouten
     public bool trainingRouteRecordingStopped = false;
     public string trainingRouteDifficulty = "";
     public int checkpointFrameCount = 0;
@@ -58,6 +58,7 @@ public class SharedFields {
     public float maxTorque;
     public float brakeTorque;
     public string playerName = "notSet";
+    public bool isNewUser = true;
     public string userInfoPath = "Assets/user.info";
 
     //Controllerauswahl

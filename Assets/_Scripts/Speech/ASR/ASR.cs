@@ -22,10 +22,13 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
 
     private GameObject SpeechAssistant;
     private ISpeechToTextInterface STT;
-    private IWakeWordEngineInterface WWE;
+    //private IWakeWordEngineInterface WWE;
+    private List<IWakeWordEngineInterface> WWEList = new List<IWakeWordEngineInterface>();   //ermöglicht mehrere WakeWordEngines parallel laufen zu lassen, Statusabfragen gehen immer an die erste der Liste, während Start() und Stop() und Init() Anweisungen an alle gehen
     private SpeechSystemStatus WakeWordState;
     private SpeechSystemStatus DictationState;
     private Boolean WantToChangeToWakeWordDetection = false;
+    //private bool asrComponentsNotSupportedOnThisMashine = false;
+    private bool asrComponentsNotSupportedOnThisMashine = false;
 
     private bool isSwitchingASRMode = false;
     public delegate void AsrSwitchDelegate();
@@ -34,6 +37,8 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
 
 
     Queue<AsrSwitchDelegate> ASRModeSwitchQueue = new Queue<AsrSwitchDelegate>();
+
+    SharedFields sharedData = SharedFields.Instance;
 
 
 
@@ -63,11 +68,39 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
     private void Awake()
     {
         SpeechAssistant = gameObject;
-        STT = SpeechAssistant.AddComponent<SpeechToText>();
-        //STT = SpeechAssistant.AddComponent<STTGoogleCloudSpeech>();
+        Debug.Log("Versuche jetzt Speech Komponenten hinzuzufügen");
+        try
+        {
+            STT = SpeechAssistant.AddComponent<SpeechToText>();
+            //STT = SpeechAssistant.AddComponent<STTGoogleCloudSpeech>();
 
 
-        WWE = SpeechAssistant.AddComponent<WakeWordEngine>();
+            WWEList.Add(SpeechAssistant.AddComponent<WakeWordEngine>());
+        }
+        catch(UnityException unityEx)
+        {
+            Debug.Log("In Unity Exception gefangen");
+            Debug.LogError("Message der Exception ist: " + unityEx.Message);
+            if (unityEx.Message.Equals("Speech recognition is not supported on this machine."))
+            {
+                STT = SpeechAssistant.AddComponent<STTGoogleCloudSpeech>();
+                Debug.Log("GoogleCloud Speech aktiviert.");
+                asrComponentsNotSupportedOnThisMashine = true; //Triggere nach Initialisierung des Sprachassistenten ein Event das diesen über das neue Setup informiert
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Message der Exception ist: " + e.Message);
+            if( e.Message.Equals("Speech recognition is not supported on this machine."))
+            {
+                STT = SpeechAssistant.AddComponent<STTGoogleCloudSpeech>();
+                Debug.Log("GoogleCloud Speech aktiviert.");
+                asrComponentsNotSupportedOnThisMashine = true; //Triggere nach Initialisierung des Sprachassistenten ein Event das diesen über das neue Setup informiert
+            }
+        }
+
+        WWEList.Add(SpeechAssistant.AddComponent<PushToTalkWWE>());
+
         //SpeechAssistant.AddComponent<GoogleVoiceSpeech>();
 
         Debug.Log("Stt hinzugefügt");
@@ -127,26 +160,44 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
         SwitchToWWE = new AsrSwitchDelegate(SwitchToWakeWordDetection);
         SwitchToSTT = new AsrSwitchDelegate(SwitchToSpeechToText);
 
-        /* SpeechAssistant = gameObject;
-         SpeechAssistant.AddComponent<SpeechToText>();
-         STT = GetComponent<SpeechToText>();
-         SpeechAssistant.AddComponent<WakeWordEngine>();
-         WWE = GetComponent<WakeWordEngine>();
-         Debug.Log("Stt hinzugefügt");
-         */
+
 
         //AddWakeWords(new String[] { "computer", "auto" });
         Debug.Log(PhraseRecognitionSystem.Status);
         //WWE.keywordRecognizer.Start();
-        WWE.InitDetection();
+        foreach (IWakeWordEngineInterface WWE in WWEList)
+            WWE.InitDetection();
 
         background = MicrophoneBorder.GetComponent<Image>();
         StartCoroutine("FlashMicrophoneOverlay");
         //SwitchToWakeWordDetection();
         //STT = GameObject.Find(STT);
+
+        if (asrComponentsNotSupportedOnThisMashine)
+        {
+            Debug.LogError("Starte Not Supported Info Routine");
+            StartCoroutine(StartNotSupportedDialogAfterNameCollection(30.0f));
+        }
     }
 
-    private void OnEnable()
+    private IEnumerator StartNotSupportedDialogAfterNameCollection(float timeout)
+    {
+        Debug.Log("Warte...");
+        float passedTime = 0f;
+        //Warte mit der Information, wie die Ersatzsteuerung funktioniert bis die Namenserkennung abgeschlossen ist, und führe einen timeout falls die Namenserkennung nicht klappt
+        while ((sharedData.playerName.Equals("notSet") || (passedTime < timeout && sharedData.playerName.Equals("waitForUserInput"))))
+        {
+            Debug.LogFormat("Warte... Name: {0}, passedTime {1} ", sharedData.playerName, passedTime);
+            passedTime += Time.deltaTime;
+            yield return null;
+        }
+        //Starte anschließend die Info
+        yield return new WaitForSeconds(3.0f); //Warte nochmal kurz damit die Kommandos nicht direkt aneinander hängen
+        Debug.LogError("Sprachsystem nicht unterstützt. Ersatzkomponenten aktiv.");
+            EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, "Sprachsystem vom Betriebssystem nicht unterstützt."));
+    }
+
+        private void OnEnable()
     {
         EventManager.StartListening(EventManager.keywordDetectedEvent, EnableSpeechToText);  //ausschalten um WWE alleine zu testen
         EventManager.StartListening(EventManager.asrRequerstDetectedEvent, EnableWakeWord);
@@ -155,10 +206,10 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
         EventManager.StartListening(EventManager.ttsUnhandledError, EnableWakeWordAfterError);
     }
 
-    public void AddWakeWords(String[] wordsToAdd)
+    /*public void AddWakeWords(String[] wordsToAdd)
     {
         WWE.AddWakeWords(wordsToAdd);
-    }
+    }*/
 
     /*public void SwitchToWakeWordDetection(EventMessageObject args)
     {
@@ -184,7 +235,7 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
         isSwitchingASRMode = false;
     }*/
 
-    //Restart WakeWord for casses keyword does not work anymore
+    //Restart WakeWord for cases keyword does not work anymore
     public void RefreshWakeWordDetection() 
     {
         
@@ -199,7 +250,8 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
             }
             else if(WakeWordState == SpeechSystemStatus.Running)
             {
-                WWE.StopDetection();
+                foreach (IWakeWordEngineInterface WWE in WWEList)
+                    WWE.StopDetection();
                 WantToChangeToWakeWordDetection = true;
             }
             else
@@ -247,7 +299,8 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
             }
             else
             {
-                WWE.StopDetection();
+                foreach (IWakeWordEngineInterface WWE in WWEList)
+                    WWE.StopDetection();
                 STT.StartDetection();
             }
         }
@@ -263,7 +316,8 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
             yield return null;
         }
         Debug.LogError("WWE gestartet - ich wechsle jetzt zu TTS");
-        WWE.StopDetection();
+        foreach (IWakeWordEngineInterface WWE in WWEList)
+            WWE.StopDetection();
         STT.StartDetection();
     }
 
@@ -318,7 +372,7 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
             //Debug.LogError(string.Format("*****ERROR: WWE Status: {0} ____ TTS Status:{1}", WWE.GetState(), STT.GetState()));
             //Debug.LogError("WWE is listening: " + WWE.)
             //if (DictationState.Equals(SpeechSystemStatus.Running))
-            if (STT.GetState().Equals(SpeechSystemStatus.Running) && !WWE.GetState().Equals(SpeechSystemStatus.Running))
+            if (STT.GetState().Equals(SpeechSystemStatus.Running) && !WWEList[0].GetState().Equals(SpeechSystemStatus.Running))
             {
                 switch (schalter)
                 {
@@ -335,7 +389,7 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
                 }
             }
             //else if (WakeWordState.Equals(SpeechSystemStatus.Running))
-            else if (WWE.GetState().Equals(SpeechSystemStatus.Running) && !STT.GetState().Equals(SpeechSystemStatus.Running))
+            else if (WWEList[0].GetState().Equals(SpeechSystemStatus.Running) && !STT.GetState().Equals(SpeechSystemStatus.Running))
             {
 
                 //Debug.Log(string.Format("Endzeit: {0} {1} ist früher als aktuelle Zeit {2} {3}", wechselzeit.Second, wechselzeit.Millisecond,DateTime.Now.Second, DateTime.Now.Millisecond));
@@ -365,7 +419,7 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
     // Update is called once per frame
     void Update()
     {
-        WakeWordState = WWE.GetState();
+        WakeWordState = WWEList[0].GetState();
         DictationState = STT.GetState();
         //lasse das Mikrofon Overlay blinken, falls TTS aktiv ist
         /*if (DictationState.Equals(SpeechSystemStatus.Running))   {
@@ -387,7 +441,8 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
             else if (DictationState.Equals(SpeechSystemStatus.Stopped))
             {
                 Debug.LogError("....und los gehts.*******");
-                WWE.StartDetection();
+                foreach (IWakeWordEngineInterface WWE in WWEList)
+                    WWE.StartDetection();
                 WantToChangeToWakeWordDetection = false;
                 isSwitchingASRMode = false;
             }

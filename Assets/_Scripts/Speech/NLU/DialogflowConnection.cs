@@ -35,11 +35,11 @@ public class DialogflowConnection : MonoBehaviour
     private readonly Queue<Action> ExecuteOnMainThread = new Queue<Action>();
 
     // Use this for initialization
-    IEnumerator Start()
+    private void Awake()
 
     {
         // check access to the Microphone
-        yield return Application.RequestUserAuthorization(UserAuthorization.Microphone);
+        //yield return Application.RequestUserAuthorization(UserAuthorization.Microphone);
         if (!Application.HasUserAuthorization(UserAuthorization.Microphone))
         {
             throw new NotSupportedException("Microphone using not authorized");

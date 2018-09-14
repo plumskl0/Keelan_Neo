@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Windows.Speech;
 
 public interface IWakeWordEngineInterface{
-    void AddWakeWords(String[] wordsToAdd);
+    //void AddWakeWords(String[] wordsToAdd);
     void InitDetection();
     void StartDetection();
     void StopDetection();

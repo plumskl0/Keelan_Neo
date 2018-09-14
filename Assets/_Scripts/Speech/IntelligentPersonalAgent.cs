@@ -54,7 +54,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
         if (!sharedData.TrainingMode)
         {
             Debug.Log("Untersuche Namen des Spielers");
-            StartCoroutine(DelayedPlayerNameCollection(0.5f));
+            StartCoroutine(DelayedPlayerNameCollection(0.1f));
         }
         FillSymmetricDictionary();
         FillEventTriggerDictionary();
@@ -127,6 +127,7 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                 if (keyValue[0].Equals("name"))
                 {
                     foundNameEntrie = true;
+                    sharedData.isNewUser = false;
                     sharedData.playerName = keyValue[1];
                     EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, "Lade Namen aus Speicher " + sharedData.playerName)); //Informiere NLU darüber, dass der Name des Spielers bekannt ist
                 }
@@ -134,12 +135,14 @@ public class IntelligentPersonalAgent : MonoBehaviour {
             streamReader.Close();
             if(!foundNameEntrie)   //Falls Dabei existiert ohne hinterlegten Namen -> behandle wie neuen Spieler
             {
-                Debug.LogError("PlayerName nicht vorhanden, obwohl Datei exisitert. Wird erstellt wenn ich den Namen habe.");
+                sharedData.playerName = "waitForUserInput";
+                Debug.LogError("PlayerName nicht vorhanden, obwohl Datei exisitert. Wird gefüllt wenn ich den Namen habe.");
                 EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, "Neuen Spieler anmelden"));
             }
         }
         else
         {
+            sharedData.playerName = "waitForUserInput";
             Debug.LogError("UserInfo nicht vorhanden. Wird erstellt wenn ich den Namen habe.");
             EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, "Neuen Spieler anmelden"));
         }
@@ -479,6 +482,55 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                     {
                         actions.Speak("Ich kann die letzte Aktion nicht rueckgängig machen. Die eingetragenen Funktionspaare funktionieren nur in die andere Richtung.");
                     }
+                    break;
+
+                case IPAAction.wantMoreHelp:
+                    //Ermittle zuletzt thematisierte Kategorie und simuliere eine entsprechende Anfrage an die NLU
+                    int navigationHelpSessionCount = 0;
+                    int mlTrainingHelpSessionCount = 0;
+                    int driveHelpSessionCount = 0;
+
+
+                    foreach (AIOutputContext currentContext in nluResponse.Result.Contexts)
+                    {
+                        string contextName = currentContext.Name;
+                        if (contextName.Equals("mltraininghelprequested"))
+                        {
+                            Debug.Log("habe training kontext");
+                            mlTrainingHelpSessionCount += (int)currentContext.Lifespan;
+                        }
+                        else if (context.Equals("navigationhelprequested"))
+                        { 
+                            Debug.Log("habe navigation kontext");
+                            navigationHelpSessionCount += (int)currentContext.Lifespan;
+                        }
+                        else if (context.Equals("drivehelprequested"))
+                        {
+                            Debug.Log("habe drive kontext");
+                            driveHelpSessionCount += (int)currentContext.Lifespan;
+                        }
+                    }
+
+                    if(navigationHelpSessionCount > Math.Max(mlTrainingHelpSessionCount, driveHelpSessionCount))
+                    {
+                        EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, "Ich brauche Hilfe in der Kategorie Fahren."));
+                    }
+
+                    else if(mlTrainingHelpSessionCount > Math.Max(navigationHelpSessionCount, driveHelpSessionCount))
+                    {
+                        EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, "Hilf mir beim trainieren"));
+                    }
+
+                    else if(driveHelpSessionCount > Math.Max(navigationHelpSessionCount, mlTrainingHelpSessionCount))
+                    {
+                        EventManager.TriggerEvent(EventManager.asrRequerstDetectedEvent, new EventMessageObject(EventManager.asrRequerstDetectedEvent, "Hilf mir beim Navigieren"));
+                    }
+
+                    else
+                    {
+                        Debug.LogFormat("Konnte kein Event auslösen: navigationHelpSessionCount {0}  mlTrainingHelpSessionCount{1}, driveHelpSessionCount {2}", navigationHelpSessionCount, mlTrainingHelpSessionCount, driveHelpSessionCount);
+                    }
+
                     break;
 
                 default:

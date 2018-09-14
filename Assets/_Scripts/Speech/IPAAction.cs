@@ -56,6 +56,7 @@ public class IPAAction : MonoBehaviour {
     public const string repeatAnswer = "Main.RepeatAnswer";
     public const string repeatLastAction = "Main.RepeatLastAction";
     public const string undo = "Main.Undo";
+    public const string wantMoreHelp = "Help.tellMeMore";
     /*public const string speak = "conversation.Speak";
     public const string askQuestion = "conversation.AskQuestion";*/
 
