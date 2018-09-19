@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using WiimoteApi;
 
@@ -86,11 +87,14 @@ public class SharedFields {
     public float plateMaxAngle = 85f;
 
     //Belohnungen für PlateAgents, (Achtung: werden von Editor Einstellungen beim Player Auto überschrieben):
-    public float incentiveLostLife = -5f;
-    public float incentiveFinishedRoute = 5f;
+    public float incentiveLostLife = -1f;
+    public float incentiveFinishedRoute = 0f;
     public float incentiveBallStillOnPlate = 0.01f;
     public float incentiveFactorDistanceBallToPlateCenter = 0.01f;
     public int delayFactor = 50;
+
+    public Dictionary<string, Vector2> trainingsStatPerFile = new Dictionary<string, Vector2>(); //Statistik pro trainingsfile mit namen string; Vector2: x -> anzahl durchläufe, y -> kummulierte Rewards
+
 
 
     //Hilfsmethode um das Spiel mit Verzögerung zu schließen

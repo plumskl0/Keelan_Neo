@@ -416,8 +416,17 @@ public class IntelligentPersonalAgent : MonoBehaviour {
                     Dictionary<string, object> givenNameEntitie;
                     if (isDict)
                     {
-                        givenNameEntitie = (Dictionary<string, object>) parameterDict["UserName"];
-                        name = (string) givenNameEntitie["given-name"];
+                        givenNameEntitie = (Dictionary<string, object>)parameterDict["UserName"];
+
+                        try
+                        {
+                            name = (string)givenNameEntitie["given-name"];
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            name = (string)givenNameEntitie["MapStringsToName"];
+                        }
+
                     }
                     else
                     {

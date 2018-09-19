@@ -39,7 +39,10 @@ public class AlternateCarController : MonoBehaviour
 
     int dirFileCount;
     private PlateAgent myPlateAgent;
-    List<FileInfo> trainingFiles = new List<FileInfo>();
+    public List<FileInfo> trainingFiles = new List<FileInfo>();
+    public int lastFileNumber;
+
+
     private Dictionary<int, Vector3> trainingsFahrroute = new Dictionary<int, Vector3>();
     private Dictionary<int, Vector3> trainingsFahrrouteSaved = new Dictionary<int, Vector3>();
     private Dictionary<int, Vector3> trainingsFahrroutePosition = new Dictionary<int, Vector3>();
@@ -90,6 +93,28 @@ public class AlternateCarController : MonoBehaviour
             sharedData.maxWheelAngle = maxWheelAngle;
             sharedData.nonMovingCar = nonMovingCar;
 
+            //Prüfe ob die Ordnerstruktur für das Training existiert und erstelle es ggf.
+            Directory.CreateDirectory(dirPathTrainingRoute + "debugLogs");
+            Directory.CreateDirectory(dirPathTrainingRoute + "default/debugLogs");
+            Directory.CreateDirectory(dirPathTrainingRoute + "einfach/debugLogs");
+            Directory.CreateDirectory(dirPathTrainingRoute + "mittel/debugLogs");
+            Directory.CreateDirectory(dirPathTrainingRoute + "schwer/debugLogs");
+
+            //Initialisiere das Trainingsfile Statisik Dictionary
+            if (sharedData.TrainingMode)
+            {
+                Debug.Log("Starte Initialisierung des Statistik Dictionarys*****");
+                LoadTrainingFilesToDict(dirPathTrainingRoute + "einfach/", sharedData.trainingsStatPerFile);
+                LoadTrainingFilesToDict(dirPathTrainingRoute + "mittel/", sharedData.trainingsStatPerFile);
+                LoadTrainingFilesToDict(dirPathTrainingRoute + "schwer/", sharedData.trainingsStatPerFile);
+                Debug.Log("Alle Trainingsfiles in die Statistik geladen");
+
+                foreach (KeyValuePair<string, Vector2> item in sharedData.trainingsStatPerFile)
+                {
+                    Debug.LogFormat("Habe Datei in Stat: {0}", item.Key);
+                }
+            }
+
 
             if (sharedData.nonMovingCar)
             {
@@ -121,16 +146,11 @@ public class AlternateCarController : MonoBehaviour
             }
         }
 
-        //Prüfe ob die Ordnerstruktur für das Training existiert und erstelle es ggf.
-        Directory.CreateDirectory(dirPathTrainingRoute + "debugLogs");
-        Directory.CreateDirectory(dirPathTrainingRoute + "default/debugLogs");
-        Directory.CreateDirectory(dirPathTrainingRoute + "einfach/debugLogs");
-        Directory.CreateDirectory(dirPathTrainingRoute + "mittel/debugLogs");
-        Directory.CreateDirectory(dirPathTrainingRoute + "schwer/debugLogs");
 
         //Lade eine Strecke, falls der Trainingsmodus aktiv ist
         if (sharedData.TrainingMode)
         {
+
             RandomDifficulty();
             LoadTrainingFiles(dirPathTrainingRoute + currentDifficulty); //vorher currentDifficulty ändern, falls statt "default" einfach, mittel oder schwer angewendet werden soll
             LoadTrainingRoute(dirPathTrainingRoute + currentDifficulty);
@@ -141,13 +161,13 @@ public class AlternateCarController : MonoBehaviour
         }
     }
 
-    private void LoadTrainingFiles(String filePath)
+    private void LoadTrainingFiles(String filePath, bool loadOtherDifficultyIfEmpty = true)
     {
         trainingFiles.Clear();
         //Debug.LogError("ich bin: " + myPlateAgent.playerObjectsTransform.name);
         DirectoryInfo dir = new DirectoryInfo(filePath);
         dirFileCount = dir.GetFiles().Length - dir.GetFiles("*.meta").Length - dir.GetFiles("*Position").Length;
-        if (dirFileCount == 0)  //Ändere wiederholt Schwirigkeitsgrad bis der Ordner FIles enthält
+        if (dirFileCount == 0 && loadOtherDifficultyIfEmpty)  //Ändere wiederholt Schwirigkeitsgrad bis der Ordner FIles enthält
         {
             Debug.LogFormat("Für aktuellen Schwierigkeitsgrad {0} gab es keine Trainingsrouten. Lade neuen Schwierigkeitsgrad", currentDifficulty);
             RandomDifficulty();
@@ -160,10 +180,27 @@ public class AlternateCarController : MonoBehaviour
             {
                 if (!((file.Name.Contains("meta")) || (file.Name.Contains("Position"))))
                 {
-                    Debug.Log("Füge File hinzu:" + file.Name);
+                   // Debug.Log("Füge File hinzu:" + file.Name);
                     trainingFiles.Add(file);
-                    Debug.Log("Jetztiger File Count: " + trainingFiles.Count);
+                 //   Debug.Log("Jetztiger File Count: " + trainingFiles.Count);
                 }
+            }
+        }
+        //Debug.LogFormat("Habe {0} Files im TrainingsRouteDict. ", trainingFiles.Count);
+    }
+
+    public void LoadTrainingFilesToDict(String folderPath, Dictionary<string, Vector2> targetDict)
+    {
+        DirectoryInfo dir = new DirectoryInfo(folderPath);
+        dirFileCount = dir.GetFiles().Length - dir.GetFiles("*.meta").Length - dir.GetFiles("*Position").Length;
+
+        foreach (FileInfo file in dir.EnumerateFiles())
+        {
+            if (!((file.Name.Contains("meta")) || (file.Name.Contains("Position"))))
+            {
+                Debug.Log("Füge File hinzu:" + file.Name);
+                targetDict.Add(file.FullName, new Vector2(0f,0f));
+                Debug.Log("Jetztiger File Count: " + sharedData.trainingsStatPerFile.Count);
             }
         }
     }
@@ -196,12 +233,15 @@ public class AlternateCarController : MonoBehaviour
             throw new Exception("Für das Training wurden keine Trainingsrouten gefunden:  " + myPlateAgent.playerObjectsTransform.name);
         }
         int randomFileNumber = UnityEngine.Random.Range(0, dirFileCount);
+        lastFileNumber = randomFileNumber;
         Debug.Log("Nehmen File Nummer: " + randomFileNumber + " mit Namen: " + trainingFiles[randomFileNumber].Name);
         //StreamReader read = new StreamReader(dirPathTrainingRoute + randomFileNumber);
         MapFileToDict(filePath + trainingFiles[randomFileNumber].Name, trainingsFahrroute);
         MapFileToDict(filePath + trainingFiles[randomFileNumber].Name + "Position", trainingsFahrroutePosition);
         MapFileToDict(filePath + "debugLogs/" + trainingFiles[randomFileNumber].Name + "velocity", trainingsFahrrouteVelocity);
         MapFileToDict(filePath + "debugLogs/" + trainingFiles[randomFileNumber].Name + "rotation", trainingsFahrrouteRotation);
+
+
 
         int currentMax = 0;
         foreach (int n in trainingsFahrroute.Keys)
@@ -212,7 +252,7 @@ public class AlternateCarController : MonoBehaviour
             }
         }
         frameDurationThisRoute = currentMax;
-        Debug.Log("max Frame: " + frameDurationThisRoute);
+       // Debug.Log("max Frame: " + frameDurationThisRoute);
     }
 
     //Hilfsmethode um aus gespeicherten Daten Dict zu erstellen
@@ -284,7 +324,7 @@ public class AlternateCarController : MonoBehaviour
         sharedData.currentFrameCount = frameCountThisTrainingRoute;
 
         //****Was genau macht diese Funktion -> berechnet zwischenschritte zw. FixedUpdate Calls ....
-        if(!sharedData.TrainingMode)   //Im Trainingsmodus wird die Steuerung über Positionsverschiebungen (ohne Collider) simuliert
+        if (!sharedData.TrainingMode)   //Im Trainingsmodus wird die Steuerung über Positionsverschiebungen (ohne Collider) simuliert
             getCollider(FRONT_LEFT).ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
 
 
@@ -301,11 +341,32 @@ public class AlternateCarController : MonoBehaviour
                     //teile Auto ggf. mit, dass die Route fertig ist:
                     if (frameCountThisTrainingRoute > frameDurationThisRoute)
                     {
-                        Debug.Log("beende Strecke bei Frame Count = " + frameCountThisTrainingRoute);
+                        //Aktualiese Statistik bevor eine neue Strecke geladen wird
+                        try
+                        {
+                            Vector2 ChooseCountAndCumRewards = sharedData.trainingsStatPerFile[trainingFiles[lastFileNumber].FullName];
+                            //xKoordinate bleibt gleich, da der Ball nicht runtergefallen ist
+                            ChooseCountAndCumRewards.y += myPlateAgent.positiveRewardsThisRound - myPlateAgent.negativeRewardsThisRound;
+                            sharedData.trainingsStatPerFile[trainingFiles[lastFileNumber].FullName] = ChooseCountAndCumRewards;
+
+                            Debug.LogFormat("Update der Statistik von File: {2} #Lebensverluste: {0} und rewards:{1}", ChooseCountAndCumRewards.x, ChooseCountAndCumRewards.y, trainingFiles[lastFileNumber].FullName);
+                        }
+                        catch (System.Exception e)
+                        {
+                            Debug.LogErrorFormat("Konnte Strecke der Statistik nicht hinzufügen. Fehler {0} ", e.Message);
+
+                        }
+
+                        //Debug.Log("beende Strecke bei Frame Count = " + frameCountThisTrainingRoute);
                         Debug.Log("Traingsstrecke beendet... Agent Reset");
 
                         myPlateAgent.TrainingRouteFinished = true;
                         frameCountThisTrainingRoute = 1;
+
+
+
+
+                        //Lade neue Strecke
                         RandomDifficulty();
                         LoadTrainingFiles(dirPathTrainingRoute + currentDifficulty);
                         LoadTrainingRoute(dirPathTrainingRoute + currentDifficulty);
@@ -363,7 +424,7 @@ public class AlternateCarController : MonoBehaviour
                     try
                     {
                         //++++++Rotation Mod und velocity ausgeschaltet eingeschaltet
-                        transform.eulerAngles = trainingsFahrrouteRotation[frameCountThisTrainingRoute];     
+                        transform.eulerAngles = trainingsFahrrouteRotation[frameCountThisTrainingRoute];
                         rb.velocity = trainingsFahrrouteVelocity[frameCountThisTrainingRoute];
                         //
 
@@ -389,7 +450,7 @@ public class AlternateCarController : MonoBehaviour
 
                     //Setze Auto auf Position der Trainingsroute -> gleicht die kleinen Abweichungen aus
                     //*++++++ Position Sim ausgeschaltet eingeschaltet
-                    gameObject.transform.position = trainingsFahrroutePosition[frameCountThisTrainingRoute];   
+                    gameObject.transform.position = trainingsFahrroutePosition[frameCountThisTrainingRoute];
 
                     //über leichte Abweichgungen der Routen soll die Fahrroute sich nicht ändern -> auf Route zurücksetzen falls Grenzwert überschritten
                     if (Mathf.Abs((trainingsFahrroutePosition[frameCountThisTrainingRoute].normalized - gameObject.transform.position.normalized).magnitude) > maxTrainingRouteDiff)
@@ -599,11 +660,11 @@ public class AlternateCarController : MonoBehaviour
         {
             currentDifficulty = "einfach/";
         }
-        else if (i >0.5f && i <=0.8f)
+        else if (i > 0.5f && i <= 0.8f)
         {
             currentDifficulty = "mittel/";
         }
-        else if (i >0.8f)
+        else if (i > 0.8f)
         {
             currentDifficulty = "schwer/";
         }
@@ -752,12 +813,12 @@ public class AlternateCarController : MonoBehaviour
             reset = 1;
         }
 
-        if(sumMoveHorizontal <-1 || sumMoveHorizontal > 1 || sumMoveVertical < -1 || sumMoveVertical > 1)
+        if (sumMoveHorizontal < -1 || sumMoveHorizontal > 1 || sumMoveVertical < -1 || sumMoveVertical > 1)
         {
             Debug.LogErrorFormat("Achsenbelegungen außerhalb Intervall [-1,1]: Hor: {0}, Vert: {1}", sumMoveHorizontal, sumMoveVertical);
         }
 
-            return new Vector4(sumMoveHorizontal, sumMoveVertical, brake, reset);
+        return new Vector4(sumMoveHorizontal, sumMoveVertical, brake, reset);
     }
 
     //*****todo: Alt und ungenutzt?!
@@ -826,6 +887,29 @@ public class AlternateCarController : MonoBehaviour
             else
                 Debug.LogError("Route nicht gespeichert, da Strecke nicht ordnungsgemäß beendet wurde");
             WriteTrainingsRouteToFile("default/");
+        }
+
+        //Schreibe im Trainingsmodus die Statistik aller Files
+        if (sharedData.TrainingMode && !myPlateAgent.isTrainingCar) 
+        {
+            using (StreamWriter writer = File.AppendText("statPerRoute_" + System.DateTime.Now.ToString("yyyyMMddHHmmss")))
+            //using (StreamWriter writer = File.AppendText("statPerRoute_"))
+
+            {
+
+                foreach (KeyValuePair<string, Vector2> item in sharedData.trainingsStatPerFile)
+                {
+                    //Debug.Log(item.Value.ToString("G9"));
+                    String valueString = string.Format("({0}.{1})", item.Value.x, item.Value.y);
+                    String concat = string.Format("[{0}|{1}]", item.Key, valueString);
+                    //KeyValuePair<int, String> n = new KeyValuePair<int, string>(item.Key, valueString);
+                    //Debug.Log(concat);
+
+                    writer.WriteLine(concat);//Todo: schaue ob laden der Route noch richtung klappt -> jetzt mit Zeilenumbruhc
+                                         //Debug.Log(sharedData.trainingsFahrroute.Count);
+                    //writer.Write(";");
+                }
+            }
         }
 
     }

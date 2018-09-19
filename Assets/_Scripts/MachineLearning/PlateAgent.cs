@@ -24,7 +24,7 @@ public class PlateAgent : Agent
 
     // Verzögere den Start pro Trainingsauto unterschiedlich -> müssen von selber Position starten, aber wenn dies gleichzeitig passiert gibt es zu viel Kollisionen
     public int delay = 0;
-    
+
 
     float ballAbstandZuTellermitte;
 
@@ -165,6 +165,9 @@ public class PlateAgent : Agent
                     //plateTransform.rotation = Quaternion.Euler(75f, 0f, 0f); //todo: zurückstellen auf neutral | Schrägstellung der Plate ist für Übung ohne Autobewegung
                     break;
                 case "Level1Training":
+                    //Reset der Belohnungen bis zum Lebensverlust bzw. Ende der Strecke, Statisik wurde bereit an der Stelle gefüllt, die Lostlife und TrainingsrouteFinished setzen
+                    positiveRewardsThisRound = 0;
+                    negativeRewardsThisRound = 0;
                     //resetCarScript.CarReset(95.39f, 1.08926f, 30.4274f, false);
                     if (sharedData.nonMovingCar)    //benötigt einen Reset an Ort und Stelle, damit die Autos nicht übereinander stehen
                     {
@@ -206,6 +209,7 @@ public class PlateAgent : Agent
                             {
                                 sharedData.LostLife = false;
                             }
+
                         }
                         else
                         {
@@ -222,7 +226,7 @@ public class PlateAgent : Agent
 
 
             //Neige den Teller unabhängig vom gewählten Level: NonMoving -> Zufallswerte, sonst -> beibehalten
-            if(sharedData.nonMovingCar) //Zufallsneigung des Tellers falls das Auto sich nicht bewegt
+            if (sharedData.nonMovingCar) //Zufallsneigung des Tellers falls das Auto sich nicht bewegt
             {
                 //Zufallswerte für Tellerneigung:
                 float randomX = Random.Range(-0.4f, 0.4f);
@@ -308,7 +312,7 @@ public class PlateAgent : Agent
         }
         else if ((unscaledVar > maxValue && Mathf.Abs(unscaledVar - maxValue) > 0.01) || (unscaledVar < minValue && Mathf.Abs(unscaledVar - minValue) > 0.01))
         {
-            Debug.LogErrorFormat("ACHTUNG: Rundungsfehler?, Input {0} ist DEUTLICH außerhalb Interhalb [min,max]: [{1},{2}]", unscaledVar,minValue, maxValue);
+            Debug.LogErrorFormat("ACHTUNG: Rundungsfehler?, Input {0} ist DEUTLICH außerhalb Interhalb [min,max]: [{1},{2}]", unscaledVar, minValue, maxValue);
             result = (unscaledVar - minValue) / (maxValue - minValue);
         }
 
@@ -316,7 +320,7 @@ public class PlateAgent : Agent
         {
             result = (unscaledVar - minValue) / (maxValue - minValue);
         }
-        if(result < 0 || result > 1)
+        if (result < 0 || result > 1)
         {
 
             Debug.LogError("***Min Max Scaler konnte den Wert nicht zwischen 0 und 1 legen: " + result);
@@ -335,7 +339,7 @@ public class PlateAgent : Agent
         Vector3 ballToTransformPositionVector = ballTransform.position - plateTransform.position;
         AddVectorObs(ballToTransformPositionVector.normalized);
         AddVectorObs(ballRgBody.velocity.normalized);
-        AddVectorObs(carRgBody.velocity.normalized);    //Richtungsvektor des Autos
+        AddVectorObs(carRgBody.velocity.normalized);    //Richtungsvektor des Autos  könnte ersetzt werden durch Steigung + motortorque
         AddVectorObs(MinMaxScaleZeroToOne(carControllerScript.angle, -sharedData.maxWheelAngle, sharedData.maxWheelAngle));
         AddVectorObs(carTransform.forward.normalized);
     }
@@ -418,8 +422,8 @@ public class PlateAgent : Agent
 
     float negativeRewards = 0;
     float positiveRewards = 0;
-    float negativeRewardsThisRound = 0;
-    float positiveRewardsThisRound = 0;
+    public float negativeRewardsThisRound = 0;
+    public float positiveRewardsThisRound = 0;
     public override void AgentAction(float[] vectorAction, string textAction)
     {
         bool takeAktion = sharedData.TrainingMode || sharedData.plateAutopilot; //reine Simulation der Belohnungen falls Autopilot den Teller nicht steuern soll
@@ -448,14 +452,41 @@ public class PlateAgent : Agent
         //(ballTransform.position.y < 0)
         if (LostLife || ((ballTransform.position.y < 0) && ballAbstandZuTellermitte > 3f))    //Leben verloren -> Reset
         {
+            negativeRewards += sharedData.incentiveLostLife;
+            //Aktualisiere Statistik bevor Belohnug bis zum Lebensverlust aktualisiert wird
+            try
+            {
+               /* foreach (KeyValuePair<string, Vector2> item in sharedData.trainingsStatPerFile)
+                {
+                    Debug.LogFormat("Habe Key in Stat: {0}", item.Key);
+                    Debug.LogFormat("Value: {0}", sharedData.trainingsStatPerFile[item.Key]);
+                }*/
+
+                string lastFileName = carControllerScript.trainingFiles[carControllerScript.lastFileNumber].FullName;
+                //Debug.Log("Name des Files: " + lastFileName);
+                Vector2 ChooseCountAndCumRewards = sharedData.trainingsStatPerFile[lastFileName];
+                ChooseCountAndCumRewards.x += 1;
+                ChooseCountAndCumRewards.y += positiveRewardsThisRound - negativeRewardsThisRound;
+                sharedData.trainingsStatPerFile[carControllerScript.trainingFiles[carControllerScript.lastFileNumber].FullName] = ChooseCountAndCumRewards;
+
+
+                Debug.LogFormat("Update der Statistik von File: {2} #Lebensverluste: {0} und rewards:{1}", ChooseCountAndCumRewards.x, ChooseCountAndCumRewards.y, lastFileName);
+
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogErrorFormat("Konnte für Strecke {1} Statistik nicht updaten {2}. Fehler {0} ", e.Message, carControllerScript.trainingFiles[carControllerScript.lastFileNumber].FullName, carControllerScript.lastFileNumber);
+
+            }
+
+
             LostLife = true;    //falls die zweite Bedinung auftritt soll das auch als Lebensverlust zählen
             //trainingRouteFinished = true;   //neue Route laden nach Lebensverlust ***geht so nicht -> siehe Zeile untendrunter -> macht CarControllerScript
             //carControllerScript.frameCountThisTrainingRoute = carControllerScript.frameDurationThisRoute + 1;
             if (sharedData.TrainingMode)
                 Debug.LogFormat("Reset: Ich {0} habe díese Runde so viele Leben gewonnen: {1} \n und bin bei Framecount {2} gescheitert", playerObjectsTransform.name, positiveRewardsThisRound, carControllerScript.frameCountThisTrainingRoute);
-            negativeRewards += sharedData.incentiveLostLife;
-            positiveRewardsThisRound = 0;
-            negativeRewardsThisRound = 0;
+
+
             //Debug.Log("habe Leben verloren");
 
             //TODO: Verhalten ok für debug Mode + PlateAutopilot?
@@ -497,8 +528,7 @@ public class PlateAgent : Agent
                 }
             }
 
-            positiveRewards += sharedData.incentiveBallStillOnPlate;
-            positiveRewardsThisRound += sharedData.incentiveBallStillOnPlate;
+
 
             //Abstand zwischen Ball und Tellermittelpunkt berechnen
             Vector3 tellermitte = plateTransform.position;
@@ -508,8 +538,8 @@ public class PlateAgent : Agent
             //Debug.Log("Abstand Ball zu Tellermite: " + ballAbstandZuTellermitte);
             float abstandbestrafung = -sharedData.incentiveFactorDistanceBallToPlateCenter * Mathf.Clamp(1f * ballAbstandZuTellermitte, 0, 1);
             //Debug.Log("**Abstandsbestrafung: " + abstandbestrafung);
-            negativeRewards += abstandbestrafung;
-            negativeRewardsThisRound += abstandbestrafung;
+            //negativeRewards += abstandbestrafung;
+            //negativeRewardsThisRound += abstandbestrafung;
 
             if (takeAktion)
             {
@@ -517,6 +547,8 @@ public class PlateAgent : Agent
                 AddReward(sharedData.incentiveBallStillOnPlate);
                 //AddReward(abstandbestrafung);
             }
+            positiveRewards += sharedData.incentiveBallStillOnPlate;
+            positiveRewardsThisRound += sharedData.incentiveBallStillOnPlate;
 
 
         }
@@ -583,39 +615,39 @@ public class PlateAgent : Agent
 
         if (actionX < plateXAxis)
         {
-                plateXAxis -= achsenaenderung * Mathf.Abs(actionX);
+            plateXAxis -= achsenaenderung * Mathf.Abs(actionX);
         }
 
         else if (actionX > plateXAxis)
         {
-                plateXAxis += achsenaenderung * Mathf.Abs(actionX);
+            plateXAxis += achsenaenderung * Mathf.Abs(actionX);
 
         }
 
         if (actionZ < plateZAxis)
         {
-                plateZAxis -= achsenaenderung * Mathf.Abs(actionZ);
+            plateZAxis -= achsenaenderung * Mathf.Abs(actionZ);
         }
 
         else if (actionZ > plateZAxis)
         {
-                plateZAxis += achsenaenderung * Mathf.Abs(actionZ);
+            plateZAxis += achsenaenderung * Mathf.Abs(actionZ);
         }
         //Debug.LogFormat("x-Achse: {0}  und y-Achse: {1}", plateXAxis, plateZAxis);
-        plateTransform.localRotation = Quaternion.Euler(Mathf.Clamp(plateXAxis,-1,1) * sharedData.plateMaxAngle, 0f, Mathf.Clamp(plateZAxis,-1,1) * sharedData.plateMaxAngle);
+        plateTransform.localRotation = Quaternion.Euler(Mathf.Clamp(plateXAxis, -1, 1) * sharedData.plateMaxAngle, 0f, Mathf.Clamp(plateZAxis, -1, 1) * sharedData.plateMaxAngle);
     }
 
     private void RotatePlateLikeUnityExample(float actionX, float actionZ)
     {
-        if(!isTrainingCar)  
-            Debug.LogFormat("zAction: {0}, tellerRotation: {1}",actionZ, plateTransform.rotation.z);
+        if (!isTrainingCar)
+            Debug.LogFormat("zAction: {0}, tellerRotation: {1}", actionZ, plateTransform.rotation.z);
 
 
         float action_z = 2f * Mathf.Clamp(actionZ, -1f, 1f);
         if ((plateTransform.rotation.z < 0.25f && action_z > 0f) ||
         (plateTransform.rotation.z > -0.25f && action_z < 0f))
         {
-            if(!isTrainingCar)
+            if (!isTrainingCar)
                 Debug.Log("RotateZ");
             /*float zielwinkel = plateTransform.rotation.eulerAngles.z + action_z;
             Debug.Log(zielwinkel + " -----> ist zielwinkel");

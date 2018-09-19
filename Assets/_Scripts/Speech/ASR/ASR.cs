@@ -68,8 +68,26 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
     private void Awake()
     {
         SpeechAssistant = gameObject;
-        Debug.Log("Versuche jetzt Speech Komponenten hinzuzufügen");
-        try
+        Debug.Log("Versuche jetzt Speech Komponenten hinzuzufügen. Betriebssystem: " + SystemInfo.operatingSystem );
+
+        //Hinzufügen Plattformabhängier Komponenten, falls keine Plattform passt wird PushToSpeek + GoogleCloudSpeech akivert
+        if(SystemInfo.operatingSystem.Contains("Windows 10"))
+        {
+            STT = SpeechAssistant.AddComponent<SpeechToText>();
+            //STT = SpeechAssistant.AddComponent<STTGoogleCloudSpeech>();
+            WWEList.Add(SpeechAssistant.AddComponent<WakeWordEngine>());
+        }
+
+        else
+        {
+            STT = SpeechAssistant.AddComponent<STTGoogleCloudSpeech>();
+            Debug.Log("GoogleCloud Speech aktiviert.");
+            asrComponentsNotSupportedOnThisMashine = true; //Triggere nach Initialisierung des Sprachassistenten ein Event das diesen über das neue Setup informiert
+        }
+
+
+
+       /* try
         {
             STT = SpeechAssistant.AddComponent<SpeechToText>();
             //STT = SpeechAssistant.AddComponent<STTGoogleCloudSpeech>();
@@ -97,13 +115,12 @@ public class ASR : MonoBehaviour, IAutomaticSpeechInterface
                 Debug.Log("GoogleCloud Speech aktiviert.");
                 asrComponentsNotSupportedOnThisMashine = true; //Triggere nach Initialisierung des Sprachassistenten ein Event das diesen über das neue Setup informiert
             }
-        }
+        }*/
 
         WWEList.Add(SpeechAssistant.AddComponent<PushToTalkWWE>());
 
         //SpeechAssistant.AddComponent<GoogleVoiceSpeech>();
 
-        Debug.Log("Stt hinzugefügt");
         MicrophoneBorder = GameObject.Find("MicrophoneBorder");
 
         EnableWakeWord = new UnityAction<EventMessageObject>(AddWWERequestToQueue);
