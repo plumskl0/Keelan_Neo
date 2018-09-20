@@ -39,8 +39,9 @@ public class AlternateCarController : MonoBehaviour
 
     int dirFileCount;
     private PlateAgent myPlateAgent;
-    public List<FileInfo> trainingFiles = new List<FileInfo>();
-    public int lastFileNumber;
+    public List<FileInfo> trainingFiles = new List<FileInfo>(); //Zwischenspeicher aller Strecken des aktuellen Schwierigkeitsgrades
+    public int lastFileNumber; //dient Statistikerstellung hier und in PlateAgent aus trainingsfiles, den Namen der zuletzt gefahrenen Strecke zu suchen
+    int anzahlEinfacherStrecken, anzahlMittlererStrecken, anzahlSchwererStrecken;
 
 
     private Dictionary<int, Vector3> trainingsFahrroute = new Dictionary<int, Vector3>();
@@ -104,9 +105,9 @@ public class AlternateCarController : MonoBehaviour
             if (sharedData.TrainingMode)
             {
                 Debug.Log("Starte Initialisierung des Statistik Dictionarys*****");
-                LoadTrainingFilesToDict(dirPathTrainingRoute + "einfach/", sharedData.trainingsStatPerFile);
-                LoadTrainingFilesToDict(dirPathTrainingRoute + "mittel/", sharedData.trainingsStatPerFile);
-                LoadTrainingFilesToDict(dirPathTrainingRoute + "schwer/", sharedData.trainingsStatPerFile);
+                anzahlEinfacherStrecken = LoadTrainingFilesToDict(dirPathTrainingRoute + "einfach/", sharedData.trainingsStatPerFile);
+                anzahlMittlererStrecken = LoadTrainingFilesToDict(dirPathTrainingRoute + "mittel/", sharedData.trainingsStatPerFile);
+                anzahlSchwererStrecken =  LoadTrainingFilesToDict(dirPathTrainingRoute + "schwer/", sharedData.trainingsStatPerFile);
                 Debug.Log("Alle Trainingsfiles in die Statistik geladen");
 
                 foreach (KeyValuePair<string, Vector2> item in sharedData.trainingsStatPerFile)
@@ -189,7 +190,7 @@ public class AlternateCarController : MonoBehaviour
         //Debug.LogFormat("Habe {0} Files im TrainingsRouteDict. ", trainingFiles.Count);
     }
 
-    public void LoadTrainingFilesToDict(String folderPath, Dictionary<string, Vector2> targetDict)
+    public int LoadTrainingFilesToDict(String folderPath, Dictionary<string, Vector2> targetDict)
     {
         DirectoryInfo dir = new DirectoryInfo(folderPath);
         dirFileCount = dir.GetFiles().Length - dir.GetFiles("*.meta").Length - dir.GetFiles("*Position").Length;
@@ -203,6 +204,8 @@ public class AlternateCarController : MonoBehaviour
                 Debug.Log("Jetztiger File Count: " + sharedData.trainingsStatPerFile.Count);
             }
         }
+        return dirFileCount;    //ermöglicht zu Erfassen wie viele Strecken der aktuelle Schwierigkeitsgrad hat
+
     }
 
     private void LoadTrainingRoute(String filePath)
@@ -655,7 +658,31 @@ public class AlternateCarController : MonoBehaviour
 
     private void RandomDifficulty()
     {
+        int gesamtZahlStrecken = anzahlEinfacherStrecken + anzahlMittlererStrecken + anzahlSchwererStrecken;
+        int anteilLeichteStrecken = anzahlEinfacherStrecken / gesamtZahlStrecken;
+        int anteilMittlererStrecken = anzahlMittlererStrecken / gesamtZahlStrecken;
+        int anteilSchwererStrecken = anzahlSchwererStrecken / gesamtZahlStrecken;
+        Debug.LogFormat("Streckenanteile: einfach: {0}, mittel:{1}, schwer {2}", anteilLeichteStrecken, anteilMittlererStrecken, anteilSchwererStrecken);
+
         float i = UnityEngine.Random.Range(0.0f, 1.0f); //Zufallsint zwischen 0 und 1, einfache Strecken sollen öfter kommen da Training so schneller geht
+        /*
+        if (i <= anteilLeichteStrecken)
+        {
+            currentDifficulty = "einfach/";
+        }
+        else if (i > anteilLeichteStrecken && i <= (anteilLeichteStrecken + anteilMittlererStrecken))
+        {
+            currentDifficulty = "mittel/";
+        }
+        else if (i > anteilLeichteStrecken + anteilMittlererStrecken)
+        {
+            currentDifficulty = "schwer/";
+        }
+        else
+        {
+            Debug.LogError("Zufallswert konnte keinem Schwierigkeitsgrad zugeordnet werden: " + i);
+        }*/
+
         if (i <= 0.5f)
         {
             currentDifficulty = "einfach/";
