@@ -42,6 +42,9 @@ public class AlternateCarController : MonoBehaviour
     public List<FileInfo> trainingFiles = new List<FileInfo>(); //Zwischenspeicher aller Strecken des aktuellen Schwierigkeitsgrades
     public int lastFileNumber; //dient Statistikerstellung hier und in PlateAgent aus trainingsfiles, den Namen der zuletzt gefahrenen Strecke zu suchen
     int anzahlEinfacherStrecken, anzahlMittlererStrecken, anzahlSchwererStrecken;
+    float anteilLeichteStrecken = 1f;
+    float anteilMittlererStrecken = 0f;
+    float anteilSchwererStrecken =0f;
 
 
     private Dictionary<int, Vector3> trainingsFahrroute = new Dictionary<int, Vector3>();
@@ -108,18 +111,20 @@ public class AlternateCarController : MonoBehaviour
                 anzahlEinfacherStrecken = LoadTrainingFilesToDict(dirPathTrainingRoute + "einfach/", sharedData.trainingsStatPerFile);
                 anzahlMittlererStrecken = LoadTrainingFilesToDict(dirPathTrainingRoute + "mittel/", sharedData.trainingsStatPerFile);
                 anzahlSchwererStrecken =  LoadTrainingFilesToDict(dirPathTrainingRoute + "schwer/", sharedData.trainingsStatPerFile);
-                Debug.Log("Alle Trainingsfiles in die Statistik geladen");
+                Debug.LogFormat("Alle Trainingsfiles in die Statistik geladen. #leicht: {0} mittel:{1} schwer {2}", anzahlEinfacherStrecken,anzahlMittlererStrecken,anzahlSchwererStrecken);
 
                 foreach (KeyValuePair<string, Vector2> item in sharedData.trainingsStatPerFile)
                 {
                     Debug.LogFormat("Habe Datei in Stat: {0}", item.Key);
                 }
                 
-                int gesamtZahlStrecken = anzahlEinfacherStrecken + anzahlMittlererStrecken + anzahlSchwererStrecken;
-                int anteilLeichteStrecken = anzahlEinfacherStrecken / gesamtZahlStrecken;
-                int anteilMittlererStrecken = anzahlMittlererStrecken / gesamtZahlStrecken;
-                int anteilSchwererStrecken = anzahlSchwererStrecken / gesamtZahlStrecken;
-                Debug.LogFormat("Streckenanteile: einfach: {0}, mittel:{1}, schwer {2}", anteilLeichteStrecken, anteilMittlererStrecken, anteilSchwererStrecken);
+                float gesamtZahlStrecken = anzahlEinfacherStrecken + anzahlMittlererStrecken + anzahlSchwererStrecken;
+                anteilLeichteStrecken = anzahlEinfacherStrecken / gesamtZahlStrecken;
+                anteilMittlererStrecken = anzahlMittlererStrecken / gesamtZahlStrecken;
+                anteilSchwererStrecken = anzahlSchwererStrecken / gesamtZahlStrecken;
+                Debug.LogFormat("Alle Trainingsfiles in die Statistik geladen. #leicht: {0} mittel:{1} schwer {2}", anzahlEinfacherStrecken, anzahlMittlererStrecken, anzahlSchwererStrecken);
+
+                Debug.LogFormat("Streckenanteile: einfach: {0}, mittel:{1}, schwer {2} gesamt {3}", anteilLeichteStrecken, anteilMittlererStrecken, anteilSchwererStrecken, gesamtZahlStrecken);
                 
             }
 
@@ -668,7 +673,7 @@ public class AlternateCarController : MonoBehaviour
         
 
         float i = UnityEngine.Random.Range(0.0f, 1.0f); //Zufallsint zwischen 0 und 1, einfache Strecken sollen öfter kommen da Training so schneller geht
-        /*
+        
         if (i <= anteilLeichteStrecken)
         {
             currentDifficulty = "einfach/";
@@ -684,8 +689,8 @@ public class AlternateCarController : MonoBehaviour
         else
         {
             Debug.LogError("Zufallswert konnte keinem Schwierigkeitsgrad zugeordnet werden: " + i);
-        }*/
-
+        }
+        /*
         if (i <= 0.5f)
         {
             currentDifficulty = "einfach/";
@@ -701,7 +706,7 @@ public class AlternateCarController : MonoBehaviour
         else
         {
             Debug.LogError("Zufallswert konnte keinem Schwierigkeitsgrad zugeordnet werden: " + i);
-        }
+        }*/
     }
 
 
