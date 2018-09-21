@@ -114,6 +114,13 @@ public class AlternateCarController : MonoBehaviour
                 {
                     Debug.LogFormat("Habe Datei in Stat: {0}", item.Key);
                 }
+                
+                int gesamtZahlStrecken = anzahlEinfacherStrecken + anzahlMittlererStrecken + anzahlSchwererStrecken;
+                int anteilLeichteStrecken = anzahlEinfacherStrecken / gesamtZahlStrecken;
+                int anteilMittlererStrecken = anzahlMittlererStrecken / gesamtZahlStrecken;
+                int anteilSchwererStrecken = anzahlSchwererStrecken / gesamtZahlStrecken;
+                Debug.LogFormat("Streckenanteile: einfach: {0}, mittel:{1}, schwer {2}", anteilLeichteStrecken, anteilMittlererStrecken, anteilSchwererStrecken);
+                
             }
 
 
@@ -658,11 +665,7 @@ public class AlternateCarController : MonoBehaviour
 
     private void RandomDifficulty()
     {
-        int gesamtZahlStrecken = anzahlEinfacherStrecken + anzahlMittlererStrecken + anzahlSchwererStrecken;
-        int anteilLeichteStrecken = anzahlEinfacherStrecken / gesamtZahlStrecken;
-        int anteilMittlererStrecken = anzahlMittlererStrecken / gesamtZahlStrecken;
-        int anteilSchwererStrecken = anzahlSchwererStrecken / gesamtZahlStrecken;
-        Debug.LogFormat("Streckenanteile: einfach: {0}, mittel:{1}, schwer {2}", anteilLeichteStrecken, anteilMittlererStrecken, anteilSchwererStrecken);
+        
 
         float i = UnityEngine.Random.Range(0.0f, 1.0f); //Zufallsint zwischen 0 und 1, einfache Strecken sollen öfter kommen da Training so schneller geht
         /*
