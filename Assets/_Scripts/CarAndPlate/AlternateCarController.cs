@@ -31,6 +31,7 @@ public class AlternateCarController : MonoBehaviour
 
     public float angle;
     public float torque;
+    public float handBrake;
 
 
     string dirPathTrainingRoute = "Assets/TrainingRoutes/"; //Ordner in dem die Trainingsrouten liegen
@@ -118,7 +119,9 @@ public class AlternateCarController : MonoBehaviour
                     Debug.LogFormat("Habe Datei in Stat: {0}", item.Key);
                 }
 
-                int gesamtZahlStrecken = anzahlEinfacherStrecken + anzahlMittlererStrecken + anzahlSchwererStrecken;
+                float gesamtZahlStrecken = anzahlEinfacherStrecken + anzahlMittlererStrecken + anzahlSchwererStrecken;
+                if (gesamtZahlStrecken == 0)
+                    throw new Exception( "Trainingmodus aktiv, aber keine Trainingsstrecken gefunden");
                 anteilLeichteStrecken = anzahlEinfacherStrecken / gesamtZahlStrecken;
                 anteilMittlererStrecken = anzahlMittlererStrecken / gesamtZahlStrecken;
                 anteilSchwererStrecken = anzahlSchwererStrecken / gesamtZahlStrecken;
@@ -314,7 +317,7 @@ public class AlternateCarController : MonoBehaviour
 
     float moveHorizontal;   //die ausgewählte Steuerung setzt diese Werte
     float moveVertical;
-    float handBrake;
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -680,17 +683,20 @@ public class AlternateCarController : MonoBehaviour
 
 
         float i = UnityEngine.Random.Range(0.0f, 1.0f); //Zufallsint zwischen 0 und 1, einfache Strecken sollen öfter kommen da Training so schneller geht
-        
+        Debug.LogFormat("Zufallswert RandomDifficulty: {0}...", i);
         if (i <= anteilLeichteStrecken)
         {
+            Debug.Log("Setze Schwierigkeit auf einfach");
             currentDifficulty = "einfach/";
         }
         else if (i > anteilLeichteStrecken && i <= (anteilLeichteStrecken + anteilMittlererStrecken))
         {
+            Debug.Log("Setze Schwierigkeit auf mittel");
             currentDifficulty = "mittel/";
         }
         else if (i > anteilLeichteStrecken + anteilMittlererStrecken)
         {
+            Debug.Log("Setze Schwierigkeit auf schwer");
             currentDifficulty = "schwer/";
         }
         else
