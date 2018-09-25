@@ -42,10 +42,7 @@ public class AlternateCarController : MonoBehaviour
     private PlateAgent myPlateAgent;
     public List<FileInfo> trainingFiles = new List<FileInfo>(); //Zwischenspeicher aller Strecken des aktuellen Schwierigkeitsgrades
     public int lastFileNumber; //dient Statistikerstellung hier und in PlateAgent aus trainingsfiles, den Namen der zuletzt gefahrenen Strecke zu suchen
-    int anzahlEinfacherStrecken, anzahlMittlererStrecken, anzahlSchwererStrecken;
-    float anteilLeichteStrecken = 1f;
-    float anteilMittlererStrecken = 0f;
-    float anteilSchwererStrecken = 0f;
+
 
 
     private Dictionary<int, Vector3> trainingsFahrroute = new Dictionary<int, Vector3>();
@@ -109,9 +106,9 @@ public class AlternateCarController : MonoBehaviour
             if (sharedData.TrainingMode)
             {
                 Debug.Log("Starte Initialisierung des Statistik Dictionarys*****");
-                anzahlEinfacherStrecken = LoadTrainingFilesToDict(dirPathTrainingRoute + "einfach/", sharedData.trainingsStatPerFile);
-                anzahlMittlererStrecken = LoadTrainingFilesToDict(dirPathTrainingRoute + "mittel/", sharedData.trainingsStatPerFile);
-                anzahlSchwererStrecken = LoadTrainingFilesToDict(dirPathTrainingRoute + "schwer/", sharedData.trainingsStatPerFile);
+                sharedData.anzahlEinfacherStrecken = LoadTrainingFilesToDict(dirPathTrainingRoute + "einfach/", sharedData.trainingsStatPerFile);
+                sharedData.anzahlMittlererStrecken = LoadTrainingFilesToDict(dirPathTrainingRoute + "mittel/", sharedData.trainingsStatPerFile);
+                sharedData.anzahlSchwererStrecken = LoadTrainingFilesToDict(dirPathTrainingRoute + "schwer/", sharedData.trainingsStatPerFile);
                 Debug.Log("Alle Trainingsfiles in die Statistik geladen");
 
                 foreach (KeyValuePair<string, Vector2> item in sharedData.trainingsStatPerFile)
@@ -119,21 +116,21 @@ public class AlternateCarController : MonoBehaviour
                     Debug.LogFormat("Habe Datei in Stat: {0}", item.Key);
                 }
 
-                float gesamtZahlStrecken = anzahlEinfacherStrecken + anzahlMittlererStrecken + anzahlSchwererStrecken;
+                float gesamtZahlStrecken = sharedData.anzahlEinfacherStrecken + sharedData.anzahlMittlererStrecken + sharedData.anzahlSchwererStrecken;
                 if (gesamtZahlStrecken == 0)
                     throw new Exception( "Trainingmodus aktiv, aber keine Trainingsstrecken gefunden");
-                anteilLeichteStrecken = anzahlEinfacherStrecken / gesamtZahlStrecken;
-                anteilMittlererStrecken = anzahlMittlererStrecken / gesamtZahlStrecken;
-                anteilSchwererStrecken = anzahlSchwererStrecken / gesamtZahlStrecken;
-                Debug.LogFormat("Streckenanteile: einfach: {0}, mittel:{1}, schwer {2}", anteilLeichteStrecken, anteilMittlererStrecken, anteilSchwererStrecken);
+                sharedData.anteilLeichteStrecken = sharedData.anzahlEinfacherStrecken / gesamtZahlStrecken;
+                sharedData.anteilMittlererStrecken = sharedData.anzahlMittlererStrecken / gesamtZahlStrecken;
+                sharedData.anteilSchwererStrecken = sharedData.anzahlSchwererStrecken / gesamtZahlStrecken;
+                Debug.LogFormat("Streckenanteile: einfach: {0}, mittel:{1}, schwer {2}", sharedData.anteilLeichteStrecken, sharedData.anteilMittlererStrecken, sharedData.anteilSchwererStrecken);
 
                 //Erhöhe Wahrscheinlichkeit, dass leichte Strecken kommen -> besseres Trainingsergebnis, weniger schlechte Strecken
                 int difficultyFactorMiddle = 2; //Anteil der vom mittleren Streckenanteil an die leichten geht -> darf nicht gleich 0 sein
                 int difficultyFactorHard = 2; //Anteil der vom schweren Streckenanteil an die leichten geht -> darf nicht gleich 0 sein
-                anteilLeichteStrecken += (anteilMittlererStrecken / difficultyFactorMiddle + anteilSchwererStrecken / difficultyFactorHard);
-                anteilMittlererStrecken -= anteilMittlererStrecken / difficultyFactorMiddle;
-                anteilSchwererStrecken -= anteilSchwererStrecken / difficultyFactorHard;
-                Debug.LogFormat("Streckenanteile Update: einfach: {0}, mittel:{1}, schwer {2}", anteilLeichteStrecken, anteilMittlererStrecken, anteilSchwererStrecken);
+                sharedData.anteilLeichteStrecken += (sharedData.anteilMittlererStrecken / difficultyFactorMiddle + sharedData.anteilSchwererStrecken / difficultyFactorHard);
+                sharedData.anteilMittlererStrecken -= sharedData.anteilMittlererStrecken / difficultyFactorMiddle;
+                sharedData.anteilSchwererStrecken -= sharedData.anteilSchwererStrecken / difficultyFactorHard;
+                Debug.LogFormat("Streckenanteile Update: einfach: {0}, mittel:{1}, schwer {2}", sharedData.anteilLeichteStrecken, sharedData.anteilMittlererStrecken, sharedData.anteilSchwererStrecken);
 
 
             }
@@ -684,17 +681,20 @@ public class AlternateCarController : MonoBehaviour
 
         float i = UnityEngine.Random.Range(0.0f, 1.0f); //Zufallsint zwischen 0 und 1, einfache Strecken sollen öfter kommen da Training so schneller geht
         Debug.LogFormat("Zufallswert RandomDifficulty: {0}...", i);
-        if (i <= anteilLeichteStrecken)
+        Debug.LogFormat("Streckenanteile: einfach: {0}, mittel:{1}, schwer {2}", sharedData.anteilLeichteStrecken, sharedData.anteilMittlererStrecken, sharedData.anteilSchwererStrecken);
+
+        if (i <= sharedData.anteilLeichteStrecken)
         {
             Debug.Log("Setze Schwierigkeit auf einfach");
+            Debug.LogFormat("i {0} ist kleiner als anteilLeichteStrekcen: {1}", i, sharedData.anteilLeichteStrecken);
             currentDifficulty = "einfach/";
         }
-        else if (i > anteilLeichteStrecken && i <= (anteilLeichteStrecken + anteilMittlererStrecken))
+        else if (i > sharedData.anteilLeichteStrecken && i <= (sharedData.anteilLeichteStrecken + sharedData.anteilMittlererStrecken))
         {
             Debug.Log("Setze Schwierigkeit auf mittel");
             currentDifficulty = "mittel/";
         }
-        else if (i > anteilLeichteStrecken + anteilMittlererStrecken)
+        else if (i > sharedData.anteilLeichteStrecken + sharedData.anteilMittlererStrecken)
         {
             Debug.Log("Setze Schwierigkeit auf schwer");
             currentDifficulty = "schwer/";

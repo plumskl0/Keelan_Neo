@@ -47,6 +47,10 @@ public class SharedFields {
     public bool trainingRouteRecordingStopped = false;
     public string trainingRouteDifficulty = "";
     public int checkpointFrameCount = 0;
+    public int anzahlEinfacherStrecken, anzahlMittlererStrecken, anzahlSchwererStrecken;
+    public float anteilLeichteStrecken = 1f;
+    public float anteilMittlererStrecken = 0f;
+    public float anteilSchwererStrecken = 0f;
 
 
     public bool nonMovingCar = false;

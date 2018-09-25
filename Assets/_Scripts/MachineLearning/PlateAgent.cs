@@ -357,11 +357,31 @@ public class PlateAgent : Agent
         //AddVectorObs(ballRgBody.velocity.normalized);
         //AddVectorObs(carRgBody.velocity.normalized);    //Richtungsvektor des Autos  könnte ersetzt werden durch Steigung + motortorque
         AddVectorObs(MinMaxScaleZeroToOne(carControllerScript.angle, -sharedData.maxWheelAngle, sharedData.maxWheelAngle));
-        AddVectorObs(MinMaxScaleZeroToOne(carControllerScript.torque, 0f, sharedData.maxTorque));
+        AddVectorObs(MinMaxScaleZeroToOne(carControllerScript.torque, -sharedData.maxTorque, sharedData.maxTorque));
         AddVectorObs(MinMaxScaleZeroToOne(carControllerScript.handBrake, 0f, carControllerScript.brakeTorque));
 
         AddVectorObs(carTransform.forward.normalized);
     }
+
+    public void ObserveTorqueParametersNoVelocityVectorsNoDirections()
+    {
+        //Wie Unity 3D Ball Beispiel: alle Werte sollen zwischen 0 und 1 liegen
+
+        //Quaternion gibt Euler Werte mit min=0 und max=360 aus
+        AddVectorObs(MinMaxScaleZeroToOne((plateTransform.rotation.eulerAngles.z), 0f, 360f));
+        AddVectorObs(MinMaxScaleZeroToOne((plateTransform.rotation.eulerAngles.x), 0f, 360f));
+        Vector3 ballToTransformPositionVector = ballTransform.position - plateTransform.position;
+        AddVectorObs(ballToTransformPositionVector.normalized);
+        //AddVectorObs(ballRgBody.velocity.normalized);
+        //AddVectorObs(carRgBody.velocity.normalized);    //Richtungsvektor des Autos  könnte ersetzt werden durch Steigung + motortorque
+        AddVectorObs(MinMaxScaleZeroToOne(carControllerScript.angle, -sharedData.maxWheelAngle, sharedData.maxWheelAngle));
+        AddVectorObs(MinMaxScaleZeroToOne(carControllerScript.torque, -sharedData.maxTorque, sharedData.maxTorque));
+        AddVectorObs(MinMaxScaleZeroToOne(carControllerScript.handBrake, 0f, carControllerScript.brakeTorque));
+        AddVectorObs(carRgBody.velocity.normalized.magnitude);
+
+        //AddVectorObs(carTransform.forward.normalized);
+    }
+
 
     List<float> obeservation = new List<float>();
     public override void CollectObservations()
@@ -401,8 +421,13 @@ public class PlateAgent : Agent
         //AddVectorObs(ballTransform.position);
 
         //Wie Unity 3D Ball Beispiel:
-        ObserveLikeUnityExampleMod();
         //ObserveLikeUnityExample();
+
+
+        //ObserveLikeUnityExampleMod();
+        ObserveTorqueParametersNoVelocityVectorsNoDirections();
+
+
 
 
         //AddVectorObs(verbindungsvektor);
