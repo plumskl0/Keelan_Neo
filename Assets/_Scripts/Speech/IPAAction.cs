@@ -57,6 +57,9 @@ public class IPAAction : MonoBehaviour {
     public const string repeatLastAction = "Main.RepeatLastAction";
     public const string undo = "Main.Undo";
     public const string wantMoreHelp = "Help.tellMeMore";
+    public const string pauseGame = "Main.Pause";
+    public const string continueGame = "Main.Continue";
+    public const string quitGame = "Main.Quit";
     /*public const string speak = "conversation.Speak";
     public const string askQuestion = "conversation.AskQuestion";*/
 
@@ -461,6 +464,16 @@ public class IPAAction : MonoBehaviour {
 
     }
 
+    public void ContinueGame()
+    {
+        playerCarObject.GetComponent<pauseMenu>().Continue();
+    }
+
+    public void PauseGame()
+    {
+        playerCarObject.GetComponent<pauseMenu>().Pause();
+    }
+
 
     // Use this for initialization
     void Start () {
@@ -494,6 +507,10 @@ public class IPAAction : MonoBehaviour {
         if(activateNavigation)
         {
             navigationArrow.LookAt(navigationGoal);
+        }
+        else
+        {
+            navigationArrow.forward = playerCarObject.transform.forward;
         }
     }
 }

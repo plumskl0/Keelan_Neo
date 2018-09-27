@@ -23,12 +23,20 @@ public class pauseMenu : MonoBehaviour {
         pauseButtonPressed = Input.GetKey(KeyCode.Escape);
 		if(pauseButtonPressed)
         {
-            sharedData.SetPlayerControl(false);
-            sharedData.SetCursorVisible(true);
-            pul.stopTimer();
-            pauseMenuCanvas.enabled = true;
+            if (pauseMenuCanvas.enabled == false)
+                Pause();
+            else
+                Continue();
         }
 	}
+
+    public void Pause()
+    {
+        sharedData.SetPlayerControl(false);
+        sharedData.SetCursorVisible(true);
+        pul.stopTimer();
+        pauseMenuCanvas.enabled = true;
+    }
 
     public void Continue()
     {

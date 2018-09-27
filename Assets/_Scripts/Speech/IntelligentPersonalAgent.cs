@@ -542,6 +542,16 @@ public class IntelligentPersonalAgent : MonoBehaviour {
 
                     break;
 
+                case IPAAction.continueGame:
+                    actions.ContinueGame();
+                    break;
+                case IPAAction.pauseGame:
+                    actions.PauseGame();
+                    break;
+                case IPAAction.quitGame:
+                    Application.Quit();
+                    break;
+
                 default:
                     Debug.Log(string.Format("Der Intent {0} wurde im IntentHandler nicht registiert.", intent));
                     noActionIntent = true;
