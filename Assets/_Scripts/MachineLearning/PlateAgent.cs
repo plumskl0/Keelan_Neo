@@ -497,32 +497,34 @@ public class PlateAgent : Agent
         if (LostLife || ((ballTransform.position.y < 0) && ballAbstandZuTellermitte > 3f))    //Leben verloren -> Reset
         {
             negativeRewards += sharedData.incentiveLostLife;
-            //Aktualisiere Statistik bevor Belohnug bis zum Lebensverlust aktualisiert wird
-            try
+            if (sharedData.TrainingMode)
             {
-               /* foreach (KeyValuePair<string, Vector2> item in sharedData.trainingsStatPerFile)
+                //Aktualisiere Statistik bevor Belohnug bis zum Lebensverlust aktualisiert wird
+                try
                 {
-                    Debug.LogFormat("Habe Key in Stat: {0}", item.Key);
-                    Debug.LogFormat("Value: {0}", sharedData.trainingsStatPerFile[item.Key]);
-                }*/
+                    /* foreach (KeyValuePair<string, Vector2> item in sharedData.trainingsStatPerFile)
+                     {
+                         Debug.LogFormat("Habe Key in Stat: {0}", item.Key);
+                         Debug.LogFormat("Value: {0}", sharedData.trainingsStatPerFile[item.Key]);
+                     }*/
 
-                string lastFileName = carControllerScript.trainingFiles[carControllerScript.lastFileNumber].FullName;
-                //Debug.Log("Name des Files: " + lastFileName);
-                Vector2 ChooseCountAndCumRewards = sharedData.trainingsStatPerFile[lastFileName];
-                ChooseCountAndCumRewards.x += 1;
-                ChooseCountAndCumRewards.y += positiveRewardsThisRound - negativeRewardsThisRound;
-                sharedData.trainingsStatPerFile[carControllerScript.trainingFiles[carControllerScript.lastFileNumber].FullName] = ChooseCountAndCumRewards;
+                    string lastFileName = carControllerScript.trainingFiles[carControllerScript.lastFileNumber].FullName;
+                    //Debug.Log("Name des Files: " + lastFileName);
+                    Vector2 ChooseCountAndCumRewards = sharedData.trainingsStatPerFile[lastFileName];
+                    ChooseCountAndCumRewards.x += 1;
+                    ChooseCountAndCumRewards.y += positiveRewardsThisRound - negativeRewardsThisRound;
+                    sharedData.trainingsStatPerFile[carControllerScript.trainingFiles[carControllerScript.lastFileNumber].FullName] = ChooseCountAndCumRewards;
 
 
-                Debug.LogFormat("Update der Statistik von File: {2} #Lebensverluste: {0} und rewards:{1}", ChooseCountAndCumRewards.x, ChooseCountAndCumRewards.y, lastFileName);
+                    Debug.LogFormat("Update der Statistik von File: {2} #Lebensverluste: {0} und rewards:{1}", ChooseCountAndCumRewards.x, ChooseCountAndCumRewards.y, lastFileName);
 
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogErrorFormat("Konnte für Strecke {1} Statistik nicht updaten {2}. Fehler {0} ", e.Message, carControllerScript.trainingFiles[carControllerScript.lastFileNumber].FullName, carControllerScript.lastFileNumber);
+
+                }
             }
-            catch (System.Exception e)
-            {
-                Debug.LogErrorFormat("Konnte für Strecke {1} Statistik nicht updaten {2}. Fehler {0} ", e.Message, carControllerScript.trainingFiles[carControllerScript.lastFileNumber].FullName, carControllerScript.lastFileNumber);
-
-            }
-
 
             LostLife = true;    //falls die zweite Bedinung auftritt soll das auch als Lebensverlust zählen
             //trainingRouteFinished = true;   //neue Route laden nach Lebensverlust ***geht so nicht -> siehe Zeile untendrunter -> macht CarControllerScript
