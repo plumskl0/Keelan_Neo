@@ -1103,7 +1103,7 @@ Prefab:
     - target: {fileID: 114996657341172558, guid: bce195198515daf4bae919a1b931fde7,
         type: 2}
       propertyPath: activateTrainingMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4729366982512886, guid: bce195198515daf4bae919a1b931fde7, type: 2}
       propertyPath: m_LocalRotation.y
@@ -1148,7 +1148,7 @@ Prefab:
     - target: {fileID: 114996657341172558, guid: bce195198515daf4bae919a1b931fde7,
         type: 2}
       propertyPath: activateDebugMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114996657341172558, guid: bce195198515daf4bae919a1b931fde7,
         type: 2}
@@ -3238,7 +3238,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &621945568
 Transform:
   m_ObjectHideFlags: 0
@@ -8339,7 +8339,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1641175491
 Transform:
   m_ObjectHideFlags: 0
@@ -8508,7 +8508,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1742148909
 Transform:
   m_ObjectHideFlags: 0
