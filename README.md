@@ -7,7 +7,6 @@ Geschicklichkeitsspiel bei dem man mit einem "Fahrzeug" einen Ball durch verschi
 **Installation:**
 Mithilfe des Repositorys kann man die aktuelle Version des Spiels selbst erzeugen. Dazu benötigt man Unity 5.6.1f1.
 
-Alternativ kann man den letzten Build unter diesem Link hier herunterladen:     https://seafile.rlp.net/f/592277e8bb954a8c805b/
 
 **Wiimote Anschluss an den Computer:**
 Hier haben wir einiges versucht! Je nachdem welche Windows Version sie nutzen empfehlen wir folgendes Vorgehen:
